@@ -1,0 +1,82 @@
+{% extends 'formation_metier/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block content %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                                 aria-hidden="true"></span></a></li>
+        <li>
+            <a href="{% url 'formation_metier:index' %}">
+                Index
+            </a>
+        </li>
+        <li class="active">
+            Formation
+        </li>
+    </ol>
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Formation : {{ formation.name }} </h2>
+        </div>
+        <div class="col-md-2" style="margin-top: 20px">
+            <div class="btn-group pull-right">
+                <button id="btn-action" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-large row ">
+                    <li>
+                        <a href="{% url 'formation_metier:update_formation' formation.id %} " class="no_spinner">
+                            <form method="post" style="margin: 0">Modifier la formation</form>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'formation_metier:index' %}" class="no_spinner">
+                            <form method="post" style="margin: 0"> Supprimer la formation</form>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'formation_metier:new_session' formation.id %}" class="no_spinner">
+                            <form method="post" style="margin: 0">Ajouter une nouvelle session</form>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" style="padding: 10px">
+        <p>Code : {{ formation.code }}</p>
+        <p>Description : {{ formation.description }}</p>
+    </div>
+    {% if formation.session_set.count > 0 %}
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>Date</td>
+                        <td>Heure</td>
+                        <td>Local</td>
+                        <td>Maximum Participant</td>
+                        <td>Nom du formateur</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for session in formation.session_set.all %}
+                        <tr>
+                            <td><a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.session_date.date }}</a></td>
+                            <td><a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.session_date.time }}</a></td>
+                            <td><a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.local}}</a></td>
+                            <td><a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.participant_max_number }}</a></td>
+                            <td><a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.formateur_id }}</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
