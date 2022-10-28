@@ -3,7 +3,7 @@ from schema_graph.views import Schema
 from django.contrib.auth import views as auth_views
 
 from formation_metier.views import IndexView, HomeView, NewFormationFormView, DetailFormation, DetailSession, \
-    UpdateFormationView, UpdateSessionView, NewSessionFormView
+    UpdateFormationView, UpdateSessionView, NewSessionFormView, delete_session
 
 app_name = 'formation_metier'
 urlpatterns = [
@@ -13,8 +13,9 @@ urlpatterns = [
     path('formation/<int:formation_id>/', DetailFormation.as_view(), name='detail_formation'),
     path('formation/new_session/<int:formation_id>', NewSessionFormView.as_view(), name='new_session'),
     path('formation/update/<int:formation_id>/', UpdateFormationView.as_view(), name='update_formation'),
-    path('formation/session/update/<int:session_id>/', UpdateSessionView.as_view(), name='update_formation'),
+    path('formation/session/update/<int:session_id>/', UpdateSessionView.as_view(), name='update_session'),
     path('formation/session/<int:session_id>/', DetailSession.as_view(), name='detail_session'),
+    path('formation/session/delete/<int:session_id>/', delete_session, name='delete_session'),
 
     # auth
     path('accounts/login/', auth_views.LoginView.as_view()),
