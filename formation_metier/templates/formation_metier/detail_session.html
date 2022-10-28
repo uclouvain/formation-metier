@@ -2,6 +2,8 @@
 {% load bootstrap3 %}
 {% load static %}
 {% block content %}
+    {% include 'formation_metier/delete_session.html' %}
+    <script src="{% static 'js/htmx.min.js' %}"></script>
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
@@ -32,14 +34,12 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-large row ">
                     <li>
-                        <a href="{% url 'formation_metier:update_formation' session.id %} " class="no_spinner">
-                            <form method="post" style="margin: 0">Modifier la formation</form>
+                        <a href="{% url 'formation_metier:update_session' session.id %} " class="no_spinner">
+                            <form method="post" style="margin: 0">Modifier la session</form>
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'formation_metier:index' %}" class="no_spinner">
-                            <form method="post" style="margin: 0"> Supprimer la formation</form>
-                        </a>
+                        <a href="#" data-toggle="modal" data-target="#exampleModal">Supprimer la formation</a>
                     </li>
                     <li>
                         <a href="{% url 'formation_metier:new_session' session.formation.id %}" class="no_spinner">
@@ -86,6 +86,5 @@
             </table>
         </div>
     </div>
-
 
 {% endblock %}
