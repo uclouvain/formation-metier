@@ -1,4 +1,4 @@
-<div class="modal fade" id="sessionDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="formationDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -6,15 +6,15 @@
                 <h5 class="modal-title" id="exampleModalLabel">Confirmation de suppression</h5>
             </div>
             <div class="modal-body">
-                <span>Voulez vous vraiment supprimer la séance du {{ session.session_date.date }} de la formation {{ session.formation.name }} </span>
-                {% if session.register_set.count > 0 %}
-                    <span>Attention cela supprimera aussi les {{ session.register_set.count }} inscriptions </span>
+                <span>Voulez vous vraiment supprimer la formation : {{ formation.code }} {{ formation.name }} {{ formation.id }}</span>
+                {% if formation.session_set.count > 0 %}
+                    <span>Attention vous allez égualement supprimer les {{ formation.session_set.count }} séances ainsi que les insciptions liées </span>
                 {% endif %}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <a class="btn btn-sm btn-danger"
-                   href="{% url 'formation_metier:delete_session' session.id %}">Delete</a>
+                   href="{% url 'formation_metier:delete_formation' formation.id %}">Delete</a>
             </div>
         </div>
     </div>
