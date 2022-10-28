@@ -7,4 +7,5 @@ from .detail_session import DetailSession
 from .update_formation_view import UpdateFormationView
 from .update_session_view import UpdateSessionView
 from .delete_session_view import delete_session
+from .delete_formation_view import delete_formation
 
