@@ -1,0 +1,38 @@
+
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    margin: 0;
+    padding-top: 70px;
+    padding-bottom: 6rem;
+    min-height: 100%;
+}
+
+div#main {
+    vertical-align: center;
+    align-self: center;
+    height: 100%;
+    margin-inline: 10em;
+    padding-inline: 2em;
+    padding-top: 70px;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+nav {display: inline-block}
+
+div#formation_session_table table {
+
+}
+div#formation_session_table th, div#formation_session_table td {
+
+    text-align: center;
+}
