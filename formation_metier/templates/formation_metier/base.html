@@ -1,0 +1,71 @@
+{% load bootstrap3 %}
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1 %}
+<link rel="stylesheet" href="{% static 'formation_metier/style.css' %}">
+<body class="">
+<nav class="navbar navbar-default navbar-fixed-top justify-content-start flew-nowrap">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a id="formation-list-link" class="navbar-brand" href="{% url 'formation_metier:home' %}">
+                <img src="{% static 'img/logo_osis.png' %}" alt="OSIS" style="margin-top: -10px; margin-left: -10px"></a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown" id="calendar-link">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        <span>
+                        Formation
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{% url 'formation_metier:index' %}">
+                                <span>index</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                    <li class="dropdown" id="authenticated-div">
+                        <!-- Login Button -->
+                        <a href="{% url 'logout' %}">
+                            <span class="glyphicon glyphicon-log-out">Déconnexion</span>
+                        </a>
+
+                    </li>
+
+                {% else %}
+                    <li class="dropdown" id="authenticated-div">
+                        <a href="{% url 'login' %}">
+                            <span class="glyphicon glyphicon-log-in">Connexion</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<div id="main" class="container-fluid p0-50">
+    {% block content %}
+    {% endblock content %}
+</div>
+</body>
+<footer class="footer">
+
+    <div class="container-fluid p0-50">
+        <p class="navbar-text pull-left">
+            <a href="https://uclouvain.be/fare" target="_blank" id="lnk_user_manual">Documentation</a> |
+            <a href="http://uclouvain.github.io/osis/" target="_blank" id="lnk_osis_website">Site web</a> |
+            <a href="https://github.com/uclouvain/osis" target="_blank" id="lnk_osis_source_code">Code source</a>
+
+        </p>
+
+        <p class="navbar-text pull-right">
+            <span class="glyphicon glyphicon-copyright-mark"></span> 2022 <a href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a>
+        </p>
+    </div>
+
+</footer>

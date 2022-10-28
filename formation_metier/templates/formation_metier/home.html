@@ -1,0 +1,66 @@
+{% extends 'formation_metier/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+
+                <div class="col-md-1"><i class="fa fa-graduation-cap" style="font-size: 400%; color: #6699FF;"></i>
+                </div>
+                <div class="col-md-5">
+                    <h4 class="media-heading"><a href="/catalog/" id="lnk_home_catalog">Catalogue des formations</a>
+                    </h4>
+                    <p>Elaboration et gestion du catalogue de formations.</p>
+                </div>
+
+
+                <div class="col-md-1"><i class="fa fa-users" style="font-size: 400%; color: #6699FF;"></i></div>
+                <div class="col-md-5">
+                    <h4 class="media-heading"><a href="/studies/" id="lnk_home_studies">Parcours de l'étudiant</a></h4>
+                    <p>Gestion du parcours des étudiants depuis leur inscription jusqu'à leur diplôme.</p>
+                </div>
+
+            </div>
+            <br>
+            <div class="row">
+
+                <div class="col-md-1"><i class="fa fa-university" style="font-size: 400%; color: #6699FF;"></i></div>
+                <div class="col-md-5">
+                    <h4 class="media-heading">
+                        <a href="/institution/" id="lnk_home_institution">Institution</a>
+                    </h4>
+                    <p>Gestion de l'institution.</p>
+                </div>
+
+                <div class="col-md-1"><span class="glyphicon glyphicon-user" aria-hidden="true"
+                                            style="font-size: 400%; color: #6699FF;"></span></div>
+                <div class="col-md-5">
+                    <h4 class="media-heading"><a href="/my_osis/">Mon OSIS</a></h4>
+                    <p>Vos données personnelles, des préférences et d'autres informations associées.</p>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+
+
+                <div class="col-md-1"><i class="far fa-address-card" style="font-size: 400%; color: #6699FF;"></i></div>
+                <div class="col-md-5">
+                    <h4 class="media-heading">
+                        <a href="/admissions/" id="lnk_home_admissions">Inscriptions</a>
+                    </h4>
+                    <p>Gestion des inscriptions.</p>
+                </div>
+                <div class="col-md-1"><span class="glyphicon glyphicon-user" aria-hidden="true"
+                                            style="font-size: 400%; color: #6699FF;"></span></div>
+                <div class="col-md-5">
+                    <h4 class="media-heading"><a href="{% url 'formation_metier:index' %}">Formation_metier</a></h4>
+                    <p>Vos données personnelles, des préférences et d'autres informations associées.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
