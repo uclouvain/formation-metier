@@ -37,8 +37,6 @@ class DetailSession(FormMixin, generic.DetailView):
     def form_valid(self, form):
         participant = form.cleaned_data.get("participant")
         session = self.get_object()
-        print(session)
-        print(participant)
         Register.objects.create(participant=participant, session=session)
         return super(DetailSession, self).form_valid(form)
 

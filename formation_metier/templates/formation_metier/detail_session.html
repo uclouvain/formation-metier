@@ -71,15 +71,20 @@
                     {% for register in session.register_set.all %}
                         <tr>
                             <td>{{ register.participant }}</td>
-                            <td> Num FGS</td>
+                            <td> {{ register.participant.numberFGS }}</td>
                         </tr>
                     {% endfor %}
                 {% endif %}
                 <form method="post">
                     {% csrf_token %}
+                    {{ form.media }}
                     <div class="row">
-                        <div class="col-lg-8">{{ form.participant }}</div>
-                        <div class="col-lg-4"><input type="submit" value="Inscire"></div>
+                        <div class="col-lg-8">
+                            {% bootstrap_form form layout='inline' %}
+                        </div>
+                        <div>
+                            {% bootstrap_button "Inscrire" button_type="submit" button_class="btn-primary" %}
+                        </div>
                     </div>
                 </form>
                 </tbody>
@@ -88,3 +93,5 @@
     </div>
 
 {% endblock %}
+
+

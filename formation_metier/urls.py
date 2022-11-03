@@ -1,9 +1,10 @@
+from django.conf.urls import url
 from django.urls import path, include
 from schema_graph.views import Schema
 from django.contrib.auth import views as auth_views
 
 from formation_metier.views import IndexView, HomeView, NewFormationFormView, DetailFormation, DetailSession, \
-    UpdateFormationView, UpdateSessionView, NewSessionFormView, delete_session, delete_formation
+    UpdateFormationView, UpdateSessionView, NewSessionFormView, delete_session, delete_formation, PersonAutoComplete
 
 app_name = 'formation_metier'
 urlpatterns = [
@@ -17,6 +18,7 @@ urlpatterns = [
     path('formation/session/<int:session_id>/', DetailSession.as_view(), name='detail_session'),
     path('formation/session/delete/<int:session_id>/', delete_session, name='delete_session'),
     path('formation/delete/<int:formation_id>/', delete_formation, name='delete_formation'),
+    path('autocompletePerson/', PersonAutoComplete.as_view(), name='widget_participant'),
 
     # auth
     path('accounts/login/', auth_views.LoginView.as_view()),

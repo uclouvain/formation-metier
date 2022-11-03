@@ -6,6 +6,7 @@ from django.contrib import admin
 from formation_metier.models import formation
 from formation_metier.models import register
 from formation_metier.models import session
+from formation_metier.models import person
 
 
 # Register your model here.
@@ -47,6 +48,15 @@ class FormationAdmin(admin.ModelAdmin):
     list_display = ('name', 'code', 'description')
 
 
+class PersonAdmin(admin.ModelAdmin):
+    fieldsets = [('name', {'fields': ['name']}),
+                 ('numberFGS', {'fields': ['numberFGS']}),
+                 ('role', {'fields': ['role']}),
+                 ]
+    list_display = ('name', 'numberFGS', 'role')
+
+
+admin.site.register(person.Person, PersonAdmin)
 admin.site.register(formation.Formation, FormationAdmin)
 admin.site.register(session.Session, SessionAdmin)
-admin.site.register(register.Register, RegisterAdmin)
+admin.site.register(register.Register, RegisterAdmin)   

@@ -10,3 +10,6 @@ class Session(models.Model):
     local = models.CharField(max_length=50)
     participant_max_number = models.IntegerField(default=0)
     formateur_id = models.CharField(max_length=50)
+
+    def __str__(self):
+        return "{} - {}".format(self.formation.name, str(self.session_date))
