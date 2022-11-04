@@ -2,7 +2,7 @@ from django.views.generic import FormView
 from django.conf.urls import url
 from django.contrib import messages
 from django.http import HttpResponseForbidden
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import generic, View
 from django.views.generic.detail import SingleObjectMixin
@@ -25,6 +25,12 @@ class DetailSession(FormMixin, generic.DetailView):
         context['form'] = self.get_form()
         return context
 
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            'session': self.get_object()
+        }
+
     def get_queryset(self):
         return super().get_queryset().filter(id=self.kwargs['session_id']).prefetch_related(
             'register_set',
@@ -38,22 +44,32 @@ class RegisterFormView(SingleObjectMixin, FormView):
     context_object_name = "session"
     pk_url_kwarg = 'session_id'
 
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            'session': self.get_object()
+        }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.get_form()
+        context['session'] = self.get_object()
+        return context
+
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
-        self.object = self.get_object()
-        return super().post(request, *args, **kwargs)
+        if self.get_form().is_valid():
+
+            register = self.get_form().save(commit=False)
+            register.session = self.get_object()
+            register.save()
+        else:
+            return render(request, self.template_name, {'session': self.get_object(), 'form': self.get_form()})
+        return redirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse('formation_metier:detail_session', kwargs={'session_id': self.object.pk})
-
-    def form_valid(self, form):
-        participant = form.cleaned_data.get("participant")
-        session = self.get_object()
-        form.clean_session(session, participant)
-        Register.objects.create(participant=participant, session=session)
-        messages.success(self.request, "l'inscription a été bien enregistrée")
-        return super().form_valid(form)
+        return reverse('formation_metier:detail_session', kwargs={'session_id': self.get_object().pk})
 
 
 class DetailSessionView(View):

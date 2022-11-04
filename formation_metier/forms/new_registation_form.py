@@ -1,4 +1,4 @@
-from django.core.exceptions import ValidationError
+from django.forms import ValidationError
 from django.forms import ModelForm
 from django_select2.forms import ModelSelect2Widget
 from dal import autocomplete
@@ -14,6 +14,10 @@ class NewRegistrationParticipantWidget(ModelSelect2Widget):
 
 
 class NewRegistrationForm(ModelForm):
+    def __init__(self, session, *args, **kwargs):
+        self.session = session
+        super().__init__(*args, **kwargs)
+
     class Meta:
         template_name = 'formation_metier/detail_session.html'
         model = Register
@@ -27,11 +31,12 @@ class NewRegistrationForm(ModelForm):
                                                      )
         }
 
-    def clean_session(self, session, participant):
-        register_set = session.register_set.all()
+    def clean(self):
+        cleaned_data = super().clean()
+        register_set = self.session.register_set.all()
         for register in register_set:
-            if register.participant == participant:
+            if register.participant == cleaned_data.get('participant'):
                 raise ValidationError(_('Vous êtes déja inscit a cette formation'))
-        if session.participant_max_number <= register_set.count():
+        if self.session.participant_max_number <= register_set.count():
             raise ValidationError(_("Le nombre maximal de participant inscit a cette formation est déjà atteint"))
-        return self.cleaned_data.get('session')
+        return cleaned_data
