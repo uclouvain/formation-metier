@@ -15,6 +15,7 @@ class NewRegistrationParticipantWidget(ModelSelect2Widget):
 
 class NewRegistrationForm(ModelForm):
     class Meta:
+        template_name = 'formation_metier/detail_session.html'
         model = Register
         fields = ('participant',)
         widgets = {
