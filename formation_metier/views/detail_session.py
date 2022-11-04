@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.http import HttpResponseForbidden
+from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
 from django.views.generic.edit import FormMixin
@@ -32,13 +33,18 @@ class DetailSession(FormMixin, generic.DetailView):
         if form.is_valid():
             return self.form_valid(form)
         else:
-            return self.form_invalid(form)
+            return render(request, self.template_name, {'errors': form.errors, 'form': form})
 
     def form_valid(self, form):
         participant = form.cleaned_data.get("participant")
         session = self.get_object()
+        # form.clean_session(session, participant)
         Register.objects.create(participant=participant, session=session)
         return super(DetailSession, self).form_valid(form)
+
+    def form_invalid(self, form):
+        # put logic here
+        return super(DetailSession, self).form_invalid(form)
 
     def get_queryset(self):
         return super().get_queryset().filter(id=self.kwargs['session_id']).prefetch_related(

@@ -8,5 +8,6 @@ from .update_formation_view import UpdateFormationView
 from .update_session_view import UpdateSessionView
 from .delete_session_view import delete_session
 from .delete_formation_view import delete_formation
+from .delete_registration_view import delete_registration
 from .select_participant_widget_view import PersonAutoComplete
 

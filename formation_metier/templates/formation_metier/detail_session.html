@@ -4,6 +4,25 @@
 {% block content %}
     {% include 'formation_metier/delete_session.html' %}
     <script src="{% static 'js/htmx.min.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".btn_delete_register").click(function () {
+                if ($(".desinscrption_btn").hasClass("hidden")) {
+
+                    $(".desinscrption_btn").each(function () {
+                        $(this).removeClass("hidden")
+                    });
+                } else {
+                    $(".desinscrption_btn").each(function () {
+                        $(this).addClass("hidden");
+                    });
+                }
+            });
+        });
+    </script>
+
+
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
@@ -46,6 +65,11 @@
                             <form method="post" style="margin: 0">Ajouter une nouvelle session</form>
                         </a>
                     </li>
+                    <li>
+                        <a href="#" id="btn_delete_register" class="no_spinner btn_delete_register">
+                            Supprimer des inscription
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -61,7 +85,7 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <td>Nom</td>
+                    <td>Nom du participant</td>
                     <td>Numéro FGS</td>
                     <td></td>
                 </tr>
@@ -69,9 +93,14 @@
                 <tbody>
                 {% if session.register_set.count > 0 %}
                     {% for register in session.register_set.all %}
-                        <tr>
+                        <tr style="max-height: 40px">
                             <td>{{ register.participant }}</td>
                             <td> {{ register.participant.numberFGS }}</td>
+                            <td class="hidden desinscrption_btn">
+                                <a href="{% url 'formation_metier:delete_registration' register.id %}" class="">
+                                    {% bootstrap_button "Désinscrire" button_type="submit" size="xs" %}
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                 {% endif %}
@@ -85,8 +114,18 @@
                         <div>
                             {% bootstrap_button "Inscrire" button_type="submit" button_class="btn-primary" %}
                         </div>
+
                     </div>
+                    {{ form.errors }}
+                    {{ form.non_field_errors }}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p> {{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
                 </form>
+                <div>
+                </div>
                 </tbody>
             </table>
         </div>

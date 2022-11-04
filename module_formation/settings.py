@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'schema_graph',
     'django_htmx',
     'django_select2',
+    'jquery',
 ]
 
 MIDDLEWARE = [
