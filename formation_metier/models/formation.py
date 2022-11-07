@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 
 
 class Formation(models.Model):
@@ -6,5 +7,8 @@ class Formation(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
 
+    class Meta:
+        constraints = [UniqueConstraint(fields=['code'], name='unique_formation_code'), ]
+
     def __str__(self):
-        return self.name
+        return f"{self.name}"

@@ -8,4 +8,4 @@ class Person(models.Model):
     role = models.CharField(choices=ROLES, max_length=20)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
