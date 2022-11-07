@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,7 +28,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = (
     'dal',
     'dal_select2',
     'dal_queryset_sequence',
@@ -40,14 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'formation_metier.apps.FormationMetierConfig',
     'bootstrap3',
-    'debug_toolbar',
     'schema_graph',
     'django_htmx',
     'django_select2',
     'jquery',
-]
+    'debug_toolbar',
+)
 
-MIDDLEWARE = [
+MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_htmx.middleware.HtmxMiddleware",
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-]
+)
 
 ROOT_URLCONF = 'module_formation.urls'
 
@@ -110,11 +110,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-be'
 
 TIME_ZONE = 'Europe/Brussels'
 
 USE_I18N = True
+USE_L10N = True
 
 USE_TZ = True
 
@@ -150,3 +151,18 @@ CACHES = {
 
 # Tell select2 which cache configuration to use:
 SELECT2_CACHE_BACKEND = "select2"
+
+OPTIONAL_APPS = ()
+OPTIONAL_MIDDLEWARES = ()
+OPTIONAL_INTERNAL_IPS = ()
+INTERNAL_IPS = (
+    '127.0.0.1',)
+
+if os.environ.get("ENABLE_DEBUG_TOOLBAR", "False").lower() == "true":
+    OPTIONAL_APPS += ('debug_toolbar',)
+    OPTIONAL_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+    OPTIONAL_INTERNAL_IPS += ('127.0.0.1',)
+
+INSTALLED_APPS += OPTIONAL_APPS
+MIDDLEWARE += OPTIONAL_MIDDLEWARES
+INTERNAL_IPS += OPTIONAL_INTERNAL_IPS
