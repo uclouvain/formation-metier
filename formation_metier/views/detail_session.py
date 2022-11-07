@@ -1,6 +1,5 @@
+from django.db.models import Count, Exists, OuterRef
 from django.views.generic import FormView
-from django.conf.urls import url
-from django.contrib import messages
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -34,7 +33,10 @@ class DetailSession(FormMixin, generic.DetailView):
     def get_queryset(self):
         return super().get_queryset().filter(id=self.kwargs['session_id']).prefetch_related(
             'register_set',
-        )
+            'register_set__participant'
+        ).annotate(
+            register_count=Count('register'),
+            )
 
 
 class RegisterFormView(SingleObjectMixin, FormView):
@@ -60,7 +62,6 @@ class RegisterFormView(SingleObjectMixin, FormView):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
         if self.get_form().is_valid():
-
             register = self.get_form().save(commit=False)
             register.session = self.get_object()
             register.save()

@@ -3,6 +3,14 @@
 {% load static %}
 {% block content %}
     {% include 'formation_metier/delete_formation.html' %}
+    <script>
+        $(document).ready(function () {
+            $(' .session_row').click(function () {
+                window.location = $(this).data('href');
+                return false;
+            });
+        });
+    </script>
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
@@ -64,7 +72,7 @@
                     </thead>
                     <tbody>
                     {% for session in formation.session_set.all %}
-                        <tr>
+                        <tr data-href="{% url 'formation_metier:detail_session' session.id %}" id="session_row" class="session_row">
                             <td>
                                 <a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.session_date.date }}</a>
                             </td>
@@ -74,7 +82,7 @@
                             <td><a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.local }}</a>
                             </td>
                             <td>
-                                <a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.participant_max_number }}</a>
+                                <a href="{% url 'formation_metier:detail_session' session.id %}">{{ formation.register_count }}/{{ session.participant_max_number }}</a>
                             </td>
                             <td>
                                 <a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.formateur_id }}</a>
