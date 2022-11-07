@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from formation_metier.views import PersonAutoComplete
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('formation_metier.urls')),
-
+    path("select2/", include("django_select2.urls")),
 ]
