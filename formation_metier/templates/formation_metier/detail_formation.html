@@ -72,16 +72,14 @@
                     </thead>
                     <tbody>
                     {% for session in formation.session_set.all %}
-                        <tr data-href="{% url 'formation_metier:detail_session' session.id %}" id="session_row"
-                            class="session_row">
+                        <tr data-href="{% url 'formation_metier:detail_session' session.id %}" id="session_row" class="session_row">
                             <td>
                                 <a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.session_date.date }}</a>
                             </td>
                             <td>
                                 <a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.session_date.time }}</a>
                             </td>
-                            <td>
-                                <a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.local }}</a>
+                            <td><a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.local }}</a>
                             </td>
                             <td>
                                 <a href="{% url 'formation_metier:detail_session' session.id %}">{{ formation.register_count }}/{{ session.participant_max_number }}</a>
@@ -93,12 +91,6 @@
                     {% endfor %}
                     </tbody>
                 </table>
-            </div>
-        </div>
-    {% else %}
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <p> Il n'y a pas de session actuellement organisé pour la formation : {{ formation.name }}</p>
             </div>
         </div>
     {% endif %}
