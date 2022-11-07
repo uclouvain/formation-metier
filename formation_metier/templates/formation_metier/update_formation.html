@@ -10,7 +10,7 @@
             </a>
         </li>
         <li class="active">
-            New Formation
+            Update Formation
         </li>
     </ol>
     <div class="page-header">
@@ -20,7 +20,7 @@
         <form method="post">{% csrf_token %}
             {% bootstrap_form form %}
 
-            <input type="submit" value="Créer la formation">
+            <input type="submit" value="Mettre à jour la formation">
             <button type="button" value="Annuler">
                 <a href="{% url 'formation_metier:index' %}" style="color: #333">
                     Annuler

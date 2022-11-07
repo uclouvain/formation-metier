@@ -1,6 +1,8 @@
 {% extends 'formation_metier/base.html' %}
 {% load bootstrap3 %}
 {% load static %}
+{% load public_cible_display %}
+{% load l10n %}
 {% block content %}
     {% include 'formation_metier/delete_session.html' %}
     <script src="{% static 'js/htmx.min.js' %}"></script>
@@ -76,11 +78,12 @@
     </div>
     <div class="panel panel-default" style="padding: 10px">
         <div class="panel-body">
-            <p>Date : {{ session.session_date.date }}</p>
-            <p>Heure : {{ session.session_date.time }}</p>
+            <p>Date : {{ session.date_format}}</p>
+            <p>Heure : {{ session.time_format }}</p>
             <p>Local : {{ session.local }}</p>
-            <p>Maximum Participant : {{ session.participant_max_number }}</p>
+            <p>Maximum Participant : {{ session.register_count }} / {{ session.participant_max_number }}</p>
             <p>Formateur : {{ session.formateur_id }}</p>
+            <p>Formation organisée pour le groupe : {% public_cible_display session %}</p>
             <h3> Inscription : </h3>
             <table class="table">
                 <thead>
@@ -115,7 +118,6 @@
                             {% bootstrap_button "Inscrire" button_type="submit" button_class="btn-primary" %}
                         </div>
                     </div>
-
                 </form>
                 <div>
                 </div>
