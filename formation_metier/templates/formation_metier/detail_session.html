@@ -78,35 +78,14 @@
     </div>
     <div class="panel panel-default" style="padding: 10px">
         <div class="panel-body">
-            <p>Date : {{ session.date_format}}</p>
+            <p>Date : {{ session.date_format }}</p>
             <p>Heure : {{ session.time_format }}</p>
             <p>Local : {{ session.local }}</p>
             <p>Maximum Participant : {{ session.register_count }} / {{ session.participant_max_number }}</p>
             <p>Formateur : {{ session.formateur_id }}</p>
             <p>Formation organisée pour le groupe : {% public_cible_display session %}</p>
             <h3> Inscription : </h3>
-            <table class="table">
-                <thead>
-                <tr>
-                    <td>Nom du participant</td>
-                    <td>Numéro FGS</td>
-                    <td></td>
-                </tr>
-                </thead>
-                <tbody>
-                {% if session.register_set.count > 0 %}
-                    {% for register in session.register_set.all %}
-                        <tr style="max-height: 40px">
-                            <td>{{ register.participant }}</td>
-                            <td> {{ register.participant.numberFGS }}</td>
-                            <td class="hidden desinscrption_btn">
-                                <a href="{% url 'formation_metier:delete_registration' register.id %}" class="">
-                                    {% bootstrap_button "Désinscrire" button_type="submit" size="xs" %}
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% endif %}
+            <div>
                 <form method="post">
                     {% csrf_token %}
                     {{ form.media }}
@@ -119,10 +98,37 @@
                         </div>
                     </div>
                 </form>
-                <div>
-                </div>
-                </tbody>
-            </table>
+            </div>
+            {% if session.register_set.count > 0 %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>Nom du participant</td>
+                        <td>Numéro FGS</td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for register in session.register_set.all %}
+                        <tr style="max-height: 40px">
+                            <td>{{ register.participant }}</td>
+                            <td> {{ register.participant.numberFGS }}</td>
+                            <td class="hidden desinscrption_btn">
+                                <a href="{% url 'formation_metier:delete_registration' register.id %}" class="">
+                                    {% bootstrap_button "Désinscrire" button_type="submit" size="xs" %}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    <div>
+                    </div>
+                    </tbody>
+                </table>
+                {% else %}
+                <p>Il n'y a aucun participant d'inscrit pour l'instant</p>
+            {% endif %}
         </div>
     </div>
 
