@@ -14,6 +14,4 @@ class DetailFormation(generic.DetailView):
         return super().get_queryset().filter(id=self.kwargs['formation_id']).prefetch_related(
             'session_set',
             'session_set__register_set',
-        ).annotate(
-            register_count=Count('session__register'),
-            )
+        )
