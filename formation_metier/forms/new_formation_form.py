@@ -7,3 +7,24 @@ class NewFormationForm(ModelForm):
     class Meta:
         model = Formation
         fields = ('name', 'code', 'description')
+
+    # A voir si Charfield convertis automatiquement en Str
+    def clean_name(self):
+        data = self.cleaned_data['name']
+        if type(data) != str:
+            raise TypeError("Le nom de la formation doit être de type str")
+        return data
+
+    def clean_code(self):
+        data = self.cleaned_data['code']
+        if type(data) != str:
+            raise TypeError("Le code de la formation doit être de type str")
+        if len(data) != 9:
+            raise ValueError("le code doit être de 9 caractère")
+        return data
+
+    def clean_description(self):
+        data = self.cleaned_data['description']
+        if type(data) != str:
+            raise TypeError("La description de la formation doit être de type str")
+        return data
