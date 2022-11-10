@@ -56,15 +56,3 @@ class NewSessionFormTest(TestCase):
         self.assertEqual(response.status_code, 200)
         # self.assertEqual(request.status_code, 200)
         self.assertFormError(request, 'form', "test", ["Un objet Formation avec ce champ Code existe déjà."])
-
-    def test_with_invalid_data_(self):
-        data = {"name": True,
-                "code": "AAAAA0002",
-                "description": "formation de test"}
-        response = self.client.get(URL_NEW_FORMATION_VIEW)
-        request = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
-
-        self.assertEqual(response.status_code, 200)
-        # self.assertEqual(request.status_code, 200)
-        # self.assertEqual(Formation.objects.count(), 1)
-        # self.assertFormError(request, 'form', "name", ["Un objet Formation avec ce champ Code existe déjà."])
