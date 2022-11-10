@@ -45,6 +45,9 @@ INSTALLED_APPS = (
     'django_select2',
     'jquery',
     'debug_toolbar',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'celery',
 )
 
 MIDDLEWARE = (
