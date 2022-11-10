@@ -7,6 +7,10 @@ from formation_metier.models import formation
 from formation_metier.models import register
 from formation_metier.models import session
 from formation_metier.models import person
+from formation_metier.models import formateur
+from formation_metier.models import participant
+from formation_metier.models import role_osis
+from formation_metier.models import person_role
 
 
 # Register your model here.
@@ -52,12 +56,43 @@ class FormationAdmin(admin.ModelAdmin):
 class PersonAdmin(admin.ModelAdmin):
     fieldsets = [('name', {'fields': ['name']}),
                  ('numberFGS', {'fields': ['numberFGS']}),
-                 ('role', {'fields': ['role']}),
+                 ('role_formation_metier', {'fields': ['role_formation_metier']}),
                  ]
-    list_display = ('name', 'numberFGS', 'role')
+    list_display = ('name', 'numberFGS', 'role_formation_metier')
+
+
+class PersonRoleAdmin(admin.ModelAdmin):
+    fieldsets = [("participant", {"fields": ["participant"]}),
+                 ("formateur", {"fields": ["formateur"]}),
+                 ("role_osis", {"fields": ["role_osis"]}),
+                 ]
+
+    list_display = ("participant", "formateur", "role_osis")
+
+
+class RoleOsisAdmin(admin.ModelAdmin):
+    fieldsets = [("name", {"fields": ["name"]})]
+
+    list_display = ["name"]
+
+
+class ParticipantAdmin(admin.ModelAdmin):
+    fieldsets = [("person", {"fields": ["person"]})]
+
+    list_display = ["person"]
+
+
+class FormateurAdmin(admin.ModelAdmin):
+    fieldsets = [("person", {"fields": ["person"]})]
+
+    list_display = ["person"]
 
 
 admin.site.register(person.Person, PersonAdmin)
 admin.site.register(formation.Formation, FormationAdmin)
 admin.site.register(session.Session, SessionAdmin)
-admin.site.register(register.Register, RegisterAdmin)   
+admin.site.register(register.Register, RegisterAdmin)
+admin.site.register(participant.Participant, ParticipantAdmin)
+admin.site.register(role_osis.RoleOsis, RoleOsisAdmin)
+admin.site.register(person_role.PersonRole, PersonRoleAdmin)
+admin.site.register(formateur.Formateur, FormateurAdmin)
