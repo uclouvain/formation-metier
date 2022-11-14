@@ -1,6 +1,7 @@
 import os
 
 from celery import Celery
+from celery.schedules import crontab
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'module_formation.settings')
@@ -18,6 +19,12 @@ app.conf.timezone = 'Europe/Belgium'
 
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
+app.conf.beat_schedule = {
+    'get_person_every_day': {
+        'task': 'tasks.get_person_from_osis',
+        'schedule': crontab(hour=8, minute=30, day_of_week=1),
+    },
+}
 
 
 @app.task(bind=True)
