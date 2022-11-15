@@ -22,7 +22,7 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'get_person_every_day': {
         'task': 'tasks.get_person_from_osis',
-        'schedule': crontab(hour=8, minute=30, day_of_week=1),
+        'schedule': crontab(minute="*/30"),
     },
 }
 

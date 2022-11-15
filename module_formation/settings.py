@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -48,6 +50,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'celery',
+    'dotenv',
+    'environ'
 )
 
 MIDDLEWARE = (
@@ -166,8 +170,17 @@ if os.environ.get("ENABLE_DEBUG_TOOLBAR", "False").lower() == "true":
     OPTIONAL_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
     OPTIONAL_INTERNAL_IPS += ('127.0.0.1',)
 
+# environ.Env.read_env(env_file=os.path.join(BASE_DIR, '../.env'))
+
+
+import environ
+
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
+
 INSTALLED_APPS += OPTIONAL_APPS
 MIDDLEWARE += OPTIONAL_MIDDLEWARES
 INTERNAL_IPS += OPTIONAL_INTERNAL_IPS
-
 API_PERSON_URL = os.environ.get('API_PERSON_URL')
+DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER')

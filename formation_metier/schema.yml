@@ -22,17 +22,13 @@ paths:
       operationId: person_list
       parameters:
         - $ref: '#/components/parameters/Accept-Language'
-        - $ref: '#/components/parameters/X-User-FirstName'
-        - $ref: '#/components/parameters/X-User-LastName'
-        - $ref: '#/components/parameters/X-User-Email'
-        - $ref: '#/components/parameters/X-User-GlobalID'
       responses:
         '200':
-          description: OK
+          description: Successful get of the list of person
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PropositionDissertationPaginatedList'
+                $ref: '#/components/schemas/PersonGet'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -41,7 +37,7 @@ paths:
         - person_list
   /person/{uuid}:
     get:
-      description: "Return a person in Osis by his uuid to the formaton_metier module"
+      description: Obtain information about a specific registration person
       operationId: person_detail
       parameters:
         - in: path
@@ -51,17 +47,13 @@ paths:
             description: 'The uuid of the person'
             type: string
         - $ref: '#/components/parameters/Accept-Language'
-        - $ref: '#/components/parameters/X-User-FirstName'
-        - $ref: '#/components/parameters/X-User-LastName'
-        - $ref: '#/components/parameters/X-User-Email'
-        - $ref: '#/components/parameters/X-User-GlobalID'
       responses:
         '200':
-          description: OK
+          description: Successful get of a person's data
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PropositionDissertationPaginatedList'
+                $ref: '#/components/schemas/PersonBasic'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -78,30 +70,6 @@ components:
       name: Authorization
       description: Enter your token in the format **Token &lt;token>**
   parameters:
-    X-User-FirstName:
-      in: header
-      name: X-User-FirstName
-      schema:
-        type: string
-      required: false
-    X-User-LastName:
-      in: header
-      name: X-User-LastName
-      schema:
-        type: string
-      required: false
-    X-User-Email:
-      in: header
-      name: X-User-Email
-      schema:
-        type: string
-      required: false
-    X-User-GlobalID:
-      in: header
-      name: X-User-GlobalID
-      schema:
-        type: string
-      required: false
     Accept-Language:
       in: header
       name: Accept-Language
@@ -130,6 +98,33 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    PersonGet:
+      allOf:
+        - $ref: '#/components/schemas/PersonBasic'
+        - type: object
+          properties:
+            gender:
+              type: string
+              enum: [Formateur, Admin, Participant]
+    PersonBasic:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Jane
+        last_name:
+          type: string
+          example: Doe
+        numFGS:
+          type: string
+          example: "AAAAA0001"
+        role_osis:
+          type: list
+          example: ["Tutor", "ParcoursViewer"]
+    Uuid:
+      type: string
+      format: uuid
+      example: "abcd-efgh-ijkl-mnop-1234-5678"
     AcceptedLanguageEnum:
       type: string
       enum:
