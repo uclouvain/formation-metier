@@ -1,0 +1,142 @@
+openapi: 3.0.0
+servers:
+ - url: https://{environment}.osis.uclouvain.be/api/v1/person_formation_metier/
+   variables:
+     environment:
+       default: dev
+       enum:
+         - dev # Development server
+         - qa # Staging server
+         - test # Test server
+ - url: https://osis.uclouvain.be/api/v1/person_formation_metier/
+   description: 'Production server'
+info:
+  version: '1.00'
+  title: 'Formation_metier Service'
+  description: |-
+    A set of API endpoints that allow you to get information about person in Osis app
+paths:
+  /person:
+    get:
+      description: "Return all person in Osis to the formaton_metier module"
+      operationId: person_list
+      parameters:
+        - $ref: '#/components/parameters/Accept-Language'
+      responses:
+        '200':
+          description: Successful get of the list of person
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonGet'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - person_list
+  /person/{uuid}:
+    get:
+      description: Obtain information about a specific registration person
+      operationId: person_detail
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            description: 'The uuid of the person'
+            type: string
+        - $ref: '#/components/parameters/Accept-Language'
+      responses:
+        '200':
+          description: Successful get of a person's data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonBasic'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+        - person_detail
+components:
+  securitySchemes:
+    Token:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Enter your token in the format **Token &lt;token>**
+  parameters:
+    Accept-Language:
+      in: header
+      name: Accept-Language
+      description: >
+        The header advertises which languages the client is able to understand, and which locale variant is preferred. (By languages, we mean natural languages, such as English, and not programming languages.)
+      schema:
+        $ref: '#/components/schemas/AcceptedLanguageEnum'
+      required: false
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    PersonGet:
+      allOf:
+        - $ref: '#/components/schemas/PersonBasic'
+        - type: object
+          properties:
+            gender:
+              type: string
+              enum: [Formateur, Admin, Participant]
+    PersonBasic:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Jane
+        last_name:
+          type: string
+          example: Doe
+        numFGS:
+          type: string
+          example: "AAAAA0001"
+        role_osis:
+          type: list
+          example: ["Tutor", "ParcoursViewer"]
+    Uuid:
+      type: string
+      format: uuid
+      example: "abcd-efgh-ijkl-mnop-1234-5678"
+    AcceptedLanguageEnum:
+      type: string
+      enum:
+        - 'en'
+        - 'fr-be'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
