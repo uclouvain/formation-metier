@@ -3,9 +3,9 @@ from django.urls import path, include
 from schema_graph.views import Schema
 from django.contrib.auth import views as auth_views
 
-from formation_metier.views import ListFormationView, HomeView, NewFormationFormView, DetailFormation,DetailSessionView, \
-    UpdateFormationView, UpdateSessionView, NewSessionFormView, delete_session, delete_formation, PersonAutoComplete, \
-    delete_registration
+from formation_metier.views import ListFormationView, HomeView, NewFormationFormView, DetailFormation, \
+    DetailSessionView, UpdateFormationView, UpdateSessionView, NewSessionFormView, delete_session, delete_formation, \
+    PersonAutoComplete, delete_registration
 from formation_metier.api import urls_api
 
 app_name = 'formation_metier'
