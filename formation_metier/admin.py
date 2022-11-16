@@ -11,7 +11,6 @@ from formation_metier.models import formateur
 from formation_metier.models import participant
 
 
-
 # Register your model here.
 
 class RegisterInLine(admin.StackedInline):
