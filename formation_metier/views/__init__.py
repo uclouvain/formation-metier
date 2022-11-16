@@ -1,4 +1,4 @@
-from .index_view import IndexView
+from .list_formation_view import ListFormationView
 from .home_view import HomeView
 from .new_formation_form_view import NewFormationFormView
 from .new_session_form_view import NewSessionFormView
