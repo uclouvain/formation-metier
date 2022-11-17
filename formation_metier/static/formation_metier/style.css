@@ -36,3 +36,6 @@ div#formation_session_table th, div#formation_session_table td {
 
     text-align: center;
 }
+span.select2-container span.select2-selection--single {
+    height: 34px;
+}

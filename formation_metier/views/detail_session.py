@@ -1,4 +1,5 @@
-from django.db.models import Count, Exists, OuterRef
+from django.contrib import messages
+from django.db.models import Count
 from django.views.generic import FormView
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
@@ -8,7 +9,6 @@ from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormMixin
 
 from formation_metier.forms.new_registation_form import NewRegistrationForm
-from formation_metier.models.register import Register
 from formation_metier.models.session import Session
 
 
@@ -65,6 +65,7 @@ class RegisterFormView(SingleObjectMixin, FormView):
             register = self.get_form().save(commit=False)
             register.session = self.get_object()
             register.save()
+            messages.success(request, 'Le participant {} a été ajouté.'.format(register.participant.name))
         else:
             return render(request, self.template_name, {'session': self.get_object(), 'form': self.get_form()})
         return redirect(self.get_success_url())
