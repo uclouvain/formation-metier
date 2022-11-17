@@ -19,8 +19,7 @@ class NewFormationForm(ModelForm):
         data = self.cleaned_data['code']
         if type(data) != str:
             raise TypeError("Le code de la formation doit être de type str")
-        if len(data) != 9:
-            raise ValueError("le code doit être de 9 caractère")
+
         return data
 
     def clean_description(self):

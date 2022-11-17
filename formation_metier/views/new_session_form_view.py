@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import generic
@@ -24,4 +25,7 @@ class NewSessionFormView(generic.CreateView):
     def form_valid(self, form):
         formation = get_object_or_404(Formation, id=self.kwargs['formation_id'])
         form.instance.formation = formation
+        messages.success(self.request, 'La session du {} à {} a été ajouté.'.format(
+            form.cleaned_data['session_date'].__format__("%A %d %B %Y"),
+            form.cleaned_data['session_date'].__format__("%Hh%I")))
         return super().form_valid(form)
