@@ -3,15 +3,15 @@ from django.urls import path, include
 from schema_graph.views import Schema
 from django.contrib.auth import views as auth_views
 
-from formation_metier.views import IndexView, HomeView, NewFormationFormView, DetailFormation,DetailSessionView, \
-    UpdateFormationView, UpdateSessionView, NewSessionFormView, delete_session, delete_formation, PersonAutoComplete, \
-    delete_registration
+from formation_metier.views import ListFormationView, HomeView, NewFormationFormView, DetailFormation, \
+    DetailSessionView, UpdateFormationView, UpdateSessionView, NewSessionFormView, delete_session, delete_formation, \
+    PersonAutoComplete, delete_registration
 from formation_metier.api import urls_api
 
 app_name = 'formation_metier'
 urlpatterns = [
-    path('index/', IndexView.as_view(), name='index'),
-    path('home/', HomeView.as_view(), name='home'),
+    path('list_formation/', ListFormationView.as_view(), name='list_formation'),
+    path('', HomeView.as_view(), name='home'),
     path('new_formation/', NewFormationFormView.as_view(), name='new_formation'),
     path('formation/<int:formation_id>/', DetailFormation.as_view(), name='detail_formation'),
     path('formation/new_session/<int:formation_id>', NewSessionFormView.as_view(), name='new_session'),

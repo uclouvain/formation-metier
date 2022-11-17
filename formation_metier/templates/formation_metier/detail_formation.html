@@ -5,7 +5,7 @@
     {% include 'formation_metier/delete_formation.html' %}
     <script>
         $(document).ready(function () {
-            $(' .session_row').click(function () {
+            $('.session_row').click(function () {
                 window.location = $(this).data('href');
                 return false;
             });
@@ -15,8 +15,8 @@
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
         <li>
-            <a href="{% url 'formation_metier:index' %}">
-                Index
+            <a href="{% url 'formation_metier:list_formation' %}">
+                Liste des formation
             </a>
         </li>
         <li class="active">
@@ -77,18 +77,10 @@
                             <td>
                                 <a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.session_date.date }}</a>
                             </td>
-                            <td>
-                                <a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.session_date.time }}</a>
-                            </td>
-                            <td>
-                                <a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.local }}</a>
-                            </td>
-                            <td>
-                                <a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.register_set.count }}/{{ session.participant_max_number }}</a>
-                            </td>
-                            <td>
-                                <a href="{% url 'formation_metier:detail_session' session.id %}">{{ session.formateur_id }}</a>
-                            </td>
+                            <td>{{ session.session_date.time }}</td>
+                            <td>{{ session.local }}</td>
+                            <td>{{ session.register_set.count }}/{{ session.participant_max_number }}</td>
+                            <td>{{ session.formateur_id }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
