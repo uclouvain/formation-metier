@@ -10,6 +10,7 @@ class NewFormationFormView(generic.CreateView):
     template_name = 'formation_metier/new_formation_form.html'
     form_class = NewFormationForm
     success_url = '/list_formation'
+    name = 'new_formation'
 
     def form_valid(self, form):
         messages.success(self.request, 'La formation {} a été ajouté.'.format(form.cleaned_data['name']))

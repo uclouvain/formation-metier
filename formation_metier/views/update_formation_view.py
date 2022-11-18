@@ -12,6 +12,7 @@ class UpdateFormationView(LoginRequiredMixin, SuccessMessageMixin, generic.edit.
     template_name = 'formation_metier/update_formation.html'
     pk_url_kwarg = "formation_id"
     success_message = 'La formation %(name)s a été modifiée.'
+    name = 'update_formation'
 
     def get_success_url(self):
         return reverse('formation_metier:detail_formation', kwargs={'formation_id': self.kwargs['formation_id']})
