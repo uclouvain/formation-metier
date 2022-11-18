@@ -12,6 +12,7 @@ class UpdateSessionView(LoginRequiredMixin, SuccessMessageMixin, generic.edit.Up
     template_name = 'formation_metier/update_session.html'
     pk_url_kwarg = "session_id"
     success_message = 'La session a été modifiée.'
+    name = 'update_session'
 
     def get_success_url(self):
         return reverse('formation_metier:detail_session', kwargs={'session_id': self.kwargs['session_id']})
