@@ -46,7 +46,6 @@ INSTALLED_APPS = (
     'django_htmx',
     'django_select2',
     'jquery',
-    'debug_toolbar',
     'rest_framework',
     'rest_framework.authtoken',
     'celery',
@@ -63,7 +62,6 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_htmx.middleware.HtmxMiddleware",
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'module_formation.urls'
@@ -162,21 +160,12 @@ SELECT2_CACHE_BACKEND = "select2"
 OPTIONAL_APPS = ()
 OPTIONAL_MIDDLEWARES = ()
 OPTIONAL_INTERNAL_IPS = ()
-INTERNAL_IPS = (
-    '127.0.0.1',)
-
+INTERNAL_IPS = ()
 if os.environ.get("ENABLE_DEBUG_TOOLBAR", "False").lower() == "true":
     OPTIONAL_APPS += ('debug_toolbar',)
     OPTIONAL_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
     OPTIONAL_INTERNAL_IPS += ('127.0.0.1',)
 
-# environ.Env.read_env(env_file=os.path.join(BASE_DIR, '../.env'))
-
-
-import environ
-
-# Initialise environment variables
-env = environ.Env()
 environ.Env.read_env()
 
 INSTALLED_APPS += OPTIONAL_APPS
