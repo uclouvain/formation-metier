@@ -52,8 +52,6 @@ INSTALLED_APPS = (
     'celery',
     'dotenv',
     'environ',
-    'django_celery_results',
-    'django_celery_beat'
 )
 
 MIDDLEWARE = (
