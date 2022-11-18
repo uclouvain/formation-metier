@@ -2,42 +2,73 @@ from celery import shared_task
 from django.conf import settings
 import requests
 import logging
-from formation_metier.models.person import create_person_object_from_api_response
+from pprint import pprint
+from formation_metier import celery_app
+
+from formation_metier.exemple_data_from_api import data_person
+from formation_metier.models.participant import Participant
+from formation_metier.models.person import Person
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
+# Commande pour lancer Celery avec exécution du beat :  celery -A formation_metier worker -B -l INFO
 
-@shared_task
+
+@celery_app.task(bind=True)
+def debug_task(self):
+    print(f'Request: {self.request!r}')
+
+
+@celery_app.task
 def get_person_from_osis():
+    # En attendant de faire les vrai appel API
+    create_person_object_from_api_response(data_person)
     url = settings.API_PERSON_URL + "person/"
-    print(url)
     try:
         persons = requests.get(
             url,
-            timeout=20  # settings.REQUESTS_TIMEOUT or 20
+            timeout=20
         )
-        for item in persons:
+        for item in persons.json():
             print(item)
-        create_person_object_from_api_response(persons.json())
+        # a décommenter lorsque il y aura la vrai API
+        # create_person_object_from_api_response(persons.json())
         return persons.json()
     except Exception:
         logger.info("[Synchronize person] An error occurred during fetching person from OSIS")
         raise ValueError
 
 
-@shared_task
+@celery_app.task()
 def get_specific_person_from_osis(person_id):
     url = settings.API_PERSON_URL + "person/" + str(person_id)
-    print(url)
     try:
         person = requests.get(
             url,
             timeout=20  # settings.REQUESTS_TIMEOUT or 20
         )
-        print(person)
-        print(person.json())
-        # create_person_object_from_api_response(person.json())
         return person.json()
     except Exception:
         logger.info("[Synchronize person] An error occurred during fetching person from OSIS")
         raise ValueError
+
+
+def create_person_object_from_api_response(person_list_json: list):
+    print("passé dans creation de person")
+    if not person_list_json:
+        raise AssertionError
+    if type(person_list_json) != list:
+        raise TypeError
+    else:
+        for person in person_list_json:
+            name = str(person["firstname"]) + " " + str(person["lastname"])
+            numbers_fgs = person["matric_fgs"]
+            person_object = Person(name=name,
+                                   numberFGS=numbers_fgs,
+                                   role_formation_metier=Person.PARTICIPANT,
+                                   )
+            if not Person.objects.filter(numberFGS=person_object.numberFGS):
+                person_object.save()
+                if person_object.role_formation_metier == Person.PARTICIPANT:
+                    participant_object = Participant(person=person_object)
+                    participant_object.save()
