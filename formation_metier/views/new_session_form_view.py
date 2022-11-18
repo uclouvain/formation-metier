@@ -13,6 +13,7 @@ class NewSessionFormView(generic.CreateView):
     template_name = 'formation_metier/new_session_form.html'
     form_class = NewSessionForm
     pk_url_kwarg = "formation_id"
+    name = 'new_session'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
