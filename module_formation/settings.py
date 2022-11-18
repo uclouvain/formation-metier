@@ -51,7 +51,9 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'celery',
     'dotenv',
-    'environ'
+    'environ',
+    'django_celery_results',
+    'django_celery_beat'
 )
 
 MIDDLEWARE = (
@@ -185,3 +187,10 @@ INTERNAL_IPS += OPTIONAL_INTERNAL_IPS
 API_PERSON_URL = os.environ.get('API_PERSON_URL')
 DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER')
 ROLES_OSIS = os.environ.get('ROLES_OSIS')
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
