@@ -24,7 +24,7 @@ urlpatterns = [
     # delete_view
     path('formation/delete/<int:formation_id>/', delete_formation, name='delete_formation'),
     path('formation/session/delete/<int:session_id>/', delete_session, name='delete_session'),
-    path('formation/session/register/delete/<int:register_id>', delete_registration, name='delete_registration'),
+    path('formation/session/register/delete/', delete_registration, name='delete_registration'),
     # Autocomplete Widget
     path('autocompletePerson/', PersonAutoComplete.as_view(), name=PersonAutoComplete.name),
     # API
