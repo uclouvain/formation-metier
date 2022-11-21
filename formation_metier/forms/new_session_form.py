@@ -6,4 +6,4 @@ from formation_metier.models.session import Session
 class NewSessionForm(ModelForm):
     class Meta:
         model = Session
-        fields = ('session_date', 'local', 'participant_max_number', 'formateur_id', 'public_cible')
+        fields = ('session_date', 'local', 'participant_max_number', 'formateur', 'public_cible','duree')
