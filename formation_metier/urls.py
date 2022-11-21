@@ -10,24 +10,27 @@ from formation_metier.api import urls_api
 
 app_name = 'formation_metier'
 urlpatterns = [
-    path('list_formation/', ListFormationView.as_view(), name='list_formation'),
-    path('', HomeView.as_view(), name='home'),
-    path('new_formation/', NewFormationFormView.as_view(), name='new_formation'),
-    path('formation/<int:formation_id>/', DetailFormation.as_view(), name='detail_formation'),
-    path('formation/new_session/<int:formation_id>', NewSessionFormView.as_view(), name='new_session'),
-    path('formation/update/<int:formation_id>/', UpdateFormationView.as_view(), name='update_formation'),
-    path('formation/session/update/<int:session_id>/', UpdateSessionView.as_view(), name='update_session'),
-    path('formation/session/<int:session_id>/', DetailSessionView.as_view(), name='detail_session'),
+    path('', HomeView.as_view(), name=HomeView.name),
+    path('list_formation/', ListFormationView.as_view(), name=ListFormationView.name),
+    # detail_view
+    path('formation/<int:formation_id>/', DetailFormation.as_view(), name=DetailFormation.name),
+    path('formation/session/<int:session_id>/', DetailSessionView.as_view(), name=DetailSessionView.name),
+    # new_view
+    path('new_formation/', NewFormationFormView.as_view(), name=NewFormationFormView.name),
+    path('formation/new_session/<int:formation_id>', NewSessionFormView.as_view(), name=NewSessionFormView.name),
+    # update_view
+    path('formation/update/<int:formation_id>/', UpdateFormationView.as_view(), name=UpdateFormationView.name),
+    path('formation/session/update/<int:session_id>/', UpdateSessionView.as_view(), name=UpdateSessionView.name),
+    # delete_view
+    path('formation/delete/<int:formation_id>/', delete_formation, name='delete_formation'),
     path('formation/session/delete/<int:session_id>/', delete_session, name='delete_session'),
     path('formation/session/register/delete/<int:register_id>', delete_registration, name='delete_registration'),
-    path('formation/delete/<int:formation_id>/', delete_formation, name='delete_formation'),
-    path('autocompletePerson/', PersonAutoComplete.as_view(), name='widget_participant'),
+    # Autocomplete Widget
+    path('autocompletePerson/', PersonAutoComplete.as_view(), name=PersonAutoComplete.name),
+    # API
     path('', include(urls_api)),
-
     # auth
     path('accounts/login/', auth_views.LoginView.as_view()),
     # graph_models
     path("schema/", Schema.as_view(), name='schemaModels'),
-    # debug Toolbar
-    path('__debug__/', include('debug_toolbar.urls')),
 ]

@@ -5,6 +5,7 @@ from formation_metier.models.person import Person
 
 
 class PersonAutoComplete(autocomplete.Select2QuerySetView):
+    name = 'widget_participant'
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Person.objects.none()

@@ -3,6 +3,9 @@ from django.conf import settings
 import requests
 import logging
 from pprint import pprint
+
+from typing import List, Dict
+
 from formation_metier import celery_app
 
 from formation_metier.exemple_data_from_api import data_person
@@ -10,6 +13,7 @@ from formation_metier.models.participant import Participant
 from formation_metier.models.person import Person
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
 
 # Commande pour lancer Celery avec exécution du beat :  celery -A formation_metier worker -B -l INFO
 
@@ -20,7 +24,7 @@ def debug_task(self):
 
 
 @celery_app.task
-def get_person_from_osis():
+def get_person_from_osis() -> List[Dict]:
     # En attendant de faire les vrai appel API
     create_person_object_from_api_response(data_person)
     url = settings.API_PERSON_URL + "person/"
@@ -40,7 +44,7 @@ def get_person_from_osis():
 
 
 @celery_app.task()
-def get_specific_person_from_osis(person_id):
+def get_specific_person_from_osis(person_id: str) -> List[Dict]:
     url = settings.API_PERSON_URL + "person/" + str(person_id)
     try:
         person = requests.get(

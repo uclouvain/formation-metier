@@ -75,6 +75,7 @@ class RegisterFormView(SingleObjectMixin, FormView):
 
 
 class DetailSessionView(View):
+    name = 'detail_session'
     def get(self, request, *args, **kwargs):
         view = DetailSession.as_view()
         return view(request, *args, **kwargs)

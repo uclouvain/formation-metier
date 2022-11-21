@@ -21,11 +21,12 @@ from django.urls import path, include
 from formation_metier.views import PersonAutoComplete
 
 urlpatterns = [
+    path('', include('formation_metier.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', include('formation_metier.urls')),
     path("select2/", include("django_select2.urls")),
 ]
+
 
 if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
