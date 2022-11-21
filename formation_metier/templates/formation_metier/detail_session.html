@@ -5,24 +5,9 @@
 {% load l10n %}
 {% block content %}
     {% include 'formation_metier/delete_session.html' %}
+    {% include 'formation_metier/delete_register.html' %}
     <script src="{% static 'js/htmx.min.js' %}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $(".btn_delete_register").click(function () {
-                if ($(".desinscrption_btn").hasClass("hidden")) {
-
-                    $(".desinscrption_btn").each(function () {
-                        $(this).removeClass("hidden")
-                    });
-                } else {
-                    $(".desinscrption_btn").each(function () {
-                        $(this).addClass("hidden");
-                    });
-                }
-            });
-        });
-    </script>
 
 
     <ol class="breadcrumb">
@@ -71,6 +56,11 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-large row ">
                     <li>
+                        <a href="{% url 'formation_metier:new_session' session.formation.id %}" class="no_spinner">
+                            <form method="post" style="margin: 0">Ajouter une nouvelle session</form>
+                        </a>
+                    </li>
+                    <li>
                         <a href="{% url 'formation_metier:update_session' session.id %} " class="no_spinner">
                             <form method="post" style="margin: 0">Modifier la session</form>
                         </a>
@@ -78,16 +68,12 @@
                     <li>
                         <a href="#" data-toggle="modal" data-target="#sessionDeleteModal">Supprimer la session</a>
                     </li>
-                    <li>
-                        <a href="{% url 'formation_metier:new_session' session.formation.id %}" class="no_spinner">
-                            <form method="post" style="margin: 0">Ajouter une nouvelle session</form>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" id="btn_delete_register" class="no_spinner btn_delete_register">
-                            Supprimer des inscription
-                        </a>
-                    </li>
+                    {% if session.register_set.count != 0 %}
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#registerDeleteModal">Supprimer des
+                                inscription</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -107,7 +93,7 @@
                     {{ form.media }}
                     <div class="row">
                         <div class="col-lg-8 mb-3">
-                            {% bootstrap_form form layout='inline' error_types='none'%}
+                            {% bootstrap_form form layout='inline' error_types='none' %}
                         </div>
                         <div>
                             {% bootstrap_button "Inscrire" button_type="submit" button_class="btn-primary" %}
@@ -130,14 +116,8 @@
                         <tr style="max-height: 40px">
                             <td>{{ register.participant }}</td>
                             <td> {{ register.participant.numberFGS }}</td>
-                            <td class="hidden desinscrption_btn">
-                                <a href="{% url 'formation_metier:delete_registration' register.id %}" class="">
-                                    {% bootstrap_button "Désinscrire" button_type="submit" size="xs" %}
-                                </a>
-                            </td>
                         </tr>
                     {% endfor %}
-
                     <div>
                     </div>
                     </tbody>
