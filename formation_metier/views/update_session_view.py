@@ -8,7 +8,7 @@ from formation_metier.models.session import Session
 
 class UpdateSessionView(LoginRequiredMixin, SuccessMessageMixin, generic.edit.UpdateView):
     model = Session
-    fields = ['session_date', 'local', 'participant_max_number', 'formateur_id', 'public_cible']
+    fields = ['session_date', 'local', 'participant_max_number', 'formateur', 'public_cible', 'duree']
     template_name = 'formation_metier/update_session.html'
     pk_url_kwarg = "session_id"
     success_message = 'La session a été modifiée.'

@@ -30,10 +30,12 @@ class SessionAdmin(admin.ModelAdmin):
                  ('session_date', {'fields': ['session_date']}),
                  ('local', {'fields': ['local']}),
                  ('participant_max_number', {'fields': ['participant_max_number']}),
-                 ('formateur_id', {'fields': ['formateur_id']}),
+                 ('formateur', {'fields': ['formateur']}),
                  ('public_cible', {'fields': ['public_cible']}),
+                 ('duree', {'fields': ['duree']})
                  ]
-    list_display = ('formation', 'session_date', 'local', 'participant_max_number', 'formateur_id', 'public_cible')
+    list_display = (
+        'formation', 'session_date', 'local', 'participant_max_number', 'formateur', 'public_cible', 'duree')
     inlines = [RegisterInLine]
 
 

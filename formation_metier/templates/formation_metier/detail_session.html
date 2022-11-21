@@ -83,8 +83,9 @@
             <p>Date : {{ session.date_format }}</p>
             <p>Heure : {{ session.time_format }}</p>
             <p>Local : {{ session.local }}</p>
-            <p>Maximum Participant : {{ session.register_count }} / {{ session.participant_max_number }}</p>
-            <p>Formateur : {{ session.formateur_id }}</p>
+            <p>Durée ( en minutes) : {{ session.duree }}</p>
+            <p>Participants : {{ session.register_count }} / {{ session.participant_max_number }}</p>
+            <p>Formateur : {{ session.formateur }}</p>
             <p>Formation organisée pour le groupe : {% public_cible_display session %}</p>
             <h3> Inscription : </h3>
             <div>
