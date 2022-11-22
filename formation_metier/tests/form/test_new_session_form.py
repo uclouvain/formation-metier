@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from django.urls import reverse
-from formation_metier.models.person import Person
+from formation_metier.models.person import Person, RoleFormationFareEnum
 from formation_metier.models.session import Session
 from formation_metier.tests.utils import create_test_formation, create_test_session, create_test_person, \
     create_test_formateur
@@ -20,7 +20,7 @@ class NewSessionFormTest(TestCase):
         cls.date = datetime.today()
         cls.formation1 = create_test_formation(name="formation_test_1", code="AAAAA0001")
         cls.person1 = create_test_person(name="test", number_fgs="AAA01",
-                                         role_formation_metier=Person.ROLES_FORMATION_FARE[1])
+                                         role_formation_metier=RoleFormationFareEnum.PARTICIPANT)
         cls.formateur1 = create_test_formateur(person=cls.person1)
         cls.session1 = create_test_session(formation=cls.formation1,
                                            session_date=cls.date,
