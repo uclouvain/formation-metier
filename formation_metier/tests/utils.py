@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+
 from formation_metier.models.formation import Formation
 from formation_metier.models.participant import Participant
 from formation_metier.models.formateur import Formateur
@@ -21,7 +23,7 @@ def create_test_formateur(person):
     return Formateur.objects.create(person=person)
 
 
-def create_test_session(formation, session_date, local, participant_max_number, formateur, public_cible,duree):
+def create_test_session(formation, session_date, local, participant_max_number, formateur, public_cible, duree):
     return Session.objects.create(formation=formation,
                                   session_date=session_date,
                                   local=local,
@@ -42,3 +44,7 @@ def create_test_formation(code, name):
     return Formation.objects.create(code=code,
                                     name=name,
                                     description="description de test")
+
+
+def create_test_user(username, password):
+    return User.objects.create(username=username, password=password)
