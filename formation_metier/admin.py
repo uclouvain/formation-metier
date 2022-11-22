@@ -57,8 +57,9 @@ class PersonAdmin(admin.ModelAdmin):
     fieldsets = [('name', {'fields': ['name']}),
                  ('numberFGS', {'fields': ['numberFGS']}),
                  ('role_formation_metier', {'fields': ['role_formation_metier']}),
+                 ('user', {'fields': ['user']}),
                  ]
-    list_display = ('name', 'numberFGS', 'role_formation_metier')
+    list_display = ('name', 'numberFGS', 'role_formation_metier', 'user')
 
 
 class ParticipantAdmin(admin.ModelAdmin):

@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
 from formation_metier.models.session import Session
 from formation_metier.tests.utils import create_test_formation, create_test_session, create_test_register, \
     create_test_person
@@ -22,22 +23,22 @@ class DetailSessionViewTest(TestCase):
                                            session_date=cls.date,
                                            participant_max_number=10,
                                            local="L001",
-                                           formateur_id="formateur1",
-                                           public_cible=Session.PARTICIPANT
+                                           formateur="formateur1",
+                                           public_cible=ROLES_OSIS_CHOICES.PARTICIPANT
                                            )
         cls.session2 = create_test_session(formation=cls.formation1,
                                            session_date=cls.date,
                                            participant_max_number=10,
                                            local="L002",
-                                           formateur_id="formateur2",
-                                           public_cible=Session.PARTICIPANT
+                                           formateur="formateur2",
+                                           public_cible=ROLES_OSIS_CHOICES.PARTICIPANT
                                            )
         cls.session3 = create_test_session(formation=cls.formation1,
                                            session_date=cls.date,
                                            participant_max_number=10,
                                            local="L002",
-                                           formateur_id="formateur2",
-                                           public_cible=Session.PARTICIPANT
+                                           formateur="formateur2",
+                                           public_cible=ROLES_OSIS_CHOICES.PARTICIPANT
                                            )
         cls.register1 = create_test_register(session=cls.session2,
                                              participant=cls.person1,
@@ -54,7 +55,7 @@ class DetailSessionViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.session1.formation)
-        self.assertContains(response, self.session1.formateur_id)
+        self.assertContains(response, self.session1.formateur)
         self.assertContains(response, self.session1.participant_max_number)
         self.assertContains(response, self.session1.public_cible)
         self.assertContains(response, "Il n'y a aucun participant d'inscrit pour l'instant")
@@ -64,7 +65,7 @@ class DetailSessionViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.session3.formation)
-        self.assertContains(response, self.session3.formateur_id)
+        self.assertContains(response, self.session3.formateur)
         self.assertContains(response, self.session3.participant_max_number)
         self.assertContains(response, self.session3.public_cible)
         self.assertContains(response, self.register3.participant.name)
@@ -77,7 +78,7 @@ class DetailSessionViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.session2.formation)
-        self.assertContains(response, self.session2.formateur_id)
+        self.assertContains(response, self.session2.formateur)
         self.assertContains(response, self.session2.participant_max_number)
         self.assertContains(response, self.session2.public_cible)
         self.assertContains(response, self.register2.participant.name)

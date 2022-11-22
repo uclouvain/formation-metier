@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.timezone import localtime
 
+from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
 from formation_metier.models.session import Session
 from formation_metier.tests.utils import create_test_formation, create_test_session
 
@@ -30,8 +31,8 @@ class DetailFormationViewTest(TestCase):
                                        session_date=self.date,
                                        participant_max_number=10,
                                        local="L001",
-                                       formateur_id="formateur1",
-                                       public_cible=Session.PARTICIPANT
+                                       formateur="formateur1",
+                                       public_cible=ROLES_OSIS_CHOICES.PARTICIPANT
                                        )
         url = reverse(URL_DETAIL_FORMATION_VIEW, args=[formation1.id])
         response = self.client.get(url)
@@ -41,7 +42,7 @@ class DetailFormationViewTest(TestCase):
         self.assertContains(response, formation1.description)
         self.assertContains(response, session1.participant_max_number)
         self.assertContains(response, session1.local)
-        self.assertContains(response, session1.formateur_id)
+        self.assertContains(response, session1.formateur)
         self.assertEqual(response.context["formation"], formation1)
 
     def test_with_one_session_not_for_formation(self):
@@ -51,8 +52,8 @@ class DetailFormationViewTest(TestCase):
                                        session_date=self.date,
                                        participant_max_number=10,
                                        local="L001",
-                                       formateur_id="formateur1",
-                                       public_cible=Session.PARTICIPANT
+                                       formateur="formateur1",
+                                       public_cible=ROLES_OSIS_CHOICES.PARTICIPANT
                                        )
         url = reverse(URL_DETAIL_FORMATION_VIEW, args=[formation1.id])
         response = self.client.get(url)
@@ -62,7 +63,7 @@ class DetailFormationViewTest(TestCase):
         self.assertNotContains(response, formation2.name)
         self.assertNotContains(response, formation2.code)
         self.assertNotContains(response, session1.local)
-        self.assertNotContains(response, session1.formateur_id)
+        self.assertNotContains(response, session1.formateur)
         self.assertEqual(response.context["formation"], formation1)
         self.assertNotEqual(response.context["formation"], formation2)
 
@@ -73,22 +74,22 @@ class DetailFormationViewTest(TestCase):
                                        session_date=self.date,
                                        participant_max_number=10,
                                        local="L001",
-                                       formateur_id="formateur1",
-                                       public_cible=Session.PARTICIPANT
+                                       formateur="formateur1",
+                                       public_cible=ROLES_OSIS_CHOICES.PARTICIPANT
                                        )
         session2 = create_test_session(formation=formation1,
                                        session_date=self.date,
                                        participant_max_number=10,
                                        local="L002",
-                                       formateur_id="formateur2",
-                                       public_cible=Session.PARTICIPANT
+                                       formateur="formateur2",
+                                       public_cible=ROLES_OSIS_CHOICES.PARTICIPANT
                                        )
         session3 = create_test_session(formation=formation1,
                                        session_date=self.date,
                                        participant_max_number=10,
                                        local="L003",
-                                       formateur_id="formateur3",
-                                       public_cible=Session.PARTICIPANT
+                                       formateur="formateur3",
+                                       public_cible=ROLES_OSIS_CHOICES.PARTICIPANT
                                        )
         url = reverse(URL_DETAIL_FORMATION_VIEW, args=[formation1.id])
         response = self.client.get(url)
@@ -102,7 +103,7 @@ class DetailFormationViewTest(TestCase):
         self.assertContains(response, session2.local)
         self.assertContains(response, session3.participant_max_number)
         self.assertContains(response, session2.participant_max_number)
-        self.assertContains(response, session2.formateur_id)
-        self.assertContains(response, session3.formateur_id)
+        self.assertContains(response, session2.formateur)
+        self.assertContains(response, session3.formateur)
         self.assertEqual(response.context["formation"], formation1)
         self.assertNotEqual(response.context["formation"], formation2)

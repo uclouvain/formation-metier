@@ -19,7 +19,6 @@ class NewFormationForm(ModelForm):
         data = self.cleaned_data['code']
         if type(data) != str:
             raise TypeError("Le code de la formation doit être de type str")
-
         return data
 
     def clean_description(self):
