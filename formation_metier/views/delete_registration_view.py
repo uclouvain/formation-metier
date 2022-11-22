@@ -1,10 +1,13 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from formation_metier.models.register import Register
 from formation_metier.models.session import Session
 
 
+@login_required
+@permission_required('formation_metier.delete_register', raise_exception=True)
 def delete_registration(request) -> HttpResponseRedirect:
     if request.method == "POST":
         register_list = request.POST.getlist('inscription')

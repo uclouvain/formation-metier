@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse
 from django.views import generic
@@ -6,7 +6,8 @@ from django.views import generic
 from formation_metier.models.session import Session
 
 
-class UpdateSessionView(LoginRequiredMixin, SuccessMessageMixin, generic.edit.UpdateView):
+class UpdateSessionView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, generic.edit.UpdateView):
+    permission_required = 'formation_metier.change_session'
     model = Session
     fields = ['session_date', 'local', 'participant_max_number', 'formateur', 'public_cible', 'duree']
     template_name = 'formation_metier/update_session.html'

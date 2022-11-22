@@ -1,11 +1,13 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.views import generic
 
 from formation_metier.models.formation import Formation
 from formation_metier.forms.new_formation_form import NewFormationForm
 
 
-class NewFormationFormView(generic.CreateView):
+class NewFormationFormView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
+    permission_required = 'formation_metier.add_formation'
     model = Formation
     template_name = 'formation_metier/new_formation_form.html'
     form_class = NewFormationForm
