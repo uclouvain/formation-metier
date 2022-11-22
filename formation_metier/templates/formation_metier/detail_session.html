@@ -115,8 +115,8 @@
 
                     {% for register in session.register_set.all %}
                         <tr style="max-height: 40px">
-                            <td>{{ register.participant }}</td>
-                            <td> {{ register.participant.numberFGS }}</td>
+                            <td>{{ register.participant.person }}</td>
+                            <td> {{ register.participant.person.numberFGS }}</td>
                         </tr>
                     {% endfor %}
                     <div>

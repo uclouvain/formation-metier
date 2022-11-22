@@ -12,7 +12,7 @@
                 <div class="modal-body">
                     {% for register in session.register_set.all %}
                         <input  type="checkbox" name="inscription" value="{{ register.id }}">
-                        <label>{{ register.participant }}</label>
+                        <label>{{ register.participant.person }}</label>
                         <br>
                     {% endfor %}
                 </div>

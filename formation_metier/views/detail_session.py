@@ -33,7 +33,7 @@ class DetailSession(FormMixin, generic.DetailView):
     def get_queryset(self):
         return super().get_queryset().filter(id=self.kwargs['session_id']).prefetch_related(
             'register_set',
-            'register_set__participant'
+            'register_set__participant__person'
         ).annotate(
             register_count=Count('register'),
             )
@@ -65,7 +65,7 @@ class RegisterFormView(SingleObjectMixin, FormView):
             register = self.get_form().save(commit=False)
             register.session = self.get_object()
             register.save()
-            messages.success(request, 'Le participant {} a été ajouté.'.format(register.participant.name))
+            messages.success(request, 'Le participant {} a été ajouté.'.format(register.participant.person.name))
         else:
             return render(request, self.template_name, {'session': self.get_object(), 'form': self.get_form()})
         return redirect(self.get_success_url())
