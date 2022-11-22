@@ -10,7 +10,7 @@ def delete_registration(request) -> HttpResponseRedirect:
         register_list = request.POST.getlist('inscription')
         register_object_list = []
         session_id = request.POST.get("session_id")
-        session_register_set = Session.objects.get(id=session_id).register_set
+        session_register_set = Session.objects.get(id=session_id).register_set.all()
         for register in register_list:
             register_object = get_object_or_404(Register, pk=register)
             if register_object not in session_register_set:
@@ -20,5 +20,5 @@ def delete_registration(request) -> HttpResponseRedirect:
         for register_object in register_object_list:
             register_object.delete()
             messages.success(request, "L'inscription de l'utilisateur '{}' a été supprimée.".format(
-                register_object.participant.name))
+                register_object.participant.person.name))
         return redirect('formation_metier:detail_session', session_id)
