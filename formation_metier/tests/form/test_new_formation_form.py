@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from django.urls import reverse
@@ -14,7 +15,7 @@ URL_NEW_FORMATION_VIEW = reverse('formation_metier:new_formation')
 class NewFormationFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.formation1 = create_test_formation(name="formation_test_1", code="AAAAA0001")
+        cls.formation1 = create_test_formation(name="formation_test_1", code="AAAA01")
 
     def test_get(self):
         response = self.client.get(URL_NEW_FORMATION_VIEW)
@@ -24,28 +25,30 @@ class NewFormationFormTest(TestCase):
 
     def test_with_valid_data_and_respected_constaint(self):
         data = {"name": "formation_test_2",
-                "code": "AAAAA0002",
+                "code": "AAAA02",
                 "description": "formation de test"}
         response = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, "/index")
+        self.assertEqual(response.url, "/list_formation")
 
     def test_with_valid_data_and_unrespected_constaint(self):
         data = {"name": "formation_test_2",
-                "code": "AAAAA0001",
+                "code": "AAAA01",
                 "description": "formation de test"}
         response = self.client.get(URL_NEW_FORMATION_VIEW)
         request = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(request.status_code, 200)
+        self.assertRaisesMessage(ValidationError,
+                                 "Un objet Formation avec ce champ Code existe déjà.")
         self.assertFormError(request, 'form', "code", ["Un objet Formation avec ce champ Code existe déjà."])
 
     # a faire si CharFiled ne convertis pas automatiquement en str
     def test_with_invalid_data_name(self):
         data = {"name": True,
-                "code": "AAAAA0002",
+                "code": "AAAA01",
                 "description": "formation de test"}
         response = self.client.get(URL_NEW_FORMATION_VIEW)
         request = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
@@ -55,9 +58,25 @@ class NewFormationFormTest(TestCase):
         # self.assertEqual(Formation.objects.count(), 1)
         # self.assertFormError(request, 'form', "name", ["Un objet Formation avec ce champ Code existe déjà."])
 
-    def test_with_invalid_data_code(self):
+    def test_with_invalid_data_code_length(self):
         data = {"name": "Fromation_test_2",
-                "code": "AAAAA0002A",
+                "code": "AAAA01A",
+                "description": "formation de test"}
+        response = self.client.get(URL_NEW_FORMATION_VIEW)
+        request = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(Formation.objects.count(), 1)
+        self.assertFormError(request,
+                             'form',
+                             "code",
+                             [
+                                 f'Assurez-vous que cette valeur comporte au plus 6 caractères (actuellement {len(data["code"])}).'])
+
+    def test_with_invalid_data_code_format(self):
+        data = {"name": "Fromation_test_2",
+                "code": "AAA001",
                 "description": "formation de test"}
         response = self.client.get(URL_NEW_FORMATION_VIEW)
         request = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
@@ -66,9 +85,8 @@ class NewFormationFormTest(TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertEqual(Formation.objects.count(), 1)
         self.assertFormError(request, 'form', "code",
-                             [f'Assurez-vous que cette valeur comporte au plus 9 caractères (actuellement {len(data["code"])}).'])
+                             ['Saisissez une valeur valide.'])
 
     # a faire si CharFiled ne convertis pas automatiquement en str
     def test_with_invalid_data_description(self):
         response = self.client.get(URL_NEW_FORMATION_VIEW)
-

@@ -21,20 +21,20 @@ def create_test_formateur(person):
     return Formateur.objects.create(person=person)
 
 
-def create_test_session(formation, session_date, local, participant_max_number, formateur, public_cible):
+def create_test_session(formation, session_date, local, participant_max_number, formateur, public_cible,duree):
     return Session.objects.create(formation=formation,
                                   session_date=session_date,
                                   local=local,
                                   participant_max_number=participant_max_number,
                                   formateur=formateur,
-                                  public_cible=public_cible
+                                  public_cible=public_cible,
+                                  duree=duree
                                   )
 
 
-def create_test_register(session, participant, register_date):
+def create_test_register(session, participant):
     return Register.objects.create(session=session,
-                                   participant=participant,
-                                   register_date=register_date
+                                   participant=participant
                                    )
 
 
