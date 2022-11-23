@@ -7,7 +7,7 @@ from formation_metier.models.formation import Formation
 
 
 class UpdateFormationView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, generic.edit.UpdateView):
-    permission_required = 'formation_metier.change_formation'
+    permission_required = ['formation_metier.change_formation', 'formation_metier.access_to_formation_fare']
     model = Formation
     fields = ['name', 'code', 'description']
     template_name = 'formation_metier/update_formation.html'

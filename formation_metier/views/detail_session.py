@@ -14,7 +14,7 @@ from formation_metier.models.session import Session
 
 
 class DetailSession(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
-    permission_required = ['formation_metier.view_session', 'formation_metier.access_to_formation_fare']
+    permission_required = 'formation_metier.view_session'
     model = Session
     template_name = 'formation_metier/detail_session.html'
     context_object_name = "session"
@@ -77,7 +77,8 @@ class RegisterFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObject
         return reverse('formation_metier:detail_session', kwargs={'session_id': self.get_object().pk})
 
 
-class DetailSessionView(View):
+class DetailSessionView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'formation_metier.access_to_formation_fare'
     name = 'detail_session'
 
     def get(self, request, *args, **kwargs):

@@ -10,7 +10,7 @@ from formation_metier.forms.new_session_form import NewSessionForm
 
 
 class NewSessionFormView(LoginRequiredMixin, PermissionRequiredMixin,generic.CreateView):
-    permission_required = 'formation_metier.add_session'
+    permission_required = ['formation_metier.add_session', 'formation_metier.access_to_formation_fare']
     model = Session
     template_name = 'formation_metier/new_session_form.html'
     form_class = NewSessionForm

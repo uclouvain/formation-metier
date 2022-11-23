@@ -8,6 +8,7 @@ from formation_metier.models.formation import Formation
 
 @login_required
 @permission_required('formation_metier.delete_formation', raise_exception=True)
+@permission_required('formation_metier.access_to_formation_fare', raise_exception=True)
 def delete_formation(request, formation_id) -> Union[HttpResponsePermanentRedirect, HttpResponseRedirect]:
     formation = Formation.objects.get(id=formation_id)
     formation.delete()

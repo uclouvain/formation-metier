@@ -7,7 +7,7 @@ from formation_metier.forms.new_formation_form import NewFormationForm
 
 
 class NewFormationFormView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
-    permission_required = 'formation_metier.add_formation'
+    permission_required = ['formation_metier.add_formation', 'formation_metier.access_to_formation_fare']
     model = Formation
     template_name = 'formation_metier/new_formation_form.html'
     form_class = NewFormationForm

@@ -6,7 +6,7 @@ from formation_metier.models.participant import Participant
 
 
 class PersonAutoComplete(LoginRequiredMixin, PermissionRequiredMixin, autocomplete.Select2QuerySetView):
-    permission_required = 'formation_metier.view_participant'
+    permission_required = ['formation_metier.view_participant', 'formation_metier.access_to_formation_fare']
     name = 'widget_participant'
 
     def get_queryset(self):
