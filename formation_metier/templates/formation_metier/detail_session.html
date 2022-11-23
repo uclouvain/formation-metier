@@ -80,7 +80,7 @@
     </div>
     <div class="panel panel-default" style="padding: 10px">
         <div class="panel-body">
-            <p>Date : {{ session.date_format }}</p>
+            <p>Date : {{ session.session_date|date:"l j F o" }}</p>
             <p>Heure : {{ session.time_format }}</p>
             <p>Local : {{ session.local }}</p>
             <p>Durée ( en minutes) : {{ session.duree }}</p>
