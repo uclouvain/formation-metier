@@ -9,7 +9,7 @@ from formation_metier.models.session import Session
 from formation_metier.forms.new_session_form import NewSessionForm
 
 
-class NewSessionFormView(LoginRequiredMixin, PermissionRequiredMixin,generic.CreateView):
+class NewSessionFormView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     permission_required = ['formation_metier.add_session', 'formation_metier.access_to_formation_fare']
     model = Session
     template_name = 'formation_metier/new_session_form.html'
@@ -30,5 +30,5 @@ class NewSessionFormView(LoginRequiredMixin, PermissionRequiredMixin,generic.Cre
         form.instance.formation = formation
         messages.success(self.request, 'La session du {} à {} a été ajouté.'.format(
             form.cleaned_data['session_date'].__format__("%A %d %B %Y"),
-            form.cleaned_data['session_date'].__format__("%Hh%I")))
+            form.cleaned_data['session_date'].__format__("%Hh%M")))
         return super().form_valid(form)
