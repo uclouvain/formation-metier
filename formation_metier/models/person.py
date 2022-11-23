@@ -25,6 +25,7 @@ class Person(models.Model):
                                                 user__isnull=True)),
                                        name='only_participant_have_user_null')
                        ]
+        permissions = (('access_to_formation_fare', 'Global access to module formation FARE'),)
 
     def __str__(self):
         return f"{self.name}"

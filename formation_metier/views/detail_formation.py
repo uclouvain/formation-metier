@@ -6,7 +6,7 @@ from formation_metier.models.formation import Formation
 
 
 class DetailFormation(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView):
-    permission_required = 'formation_metier.view_formation'
+    permission_required = ['formation_metier.view_formation', 'formation_metier.access_to_formation_fare']
     model = Formation
     template_name = 'formation_metier/detail_formation.html'
     context_object_name = "formation"

@@ -14,7 +14,7 @@ from formation_metier.models.session import Session
 
 
 class DetailSession(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
-    permission_required = 'formation_metier.view_session'
+    permission_required = ['formation_metier.view_session', 'formation_metier.access_to_formation_fare']
     model = Session
     template_name = 'formation_metier/detail_session.html'
     context_object_name = "session"
