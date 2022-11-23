@@ -8,10 +8,11 @@ from formation_metier.models.register import Register
 from formation_metier.models.person import Person
 
 
-def create_test_person(name, number_fgs, role_formation_metier):
+def create_test_person(name, number_fgs, role_formation_metier, user=None):
     return Person.objects.create(name=name,
                                  numberFGS=number_fgs,
-                                 role_formation_metier=role_formation_metier
+                                 role_formation_metier=role_formation_metier,
+                                 user=user
                                  )
 
 
