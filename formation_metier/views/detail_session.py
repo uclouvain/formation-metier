@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Count
 from django.views.generic import FormView
 from django.http import HttpResponseForbidden
@@ -12,7 +13,8 @@ from formation_metier.forms.new_registation_form import NewRegistrationForm
 from formation_metier.models.session import Session
 
 
-class DetailSession(FormMixin, generic.DetailView):
+class DetailSession(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
+    permission_required = 'formation_metier.view_session'
     model = Session
     template_name = 'formation_metier/detail_session.html'
     context_object_name = "session"
@@ -36,10 +38,11 @@ class DetailSession(FormMixin, generic.DetailView):
             'register_set__participant__person'
         ).annotate(
             register_count=Count('register'),
-            )
+        )
 
 
-class RegisterFormView(SingleObjectMixin, FormView):
+class RegisterFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObjectMixin, FormView):
+    permission_required = 'formation_metier.add_register'
     template_name = 'formation_metier/detail_session.html'
     form_class = NewRegistrationForm
     model = Session
@@ -74,8 +77,10 @@ class RegisterFormView(SingleObjectMixin, FormView):
         return reverse('formation_metier:detail_session', kwargs={'session_id': self.get_object().pk})
 
 
-class DetailSessionView(View):
+class DetailSessionView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = 'formation_metier.access_to_formation_fare'
     name = 'detail_session'
+
     def get(self, request, *args, **kwargs):
         view = DetailSession.as_view()
         return view(request, *args, **kwargs)
