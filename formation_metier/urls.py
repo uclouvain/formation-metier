@@ -4,7 +4,7 @@ from schema_graph.views import Schema
 from django.contrib.auth import views as auth_views
 
 from formation_metier.views import ListFormationView, HomeView, NewFormationFormView, DetailFormation, \
-    DetailSessionView, UpdateFormationView, UpdateSessionView, NewSessionFormView, delete_session, delete_formation, \
+    DetailSeanceView, UpdateFormationView, UpdateSeanceView, NewSeanceFormView, delete_seance, delete_formation, \
     PersonAutoComplete, delete_registration
 from formation_metier.api import urls_api
 
@@ -14,17 +14,17 @@ urlpatterns = [
     path('list_formation/', ListFormationView.as_view(), name=ListFormationView.name),
     # detail_view
     path('formation/<int:formation_id>/', DetailFormation.as_view(), name=DetailFormation.name),
-    path('formation/session/<int:session_id>/', DetailSessionView.as_view(), name=DetailSessionView.name),
+    path('formation/seance/<int:seance_id>/', DetailSeanceView.as_view(), name=DetailSeanceView.name),
     # new_view
     path('new_formation/', NewFormationFormView.as_view(), name=NewFormationFormView.name),
-    path('formation/new_session/<int:formation_id>', NewSessionFormView.as_view(), name=NewSessionFormView.name),
+    path('formation/new_seance/<int:formation_id>', NewSeanceFormView.as_view(), name=NewSeanceFormView.name),
     # update_view
     path('formation/update/<int:formation_id>/', UpdateFormationView.as_view(), name=UpdateFormationView.name),
-    path('formation/session/update/<int:session_id>/', UpdateSessionView.as_view(), name=UpdateSessionView.name),
+    path('formation/seance/update/<int:seance_id>/', UpdateSeanceView.as_view(), name=UpdateSeanceView.name),
     # delete_view
     path('formation/delete/<int:formation_id>/', delete_formation, name='delete_formation'),
-    path('formation/session/delete/<int:session_id>/', delete_session, name='delete_session'),
-    path('formation/session/register/delete/', delete_registration, name='delete_registration'),
+    path('formation/seance/delete/<int:seance_id>/', delete_seance, name='delete_seance'),
+    path('formation/seance/register/delete/', delete_registration, name='delete_registration'),
     # Autocomplete Widget
     path('autocompletePerson/', PersonAutoComplete.as_view(), name=PersonAutoComplete.name),
     # API

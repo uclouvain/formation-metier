@@ -5,7 +5,7 @@ from django.contrib import admin
 
 from formation_metier.models import formation
 from formation_metier.models import register
-from formation_metier.models import session
+from formation_metier.models import seance
 from formation_metier.models import person
 from formation_metier.models import formateur
 from formation_metier.models import participant
@@ -19,27 +19,27 @@ class RegisterInLine(admin.StackedInline):
 
 
 class RegisterAdmin(admin.ModelAdmin):
-    fieldsets = [('session', {'fields': ['session']}),
+    fieldsets = [('seance', {'fields': ['seance']}),
                  ('participant', {'fields': ['participant']}),
                  ]
-    list_display = ('session', 'participant', 'register_date')
+    list_display = ('seance', 'participant', 'register_date')
 
 
-class SessionAdmin(admin.ModelAdmin):
+class SeanceAdmin(admin.ModelAdmin):
     fieldsets = [('formation', {'fields': ['formation']}),
-                 ('session_date', {'fields': ['session_date']}),
+                 ('seance_date', {'fields': ['seance_date']}),
                  ('local', {'fields': ['local']}),
                  ('participant_max_number', {'fields': ['participant_max_number']}),
                  ('formateur', {'fields': ['formateur']}),
                  ('duree', {'fields': ['duree']})
                  ]
     list_display = (
-        'formation', 'session_date', 'local', 'participant_max_number', 'formateur', 'duree')
+        'formation', 'seance_date', 'local', 'participant_max_number', 'formateur', 'duree')
     inlines = [RegisterInLine]
 
 
-class SessionInLine(admin.StackedInline):
-    model = session.Session
+class SeanceInLine(admin.StackedInline):
+    model = seance.Seance
     extra = 3
 
 
@@ -49,7 +49,7 @@ class FormationAdmin(admin.ModelAdmin):
                  ('description', {'fields': ['description']}),
                  ('public_cible', {'fields': ['public_cible']})
                  ]
-    inlines = [SessionInLine]
+    inlines = [SeanceInLine]
     list_display = ('name', 'code', 'description', 'public_cible')
 
 
@@ -76,7 +76,7 @@ class FormateurAdmin(admin.ModelAdmin):
 
 admin.site.register(person.Person, PersonAdmin)
 admin.site.register(formation.Formation, FormationAdmin)
-admin.site.register(session.Session, SessionAdmin)
+admin.site.register(seance.Seance, SeanceAdmin)
 admin.site.register(register.Register, RegisterAdmin)
 admin.site.register(participant.Participant, ParticipantAdmin)
 admin.site.register(formateur.Formateur, FormateurAdmin)

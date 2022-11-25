@@ -3,7 +3,7 @@
 {% load static %}
 {% load l10n %}
 {% block content %}
-    {% include 'formation_metier/delete_session.html' %}
+    {% include 'formation_metier/delete_seance.html' %}
     {% include 'formation_metier/delete_register.html' %}
     <script src="{% static 'js/htmx.min.js' %}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -18,12 +18,12 @@
             </a>
         </li>
         <li>
-            <a href="{% url 'formation_metier:detail_formation' session.formation.id %}">
+            <a href="{% url 'formation_metier:detail_formation' seance.formation.id %}">
                 Formation
             </a>
         </li>
         <li class="active">
-            Session
+            Séance
         </li>
     </ol>
 
@@ -44,7 +44,7 @@
 
     <div class="row">
         <div class="col-md-10">
-            <h2>Formation : {{ session.formation.name }} </h2>
+            <h2>Formation : {{ seance.formation.name }} </h2>
         </div>
         <div class="col-md-2" style="margin-top: 20px">
             <div class="btn-group pull-right">
@@ -55,19 +55,19 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-large row ">
                     <li>
-                        <a href="{% url 'formation_metier:new_session' session.formation.id %}" class="no_spinner">
-                            <form method="post" style="margin: 0">Ajouter une nouvelle session</form>
+                        <a href="{% url 'formation_metier:new_seance' seance.formation.id %}" class="no_spinner">
+                            <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'formation_metier:update_session' session.id %} " class="no_spinner">
-                            <form method="post" style="margin: 0">Modifier la session</form>
+                        <a href="{% url 'formation_metier:update_seance' seance.id %} " class="no_spinner">
+                            <form method="post" style="margin: 0">Modifier la seance</form>
                         </a>
                     </li>
                     <li>
-                        <a href="#" data-toggle="modal" data-target="#sessionDeleteModal">Supprimer la session</a>
+                        <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
                     </li>
-                    {% if session.register_set.count != 0 %}
+                    {% if seance.register_set.count != 0 %}
                         <li>
                             <a href="#" data-toggle="modal" data-target="#registerDeleteModal">Supprimer des
                                 inscription</a>
@@ -79,12 +79,12 @@
     </div>
     <div class="panel panel-default" style="padding: 10px">
         <div class="panel-body">
-            <p>Date : {{ session.session_date|date:"l j F o" }}</p>
-            <p>Heure : {{ session.time_format }}</p>
-            <p>Local : {{ session.local }}</p>
-            <p>Durée ( en minutes) : {{ session.duree }}</p>
-            <p>Participants : {{ session.register_count }} / {{ session.participant_max_number }}</p>
-            <p>Formateur : {{ session.formateur }}</p>
+            <p>Date : {{ seance.seance_date|date:"l j F o" }}</p>
+            <p>Heure : {{ seance.time_format }}</p>
+            <p>Local : {{ seance.local }}</p>
+            <p>Durée ( en minutes) : {{ seance.duree }}</p>
+            <p>Participants : {{ seance.register_count }} / {{ seance.participant_max_number }}</p>
+            <p>Formateur : {{ seance.formateur }}</p>
             <h3> Inscription : </h3>
             <div>
                 <form method="post">
@@ -100,7 +100,7 @@
                     </div>
                 </form>
             </div>
-            {% if session.register_set.count > 0 %}
+            {% if seance.register_set.count > 0 %}
                 <table class="table">
                     <thead>
                     <tr>
@@ -111,7 +111,7 @@
                     </thead>
                     <tbody>
 
-                    {% for register in session.register_set.all %}
+                    {% for register in seance.register_set.all %}
                         <tr style="max-height: 40px">
                             <td>{{ register.participant.person }}</td>
                             <td> {{ register.participant.person.numberFGS }}</td>

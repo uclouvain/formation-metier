@@ -10,24 +10,29 @@
             </a>
         </li>
         <li>
-            <a href="{% url 'formation_metier:detail_formation' formation_id %}">
+            <a href="{% url 'formation_metier:detail_formation' seance.formation.id%}">
                 Formation
             </a>
         </li>
+        <li>
+            <a href="{% url 'formation_metier:detail_seance' seance.id%}">
+                Seance
+            </a>
+        </li>
         <li class="active">
-            New Session
+            Modification de seance
         </li>
     </ol>
     <div class="page-header">
-        <h2>Nouvelle session</h2>
+        <h2>Update la seance du {{ seance.seance_date }} de la formation {{ seance.formation.name}}</h2>
     </div>
     <div class="panel panel-default" style="padding: 10px">
         <form method="post">{% csrf_token %}
             {% bootstrap_form form %}
 
-            <input type="submit" value="Créer la formation">
+            <input type="submit" value="Update la formation">
             <button type="button" value="Annuler">
-                <a href="{% url 'formation_metier:detail_formation' formation_id %}" style="color: #333">
+                <a href="{% url 'formation_metier:detail_seance' seance.id%}" style="color: #333">
                     Annuler
                 </a>
             </button>
