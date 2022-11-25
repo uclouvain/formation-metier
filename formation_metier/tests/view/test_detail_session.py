@@ -47,13 +47,13 @@ class DetailSessionViewTest(TestCase):
         cls.participant5 = create_test_participant(person=cls.person5)
         cls.participant6 = create_test_participant(person=cls.person6)
         cls.formateur1 = create_test_formateur(person=cls.person7)
-        cls.formation1 = create_test_formation(name="Formation_name_1", code="AAAAA0001")
+        cls.formation1 = create_test_formation(name="Formation_name_1", code="AAAAA0001",
+                                               public_cible=ROLES_OSIS_CHOICES[1], )
         cls.session1 = create_test_session(formation=cls.formation1,
                                            session_date=cls.date,
                                            participant_max_number=10,
                                            local="L001",
                                            formateur=cls.formateur1,
-                                           public_cible=ROLES_OSIS_CHOICES[1],
                                            duree=60
                                            )
         cls.session2 = create_test_session(formation=cls.formation1,
@@ -61,7 +61,6 @@ class DetailSessionViewTest(TestCase):
                                            participant_max_number=5,
                                            local="L002",
                                            formateur=cls.formateur1,
-                                           public_cible=ROLES_OSIS_CHOICES[1],
                                            duree=60
                                            )
         cls.session3 = create_test_session(formation=cls.formation1,
@@ -69,7 +68,6 @@ class DetailSessionViewTest(TestCase):
                                            participant_max_number=10,
                                            local="L003",
                                            formateur=cls.formateur1,
-                                           public_cible=ROLES_OSIS_CHOICES[1],
                                            duree=60
                                            )
         cls.register1 = create_test_register(session=cls.session2,
@@ -93,7 +91,6 @@ class DetailSessionViewTest(TestCase):
         self.assertContains(response, self.session1.formation)
         self.assertContains(response, self.session1.formateur)
         self.assertContains(response, self.session1.participant_max_number)
-        self.assertContains(response, self.session1.public_cible[1])
         self.assertEqual(response.context["session"].register_set.count(), 0)
         self.assertContains(response, "Il n'y a aucun participant d'inscrit pour l'instant")
 
@@ -105,7 +102,6 @@ class DetailSessionViewTest(TestCase):
         self.assertContains(response, self.session2.formation)
         self.assertContains(response, self.session2.formateur)
         self.assertContains(response, self.session2.participant_max_number)
-        self.assertContains(response, self.session2.public_cible[1])
         self.assertContains(response, self.register2.participant.person.name)
         self.assertContains(response, self.register2.participant.person.numberFGS)
         self.assertContains(response, self.register1.participant.person.name)

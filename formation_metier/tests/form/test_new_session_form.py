@@ -36,7 +36,8 @@ class NewSessionFormTest(TestCase):
         cls.user2 = User.objects.get(pk=cls.user2.pk)
         cls.user3 = User.objects.get(pk=cls.user3.pk)
 
-        cls.formation1 = create_test_formation(name="formation_test_1", code="AAAAA0001")
+        cls.formation1 = create_test_formation(name="formation_test_1", code="AAAAA0001",
+                                               public_cible=ROLES_OSIS_CHOICES[1])
         cls.person1 = create_test_person(name="test", number_fgs="AAA01",
                                          role_formation_metier=RoleFormationFareEnum.PARTICIPANT)
         cls.formateur1 = create_test_formateur(person=cls.person1)
@@ -45,7 +46,6 @@ class NewSessionFormTest(TestCase):
                                            participant_max_number=10,
                                            local="L001",
                                            formateur=cls.formateur1,
-                                           public_cible=ROLES_OSIS_CHOICES[1],
                                            duree=60
                                            )
 
@@ -78,7 +78,6 @@ class NewSessionFormTest(TestCase):
                 "participant_max_number": 10,
                 "local": "L002",
                 "formateur": self.formateur1,
-                "public_cible": ROLES_OSIS_CHOICES[1],
                 "duree": 20
                 }
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]))
@@ -89,7 +88,6 @@ class NewSessionFormTest(TestCase):
                                participant_max_number=10,
                                local="L002",
                                formateur=self.formateur1,
-                               public_cible=ROLES_OSIS_CHOICES[1],
                                duree=20)
         self.assertEqual(request.status_code, 200)
         self.assertEqual(Session.objects.count(), 2)
@@ -101,7 +99,6 @@ class NewSessionFormTest(TestCase):
                 "participant_max_number": 10,
                 "local": "L001",
                 "formateur": self.formateur1,
-                "public_cible": ROLES_OSIS_CHOICES[1],
                 'duree': 700}
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]))
         request = self.client.post(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]), data=data)

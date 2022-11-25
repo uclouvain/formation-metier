@@ -28,15 +28,17 @@ class DetailFormationViewTest(TestCase):
                                          )
         cls.formateur1 = create_test_formateur(person=cls.person1)
 
-        cls.formation1 = create_test_formation(name="Formation_name_1", code="AAAA01")
-        cls.formation2 = create_test_formation(name="Formation_name_2", code="AAAA02")
-        cls.formation3 = create_test_formation(name="Formation_name_3", code="AAAA03")
+        cls.formation1 = create_test_formation(name="Formation_name_1", code="AAAA01",
+                                               public_cible=ROLES_OSIS_CHOICES[1])
+        cls.formation2 = create_test_formation(name="Formation_name_2", code="AAAA02",
+                                               public_cible=ROLES_OSIS_CHOICES[1])
+        cls.formation3 = create_test_formation(name="Formation_name_3", code="AAAA03",
+                                               public_cible=ROLES_OSIS_CHOICES[1])
         cls.session1 = create_test_session(formation=cls.formation2,
                                            session_date=cls.date,
                                            participant_max_number=10,
                                            local="L001",
                                            formateur=cls.formateur1,
-                                           public_cible=ROLES_OSIS_CHOICES[1],
                                            duree=60
                                            )
         cls.session2 = create_test_session(formation=cls.formation1,
@@ -44,7 +46,6 @@ class DetailFormationViewTest(TestCase):
                                            participant_max_number=10,
                                            local="L002",
                                            formateur=cls.formateur1,
-                                           public_cible=ROLES_OSIS_CHOICES[1],
                                            duree=60
                                            )
         cls.session3 = create_test_session(formation=cls.formation1,
@@ -52,7 +53,6 @@ class DetailFormationViewTest(TestCase):
                                            participant_max_number=10,
                                            local="L003",
                                            formateur=cls.formateur1,
-                                           public_cible=ROLES_OSIS_CHOICES[1],
                                            duree=60
                                            )
 

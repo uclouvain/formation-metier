@@ -9,7 +9,7 @@ from formation_metier.models.formation import Formation
 class UpdateFormationView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, generic.edit.UpdateView):
     permission_required = ['formation_metier.change_formation', 'formation_metier.access_to_formation_fare']
     model = Formation
-    fields = ['name', 'code', 'description']
+    fields = ['name', 'code', 'description', 'public_cible']
     template_name = 'formation_metier/update_formation.html'
     pk_url_kwarg = "formation_id"
     success_message = 'La formation %(name)s a été modifiée.'

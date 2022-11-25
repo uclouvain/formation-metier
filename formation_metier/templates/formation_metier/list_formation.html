@@ -1,6 +1,7 @@
 {% extends 'formation_metier/base.html' %}
 {% load bootstrap3 %}
 {% load static %}
+{% load public_cible_display %}
 {% block content %}
     <script>
         $(document).ready(function () {
@@ -73,7 +74,7 @@
                                 {{ formation.code }}
                             </td>
                             <td>
-                                {{ formation.public_cible }}
+                                {% public_cible_display formation %}
                             </td>
                         </tr>
 

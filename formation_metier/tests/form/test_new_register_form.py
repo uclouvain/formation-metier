@@ -51,7 +51,8 @@ class NewRegisterFormTest(TestCase):
         cls.user2 = User.objects.get(pk=cls.user2.pk)
         cls.user3 = User.objects.get(pk=cls.user3.pk)
         cls.user4 = User.objects.get(pk=cls.user4.pk)
-        cls.formation1 = create_test_formation(name="formation_test_1", code="AAAAA0001")
+        cls.formation1 = create_test_formation(name="formation_test_1", code="AAAAA0001",
+                                           public_cible=ROLES_OSIS_CHOICES[1])
 
         cls.person1 = create_test_person(name="Formateur1",
                                          number_fgs="AAA01",
@@ -82,7 +83,6 @@ class NewRegisterFormTest(TestCase):
                                            participant_max_number=5,
                                            local="L001",
                                            formateur=cls.formateur1,
-                                           public_cible=ROLES_OSIS_CHOICES[1],
                                            duree=60
                                            )
 
