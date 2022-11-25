@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from formation_metier.models.formation import Formation
 from formation_metier.models.participant import Participant
 from formation_metier.models.formateur import Formateur
-from formation_metier.models.session import Session
+from formation_metier.models.seance import Seance
 from formation_metier.models.register import Register
 from formation_metier.models.person import Person
 
@@ -24,19 +24,19 @@ def create_test_formateur(person):
     return Formateur.objects.create(person=person)
 
 
-def create_test_session(formation, session_date, local, participant_max_number, formateur, duree):
-    return Session.objects.create(formation=formation,
-                                  session_date=session_date,
-                                  local=local,
-                                  participant_max_number=participant_max_number,
-                                  formateur=formateur,
+def create_test_seance(formation, seance_date, local, participant_max_number, formateur, duree):
+    return Seance.objects.create(formation=formation,
+                                 seance_date=seance_date,
+                                 local=local,
+                                 participant_max_number=participant_max_number,
+                                 formateur=formateur,
 
-                                  duree=duree
-                                  )
+                                 duree=duree
+                                 )
 
 
-def create_test_register(session, participant):
-    return Register.objects.create(session=session,
+def create_test_register(seance, participant):
+    return Register.objects.create(seance=seance,
                                    participant=participant
                                    )
 

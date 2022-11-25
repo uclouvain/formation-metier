@@ -7,7 +7,7 @@
     {% include 'formation_metier/delete_formation.html' %}
     <script>
         $(document).ready(function () {
-            $('.session_row').click(function () {
+            $('.seance_row').click(function () {
                 window.location = $(this).data('href');
                 return false;
             });
@@ -60,8 +60,8 @@
                         <a href="#" data-toggle="modal" data-target="#formationDeleteModal">Supprimer la formation</a>
                     </li>
                     <li>
-                        <a href="{% url 'formation_metier:new_session' formation.id %}" class="no_spinner">
-                            <form method="post" style="margin: 0">Ajouter une nouvelle session</form>
+                        <a href="{% url 'formation_metier:new_seance' formation.id %}" class="no_spinner">
+                            <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
                         </a>
                     </li>
                 </ul>
@@ -73,7 +73,7 @@
         <p>Description : {{ formation.description }}</p>
         <p>Public cible : {% public_cible_display formation %}</p>
     </div>
-    {% if formation.session_set.count > 0 %}
+    {% if formation.seance_set.count > 0 %}
 
         <div class="panel panel-default">
             <div class="panel-body">
@@ -89,19 +89,19 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for session in formation.session_set.all %}
-                        <tr data-href="{% url 'formation_metier:detail_session' session.id %}" id="session_row"
-                            class="session_row">
+                    {% for seance in formation.seance_set.all %}
+                        <tr data-href="{% url 'formation_metier:detail_seance' seance.id %}" id="seance_row"
+                            class="seance_row">
                             <td>
-                                <a href="{% url 'formation_metier:detail_session' session.id %}">
-                                    {{ session.session_date|date:"l j F o" }}
+                                <a href="{% url 'formation_metier:detail_seance' seance.id %}">
+                                    {{ seance.seance_date|date:"l j F o" }}
                                 </a>
                             </td>
-                            <td>{{ session.time_format }}</td>
-                            <td>{{ session.duree }}</td>
-                            <td>{{ session.local }}</td>
-                            <td>{{ session.register_set.count }}/{{ session.participant_max_number }}</td>
-                            <td>{{ session.formateur }}</td>
+                            <td>{{ seance.time_format }}</td>
+                            <td>{{ seance.duree }}</td>
+                            <td>{{ seance.local }}</td>
+                            <td>{{ seance.register_set.count }}/{{ seance.participant_max_number }}</td>
+                            <td>{{ seance.formateur }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -111,7 +111,7 @@
     {% else %}
         <div class="panel panel-default">
             <div class="panel-body">
-                <p> Il n'y a pas de session actuellement organisé pour la formation : {{ formation.name }}</p>
+                <p> Il n'y a pas de seance actuellement organisé pour la formation : {{ formation.name }}</p>
             </div>
         </div>
     {% endif %}

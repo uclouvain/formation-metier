@@ -14,12 +14,12 @@ class NewRegistrationParticipantWidget(ModelSelect2Widget):
 
 
 class NewRegistrationForm(ModelForm):
-    def __init__(self, session, *args, **kwargs):
-        self.session = session
+    def __init__(self, seance, *args, **kwargs):
+        self.seance = seance
         super().__init__(*args, **kwargs)
 
     class Meta:
-        template_name = 'formation_metier/detail_session.html'
+        template_name = 'formation_metier/detail_seance.html'
         model = Register
         fields = ('participant',)
         widgets = {
@@ -33,11 +33,11 @@ class NewRegistrationForm(ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        register_set = self.session.register_set.all()
+        register_set = self.seance.register_set.all()
         for register in register_set:
             if register.participant == cleaned_data.get('participant'):
                 raise ValidationError(
                     _("L'utilisateur {} est déja inscit à cette formation").format(register.participant.person.name))
-        if self.session.participant_max_number <= register_set.count():
-            raise ValidationError(_("Le nombre maximal de participant inscit a cette session est déjà atteint"))
+        if self.seance.participant_max_number <= register_set.count():
+            raise ValidationError(_("Le nombre maximal de participant inscit a cette seance est déjà atteint"))
         return cleaned_data

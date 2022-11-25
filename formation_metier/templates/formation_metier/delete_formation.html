@@ -8,8 +8,8 @@
             <div class="modal-body">
                 <span>Voulez vous vraiment supprimer la formation : {{ formation.code }} {{ formation.name }} {{ formation.id }}</span>
             <br>
-                {% if formation.session_set.count > 0 %}
-                    <span>Attention : Vous allez égualement supprimer les {{ formation.session_set.count }} séances ainsi que les insciptions liées </span>
+                {% if formation.seance_set.count > 0 %}
+                    <span>Attention : Vous allez égualement supprimer les {{ formation.seance_set.count }} séances ainsi que les insciptions liées </span>
                 {% endif %}
             </div>
             <div class="modal-footer">

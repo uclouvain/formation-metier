@@ -10,15 +10,15 @@ from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormMixin
 
 from formation_metier.forms.new_registation_form import NewRegistrationForm
-from formation_metier.models.session import Session
+from formation_metier.models.seance import Seance
 
 
-class DetailSession(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
-    permission_required = ('formation_metier.view_session', 'formation_metier.view_register')
-    model = Session
-    template_name = 'formation_metier/detail_session.html'
-    context_object_name = "session"
-    pk_url_kwarg = 'session_id'
+class DetailSeance(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
+    permission_required = ('formation_metier.view_seance', 'formation_metier.view_register')
+    model = Seance
+    template_name = 'formation_metier/detail_seance.html'
+    context_object_name = "seance"
+    pk_url_kwarg = 'seance_id'
     form_class = NewRegistrationForm
 
     def get_context_data(self, **kwargs):
@@ -29,11 +29,11 @@ class DetailSession(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, gene
     def get_form_kwargs(self):
         return {
             **super().get_form_kwargs(),
-            'session': self.get_object()
+            'seance': self.get_object()
         }
 
     def get_queryset(self):
-        return super().get_queryset().filter(id=self.kwargs['session_id']).prefetch_related(
+        return super().get_queryset().filter(id=self.kwargs['seance_id']).prefetch_related(
             'register_set',
             'register_set__participant__person'
         ).annotate(
@@ -43,22 +43,22 @@ class DetailSession(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, gene
 
 class RegisterFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObjectMixin, FormView):
     permission_required = 'formation_metier.add_register'
-    template_name = 'formation_metier/detail_session.html'
+    template_name = 'formation_metier/detail_seance.html'
     form_class = NewRegistrationForm
-    model = Session
-    context_object_name = "session"
-    pk_url_kwarg = 'session_id'
+    model = Seance
+    context_object_name = "seance"
+    pk_url_kwarg = 'seance_id'
 
     def get_form_kwargs(self):
         return {
             **super().get_form_kwargs(),
-            'session': self.get_object()
+            'seance': self.get_object()
         }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = self.get_form()
-        context['session'] = self.get_object()
+        context['seance'] = self.get_object()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -66,23 +66,23 @@ class RegisterFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObject
             return HttpResponseForbidden()
         if self.get_form().is_valid():
             register = self.get_form().save(commit=False)
-            register.session = self.get_object()
+            register.seance = self.get_object()
             register.save()
             messages.success(request, 'Le participant {} a été ajouté.'.format(register.participant.person.name))
         else:
-            return render(request, self.template_name, {'session': self.get_object(), 'form': self.get_form()})
+            return render(request, self.template_name, {'seance': self.get_object(), 'form': self.get_form()})
         return redirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse('formation_metier:detail_session', kwargs={'session_id': self.get_object().pk})
+        return reverse('formation_metier:detail_seance', kwargs={'seance_id': self.get_object().pk})
 
 
-class DetailSessionView(LoginRequiredMixin, PermissionRequiredMixin, View):
+class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, View):
     permission_required = 'formation_metier.access_to_formation_fare'
-    name = 'detail_session'
+    name = 'detail_seance'
 
     def get(self, request, *args, **kwargs):
-        view = DetailSession.as_view()
+        view = DetailSeance.as_view()
         return view(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

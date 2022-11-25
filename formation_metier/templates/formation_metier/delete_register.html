@@ -7,10 +7,10 @@
             </div>
             <form method="post" action="{% url 'formation_metier:delete_registration' %}">
                 {% csrf_token %}
-                <input name="session_id" class="hidden" type="text" value="{{ session.id }}" readonly>
-                <span style="padding-left: 15px">Cochez la/les inscription(s) a supprimer pour cette session</span>
+                <input name="seance_id" class="hidden" type="text" value="{{ seance.id }}" readonly>
+                <span style="padding-left: 15px">Cochez la/les inscription(s) a supprimer pour cette seance</span>
                 <div class="modal-body">
-                    {% for register in session.register_set.all %}
+                    {% for register in seance.register_set.all %}
                         <input  type="checkbox" name="inscription" value="{{ register.id }}">
                         <label>{{ register.participant.person }}</label>
                         <br>
