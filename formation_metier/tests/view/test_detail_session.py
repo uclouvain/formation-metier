@@ -20,6 +20,8 @@ class DetailSessionViewTest(TestCase):
         cls.user1 = create_test_user(username="user1", password="password123")
         cls.user1.user_permissions.add(
             Permission.objects.get(codename='access_to_formation_fare'))
+        cls.user1.user_permissions.add(
+            Permission.objects.get(codename='view_register'))
         # pk=32 => Permission : 'formation_metier.view_session'
         cls.user1.user_permissions.add(
             Permission.objects.get(pk=32))
