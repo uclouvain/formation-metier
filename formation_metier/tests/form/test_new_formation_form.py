@@ -6,6 +6,7 @@ from django.test import TestCase
 
 from django.urls import reverse
 
+from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
 from formation_metier.forms.new_formation_form import NewFormationForm
 from formation_metier.models.formation import Formation
 from formation_metier.tests.utils import create_test_formation, create_test_user
@@ -16,7 +17,8 @@ URL_NEW_FORMATION_VIEW = reverse('formation_metier:new_formation')
 class NewFormationFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.formation1 = create_test_formation(name="formation_test_1", code="AAAA01")
+        cls.formation1 = create_test_formation(name="formation_test_1", code="AAAA01",
+                                               public_cible=ROLES_OSIS_CHOICES[1])
         cls.user1 = create_test_user(username="user1", password="password123")
         cls.user2 = create_test_user(username="user2", password="password123")
         cls.user3 = create_test_user(username="user3", password="password123")
@@ -57,17 +59,17 @@ class NewFormationFormTest(TestCase):
         self.client.force_login(user=self.user1)
         data = {"name": "formation_test_2",
                 "code": "AAAA02",
-                "description": "formation de test"}
+                "description": "formation de test",
+                'public_cible': ROLES_OSIS_CHOICES[1]}
         response = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, "/list_formation")
+        self.assertEqual(response.status_code, 200)
 
     def test_with_valid_data_and_unrespected_constaint(self):
         self.client.force_login(user=self.user1)
         data = {"name": "formation_test_2",
                 "code": "AAAA01",
-                "description": "formation de test"}
+                "description": "formation de test",
+                'public_cible': ROLES_OSIS_CHOICES[1]}
         response = self.client.get(URL_NEW_FORMATION_VIEW)
         request = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
 
@@ -82,7 +84,8 @@ class NewFormationFormTest(TestCase):
         self.client.force_login(user=self.user1)
         data = {"name": True,
                 "code": "AAAA01",
-                "description": "formation de test"}
+                "description": "formation de test",
+                'public_cible': ROLES_OSIS_CHOICES[1]}
         response = self.client.get(URL_NEW_FORMATION_VIEW)
         request = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
 
@@ -95,7 +98,8 @@ class NewFormationFormTest(TestCase):
         self.client.force_login(user=self.user1)
         data = {"name": "Fromation_test_2",
                 "code": "AAAA01A",
-                "description": "formation de test"}
+                "description": "formation de test",
+                'public_cible': ROLES_OSIS_CHOICES[1]}
         response = self.client.get(URL_NEW_FORMATION_VIEW)
         request = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
 
@@ -112,7 +116,8 @@ class NewFormationFormTest(TestCase):
         self.client.force_login(user=self.user1)
         data = {"name": "Fromation_test_2",
                 "code": "AAA001",
-                "description": "formation de test"}
+                "description": "formation de test",
+                'public_cible': ROLES_OSIS_CHOICES[1]}
         response = self.client.get(URL_NEW_FORMATION_VIEW)
         request = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
 

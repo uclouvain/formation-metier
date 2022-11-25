@@ -31,11 +31,10 @@ class SessionAdmin(admin.ModelAdmin):
                  ('local', {'fields': ['local']}),
                  ('participant_max_number', {'fields': ['participant_max_number']}),
                  ('formateur', {'fields': ['formateur']}),
-                 ('public_cible', {'fields': ['public_cible']}),
                  ('duree', {'fields': ['duree']})
                  ]
     list_display = (
-        'formation', 'session_date', 'local', 'participant_max_number', 'formateur', 'public_cible', 'duree')
+        'formation', 'session_date', 'local', 'participant_max_number', 'formateur', 'duree')
     inlines = [RegisterInLine]
 
 
@@ -47,10 +46,11 @@ class SessionInLine(admin.StackedInline):
 class FormationAdmin(admin.ModelAdmin):
     fieldsets = [('code', {'fields': ['code']}),
                  ('name', {'fields': ['name']}),
-                 ('description', {'fields': ['description']})
+                 ('description', {'fields': ['description']}),
+                 ('public_cible', {'fields': ['public_cible']})
                  ]
     inlines = [SessionInLine]
-    list_display = ('name', 'code', 'description')
+    list_display = ('name', 'code', 'description', 'public_cible')
 
 
 class PersonAdmin(admin.ModelAdmin):

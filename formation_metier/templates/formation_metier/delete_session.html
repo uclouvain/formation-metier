@@ -7,8 +7,9 @@
             </div>
             <div class="modal-body">
                 <span>Voulez vous vraiment supprimer la séance du {{ session.session_date.date }} de la formation {{ session.formation.name }} </span>
+                <br>
                 {% if session.register_set.count > 0 %}
-                    <span>Attention cela supprimera aussi les {{ session.register_set.count }} inscriptions </span>
+                    <span>Attention : Cela supprimera aussi les {{ session.register_set.count }} inscriptions </span>
                 {% endif %}
             </div>
             <div class="modal-footer">

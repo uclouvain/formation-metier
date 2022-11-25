@@ -3,6 +3,8 @@ from datetime import datetime
 from django.contrib.auth.models import Permission, User
 from django.test import TestCase
 from django.urls import reverse
+
+from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
 from formation_metier.tests.utils import create_test_formation, create_test_user
 
 URL_LIST_FORMATION = 'formation_metier:list_formation'
@@ -27,7 +29,8 @@ class ListFormationViewTest(TestCase):
 
     def test_with_one_formation(self):
         self.client.force_login(user=self.user1)
-        formation1 = create_test_formation(name="Formation_name_1", code="AAAAA0001")
+        formation1 = create_test_formation(name="Formation_name_1", code="AAAAA0001",
+                                           public_cible=ROLES_OSIS_CHOICES[1])
         url = reverse(URL_LIST_FORMATION)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -39,8 +42,10 @@ class ListFormationViewTest(TestCase):
 
     def test_with_two_formation(self):
         self.client.force_login(user=self.user1)
-        formation1 = create_test_formation(name="Formation_name_1", code="AAAAA0001")
-        formation2 = create_test_formation(name="Formation_name_2", code="AAAAA0002")
+        formation1 = create_test_formation(name="Formation_name_1", code="AAAAA0001",
+                                           public_cible=ROLES_OSIS_CHOICES[1])
+        formation2 = create_test_formation(name="Formation_name_2", code="AAAAA0002",
+                                           public_cible=ROLES_OSIS_CHOICES[1])
         url = reverse(URL_LIST_FORMATION)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

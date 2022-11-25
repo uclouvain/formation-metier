@@ -1,7 +1,6 @@
 {% extends 'formation_metier/base.html' %}
 {% load bootstrap3 %}
 {% load static %}
-{% load public_cible_display %}
 {% load l10n %}
 {% block content %}
     {% include 'formation_metier/delete_session.html' %}
@@ -86,7 +85,6 @@
             <p>Durée ( en minutes) : {{ session.duree }}</p>
             <p>Participants : {{ session.register_count }} / {{ session.participant_max_number }}</p>
             <p>Formateur : {{ session.formateur }}</p>
-            <p>Formation organisée pour le groupe : {% public_cible_display session %}</p>
             <h3> Inscription : </h3>
             <div>
                 <form method="post">
