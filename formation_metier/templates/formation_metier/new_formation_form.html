@@ -3,7 +3,8 @@
 {% load static %}
 {% block content %}
     <ol class="breadcrumb">
-        <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+        <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                                 aria-hidden="true"></span></a></li>
         <li>
             <a href="{% url 'formation_metier:list_formation' %}">
                 Liste des formation
@@ -19,13 +20,10 @@
     <div class="panel panel-default" style="padding: 10px">
         <form method="post">{% csrf_token %}
             {% bootstrap_form form %}
-
-            <input type="submit" value="Créer la formation">
-            <button type="button" value="Annuler">
-                <a href="{% url 'formation_metier:list_formation' %}" style="color: #333">
-                    Annuler
-                </a>
-            </button>
+            {% bootstrap_button "Créer la séance" button_type="submit" button_class="btn-primary" %}
+            <a href="{% url 'formation_metier:list_formation' %}" style="color: #333">
+                {% bootstrap_button "Annuler" button_type="button" button_class="btn-secondary" %}
+            </a>
         </form>
     </div>
 {% endblock %}
