@@ -12,6 +12,7 @@ from formation_metier.models.session import Session
 def delete_session(request, session_id: str) -> Union[HttpResponsePermanentRedirect, HttpResponseRedirect]:
     session = Session.objects.get(id=session_id)
     session.delete()
-    messages.success(request, 'La session du {} à {} a été supprimée.'.format(session.date_format(),
-                                                                              session.time_format()))
+    messages.success(request,
+                     'La session du {} à {} a été supprimée.'.format(session.session_date.__format__("%d/%m/%Y"),
+                                                                     session.time_format()))
     return redirect('formation_metier:detail_formation', session.formation.id)
