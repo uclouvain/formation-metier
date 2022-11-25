@@ -70,6 +70,7 @@
     <div class="panel panel-default" style="padding: 10px">
         <p>Code : {{ formation.code }}</p>
         <p>Description : {{ formation.description }}</p>
+        <p>Public cible : {% public_cible_display formation %}</p>
     </div>
     {% if formation.session_set.count > 0 %}
 
