@@ -1,3 +1,4 @@
+{% load bootstrap3 %}
 <div class="modal fade" id="registerDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -17,8 +18,8 @@
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <input class="btn btn-danger" type="submit" value="Supprimer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Fermer</button>
+                    {% bootstrap_button "Supprimer" button_type="submit" button_class="btn btn-sm btn-danger" %}
                 </div>
             </form>
         </div>

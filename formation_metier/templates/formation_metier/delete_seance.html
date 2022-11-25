@@ -1,3 +1,4 @@
+{% load bootstrap3 %}
 <div class="modal fade" id="seanceDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -13,9 +14,10 @@
                 {% endif %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a class="btn btn-sm btn-danger"
-                   href="{% url 'formation_metier:delete_seance' seance.id %}">Delete</a>
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                <a href="{% url 'formation_metier:delete_seance' seance.id %}">
+                    {% bootstrap_button "Supprimer" button_type="submit" button_class="btn btn-sm btn-danger" %}
+                </a>
             </div>
         </div>
     </div>

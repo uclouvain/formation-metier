@@ -1,3 +1,4 @@
+{% load bootstrap3 %}
 <div class="modal fade" id="formationDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -7,15 +8,16 @@
             </div>
             <div class="modal-body">
                 <span>Voulez vous vraiment supprimer la formation : {{ formation.code }} {{ formation.name }} {{ formation.id }}</span>
-            <br>
+                <br>
                 {% if formation.seance_set.count > 0 %}
                     <span>Attention : Vous allez égualement supprimer les {{ formation.seance_set.count }} séances ainsi que les insciptions liées </span>
                 {% endif %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a class="btn btn-sm btn-danger"
-                   href="{% url 'formation_metier:delete_formation' formation.id %}">Delete</a>
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                <a href="{% url 'formation_metier:delete_formation' formation.id %}">
+                    {% bootstrap_button "Supprimer" button_type="button" button_class="btn btn-sm btn-danger" %}
+                </a>
             </div>
         </div>
     </div>
