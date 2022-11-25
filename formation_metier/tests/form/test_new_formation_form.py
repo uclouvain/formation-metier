@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.contrib.auth.models import Permission, User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
@@ -7,7 +8,7 @@ from django.urls import reverse
 
 from formation_metier.forms.new_formation_form import NewFormationForm
 from formation_metier.models.formation import Formation
-from formation_metier.tests.utils import create_test_formation
+from formation_metier.tests.utils import create_test_formation, create_test_user
 
 URL_NEW_FORMATION_VIEW = reverse('formation_metier:new_formation')
 
@@ -16,14 +17,44 @@ class NewFormationFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.formation1 = create_test_formation(name="formation_test_1", code="AAAA01")
+        cls.user1 = create_test_user(username="user1", password="password123")
+        cls.user2 = create_test_user(username="user2", password="password123")
+        cls.user3 = create_test_user(username="user3", password="password123")
+        cls.user1.user_permissions.add(
+            Permission.objects.get(codename='access_to_formation_fare'))
+        cls.user1.user_permissions.add(
+            Permission.objects.get(codename='add_formation'))
+        cls.user2.user_permissions.add(
+            Permission.objects.get(codename='add_formation'))
+        cls.user3.user_permissions.add(
+            Permission.objects.get(codename='access_to_formation_fare'))
+        cls.user1 = User.objects.get(pk=cls.user1.pk)
+        cls.user2 = User.objects.get(pk=cls.user2.pk)
+        cls.user3 = User.objects.get(pk=cls.user3.pk)
 
     def test_get(self):
+        self.client.force_login(user=self.user1)
         response = self.client.get(URL_NEW_FORMATION_VIEW)
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "<h2>Nouvelle formation</h2>", html=True)
 
+    def test_get_without_force_login(self):
+        response = self.client.get(URL_NEW_FORMATION_VIEW)
+        self.assertEqual(response.status_code, 302)
+
+    def test_get_without_permission_access_to_formation_fare(self):
+        self.client.force_login(user=self.user2)
+        response = self.client.get(URL_NEW_FORMATION_VIEW)
+        self.assertEqual(response.status_code, 403)
+
+    def test_get_without_permission_add_formation(self):
+        self.client.force_login(user=self.user3)
+        response = self.client.get(URL_NEW_FORMATION_VIEW)
+        self.assertEqual(response.status_code, 403)
+
     def test_with_valid_data_and_respected_constaint(self):
+        self.client.force_login(user=self.user1)
         data = {"name": "formation_test_2",
                 "code": "AAAA02",
                 "description": "formation de test"}
@@ -33,6 +64,7 @@ class NewFormationFormTest(TestCase):
         self.assertEqual(response.url, "/list_formation")
 
     def test_with_valid_data_and_unrespected_constaint(self):
+        self.client.force_login(user=self.user1)
         data = {"name": "formation_test_2",
                 "code": "AAAA01",
                 "description": "formation de test"}
@@ -47,6 +79,7 @@ class NewFormationFormTest(TestCase):
 
     # a faire si CharFiled ne convertis pas automatiquement en str
     def test_with_invalid_data_name(self):
+        self.client.force_login(user=self.user1)
         data = {"name": True,
                 "code": "AAAA01",
                 "description": "formation de test"}
@@ -59,6 +92,7 @@ class NewFormationFormTest(TestCase):
         # self.assertFormError(request, 'form', "name", ["Un objet Formation avec ce champ Code existe déjà."])
 
     def test_with_invalid_data_code_length(self):
+        self.client.force_login(user=self.user1)
         data = {"name": "Fromation_test_2",
                 "code": "AAAA01A",
                 "description": "formation de test"}
@@ -75,6 +109,7 @@ class NewFormationFormTest(TestCase):
                                  f'Assurez-vous que cette valeur comporte au plus 6 caractères (actuellement {len(data["code"])}).'])
 
     def test_with_invalid_data_code_format(self):
+        self.client.force_login(user=self.user1)
         data = {"name": "Fromation_test_2",
                 "code": "AAA001",
                 "description": "formation de test"}
@@ -89,4 +124,5 @@ class NewFormationFormTest(TestCase):
 
     # a faire si CharFiled ne convertis pas automatiquement en str
     def test_with_invalid_data_description(self):
+        self.client.force_login(user=self.user1)
         response = self.client.get(URL_NEW_FORMATION_VIEW)
