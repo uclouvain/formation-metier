@@ -2,7 +2,7 @@ from dal import autocomplete
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.utils.html import format_html
 
-from formation_metier.models.participant import Participant
+from formation_metier.models.person import Person
 
 
 class PersonAutoComplete(LoginRequiredMixin, PermissionRequiredMixin, autocomplete.Select2QuerySetView):
@@ -11,9 +11,9 @@ class PersonAutoComplete(LoginRequiredMixin, PermissionRequiredMixin, autocomple
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
-            return Participant.objects.none()
+            return Person.objects.none()
 
-        qs = Participant.objects.all()
+        qs = Person.objects.all()
 
         if self.q:
             qs = qs.filter(person__name__istartswith=self.q)

@@ -4,12 +4,12 @@ from django_select2.forms import ModelSelect2Widget
 from dal import autocomplete
 from django.utils.translation import gettext_lazy as _
 
-from formation_metier.models.participant import Participant
+from formation_metier.models.person import Person
 from formation_metier.models.register import Register
 
 
 class NewRegistrationParticipantWidget(ModelSelect2Widget):
-    model = Participant
+    model = Person
     search_fields = ["name__icontains"]
 
 

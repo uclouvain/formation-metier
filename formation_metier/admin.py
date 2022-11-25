@@ -7,9 +7,6 @@ from formation_metier.models import formation
 from formation_metier.models import register
 from formation_metier.models import seance
 from formation_metier.models import person
-from formation_metier.models import formateur
-from formation_metier.models import participant
-
 
 # Register your model here.
 
@@ -62,21 +59,10 @@ class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'numberFGS', 'role_formation_metier', 'user')
 
 
-class ParticipantAdmin(admin.ModelAdmin):
-    fieldsets = [("person", {"fields": ["person"]})]
 
-    list_display = ["person"]
-
-
-class FormateurAdmin(admin.ModelAdmin):
-    fieldsets = [("person", {"fields": ["person"]})]
-
-    list_display = ["person"]
 
 
 admin.site.register(person.Person, PersonAdmin)
 admin.site.register(formation.Formation, FormationAdmin)
 admin.site.register(seance.Seance, SeanceAdmin)
 admin.site.register(register.Register, RegisterAdmin)
-admin.site.register(participant.Participant, ParticipantAdmin)
-admin.site.register(formateur.Formateur, FormateurAdmin)

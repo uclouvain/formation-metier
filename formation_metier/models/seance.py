@@ -3,7 +3,7 @@ from django.core.validators import MaxValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 
-from formation_metier.models import formation, formateur
+from formation_metier.models import formation, person
 
 
 class Seance(models.Model):
@@ -11,7 +11,7 @@ class Seance(models.Model):
     seance_date = models.DateTimeField(default=django.utils.timezone.now, blank=False)
     local = models.CharField(max_length=50, blank=False)
     participant_max_number = models.IntegerField(default=0, blank=False)
-    formateur = models.ForeignKey(formateur.Formateur, on_delete=models.SET_NULL, null=True)
+    formateur = models.ForeignKey(person.Person, on_delete=models.SET_NULL, null=True)
     duree = models.PositiveSmallIntegerField(validators=[MaxValueValidator(600)], default=60)
 
     class Meta:
