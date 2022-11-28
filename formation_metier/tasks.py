@@ -6,11 +6,12 @@ from pprint import pprint
 
 from typing import List, Dict
 
+from django.contrib.auth.models import User
+
 from formation_metier import celery_app
 
 from formation_metier.exemple_data_from_api import data_person
-from formation_metier.models.participant import Participant
-from formation_metier.models.person import Person
+from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleFormationFareEnum
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -67,12 +68,14 @@ def create_person_object_from_api_response(person_list_json: list):
         for person in person_list_json:
             name = str(person["firstname"]) + " " + str(person["lastname"])
             numbers_fgs = person["matric_fgs"]
-            person_object = Person(name=name,
-                                   numberFGS=numbers_fgs,
-                                   role_formation_metier=Person.PARTICIPANT,
-                                   )
-            if not Person.objects.filter(numberFGS=person_object.numberFGS):
+            user_object = User.objects.filter(username=name)
+            if not user_object:
+                user_object = User.objects.create_user(username=name, password="osis")
+            print(user_object)
+            person_object = EmployeUCLouvain(name=name,
+                                             numberFGS=numbers_fgs,
+                                             role_formation_metier=RoleFormationFareEnum.PARTICIPANT,
+                                             user=user_object.objects.get()
+                                             )
+            if not EmployeUCLouvain.objects.filter(numberFGS=person_object.numberFGS):
                 person_object.save()
-                if person_object.role_formation_metier == Person.PARTICIPANT:
-                    participant_object = Participant(person=person_object)
-                    participant_object.save()

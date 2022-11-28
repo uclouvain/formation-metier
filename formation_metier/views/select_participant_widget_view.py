@@ -2,7 +2,7 @@ from dal import autocomplete
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.utils.html import format_html
 
-from formation_metier.models.person import Person
+from formation_metier.models.employe_uclouvain import EmployeUCLouvain
 
 
 class PersonAutoComplete(LoginRequiredMixin, PermissionRequiredMixin, autocomplete.Select2QuerySetView):
@@ -11,14 +11,14 @@ class PersonAutoComplete(LoginRequiredMixin, PermissionRequiredMixin, autocomple
 
     def get_queryset(self):
         if not self.request.user.is_authenticated:
-            return Person.objects.none()
+            return EmployeUCLouvain.objects.none()
 
-        qs = Person.objects.all()
+        qs = EmployeUCLouvain.objects.all()
 
         if self.q:
-            qs = qs.filter(person__name__istartswith=self.q)
+            qs = qs.filter(name__istartswith=self.q)
 
         return qs
 
     def get_result_label(self, result):
-        return format_html('<span>{}<span>', result.person.name)
+        return format_html('<span>{}<span>', result.name)

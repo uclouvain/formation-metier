@@ -4,12 +4,12 @@ from datetime import datetime
 
 from django.db.models import UniqueConstraint
 
-from formation_metier.models import seance, person
+from formation_metier.models import seance, employe_uclouvain
 
 
 class Register(models.Model):
     seance = models.ForeignKey(seance.Seance, on_delete=models.CASCADE, blank=False)
-    participant = models.ForeignKey(person.Person, on_delete=models.CASCADE, blank=False)
+    participant = models.ForeignKey(employe_uclouvain.EmployeUCLouvain, on_delete=models.CASCADE, blank=False)
     register_date = models.DateTimeField(auto_now_add=True, blank=False)
 
     class Meta:
