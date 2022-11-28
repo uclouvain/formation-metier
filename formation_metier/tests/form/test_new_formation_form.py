@@ -7,7 +7,6 @@ from django.test import TestCase
 from django.urls import reverse
 
 from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
-from formation_metier.forms.new_formation_form import NewFormationForm
 from formation_metier.models.formation import Formation
 from formation_metier.tests.utils import create_test_formation, create_test_user
 

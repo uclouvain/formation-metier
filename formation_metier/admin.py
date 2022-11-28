@@ -6,9 +6,7 @@ from django.contrib import admin
 from formation_metier.models import formation
 from formation_metier.models import register
 from formation_metier.models import seance
-from formation_metier.models import person
-from formation_metier.models import formateur
-from formation_metier.models import participant
+from formation_metier.models import employe_uclouvain
 
 
 # Register your model here.
@@ -53,7 +51,7 @@ class FormationAdmin(admin.ModelAdmin):
     list_display = ('name', 'code', 'description', 'public_cible')
 
 
-class PersonAdmin(admin.ModelAdmin):
+class EmployeUCLouvainAdmin(admin.ModelAdmin):
     fieldsets = [('name', {'fields': ['name']}),
                  ('numberFGS', {'fields': ['numberFGS']}),
                  ('role_formation_metier', {'fields': ['role_formation_metier']}),
@@ -62,21 +60,7 @@ class PersonAdmin(admin.ModelAdmin):
     list_display = ('name', 'numberFGS', 'role_formation_metier', 'user')
 
 
-class ParticipantAdmin(admin.ModelAdmin):
-    fieldsets = [("person", {"fields": ["person"]})]
-
-    list_display = ["person"]
-
-
-class FormateurAdmin(admin.ModelAdmin):
-    fieldsets = [("person", {"fields": ["person"]})]
-
-    list_display = ["person"]
-
-
-admin.site.register(person.Person, PersonAdmin)
+admin.site.register(employe_uclouvain.EmployeUCLouvain, EmployeUCLouvainAdmin)
 admin.site.register(formation.Formation, FormationAdmin)
 admin.site.register(seance.Seance, SeanceAdmin)
 admin.site.register(register.Register, RegisterAdmin)
-admin.site.register(participant.Participant, ParticipantAdmin)
-admin.site.register(formateur.Formateur, FormateurAdmin)

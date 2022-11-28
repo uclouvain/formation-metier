@@ -1,1 +1,1 @@
-from formation_metier.api.views.person import PersonList, PersonDetail
+from formation_metier.api.views.employe_ucl import EmployeUCLDetail, EmployeUCLList

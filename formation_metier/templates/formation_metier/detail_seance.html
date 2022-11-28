@@ -113,8 +113,8 @@
 
                     {% for register in seance.register_set.all %}
                         <tr style="max-height: 40px">
-                            <td>{{ register.participant.person }}</td>
-                            <td> {{ register.participant.person.numberFGS }}</td>
+                            <td>{{ register.participant.name }}</td>
+                            <td> {{ register.participant.numberFGS }}</td>
                         </tr>
                     {% endfor %}
                     <div>

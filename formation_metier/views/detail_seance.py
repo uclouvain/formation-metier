@@ -34,8 +34,7 @@ class DetailSeance(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, gener
 
     def get_queryset(self):
         return super().get_queryset().filter(id=self.kwargs['seance_id']).prefetch_related(
-            'register_set',
-            'register_set__participant__person'
+            'register_set'
         ).annotate(
             register_count=Count('register'),
         )
@@ -68,7 +67,8 @@ class RegisterFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObject
             register = self.get_form().save(commit=False)
             register.seance = self.get_object()
             register.save()
-            messages.success(request, 'Le participant {} a été ajouté.'.format(register.participant.person.name))
+            messages.success(request,
+                             'Le participant {} a été ajouté.'.format(register.participant.name))
         else:
             return render(request, self.template_name, {'seance': self.get_object(), 'form': self.get_form()})
         return redirect(self.get_success_url())

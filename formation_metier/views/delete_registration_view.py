@@ -18,11 +18,11 @@ def delete_registration(request) -> HttpResponseRedirect:
         for register in register_list:
             register_object = get_object_or_404(Register, pk=register)
             if register_object not in seance_register_set:
-                raise ValueError("l'inscription n'appartient pas a la seance actuelle")
+                raise ValueError("l'inscription n'appartient pas à la seance actuelle")
             else:
                 register_object_list.append(register_object)
         for register_object in register_object_list:
             register_object.delete()
             messages.success(request, "L'inscription de l'utilisateur '{}' a été supprimée.".format(
-                register_object.participant.person.name))
+                register_object.participant.name))
         return redirect('formation_metier:detail_seance', seance_id)

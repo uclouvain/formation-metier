@@ -13,7 +13,7 @@
                 <div class="modal-body">
                     {% for register in seance.register_set.all %}
                         <input  type="checkbox" name="inscription" value="{{ register.id }}">
-                        <label>{{ register.participant.person }}</label>
+                        <label>{{ register.participant }}</label>
                         <br>
                     {% endfor %}
                 </div>
