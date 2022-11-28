@@ -6,10 +6,10 @@ from django.urls import reverse
 from django.core.exceptions import ValidationError
 
 from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
-from formation_metier.models.person import Person, RoleFormationFareEnum
+from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleFormationFareEnum
 from formation_metier.models.register import Register
-from formation_metier.tests.utils import create_test_formation, create_test_seance, create_test_formateur, \
-    create_test_person, create_test_register, create_test_participant, create_test_user
+from formation_metier.tests.utils import create_test_formation, create_test_seance, \
+    create_test_register, create_test_user, create_test_employe_ucl
 
 URL_NEW_REGISTRATION = 'formation_metier:detail_seance'
 
@@ -22,6 +22,9 @@ class NewRegisterFormTest(TestCase):
         cls.user2 = create_test_user(username="user2", password="password123")
         cls.user3 = create_test_user(username="user3", password="password123")
         cls.user4 = create_test_user(username="user4", password="password123")
+        cls.user5 = create_test_user(username="user5", password="password123")
+        cls.user6 = create_test_user(username="user6", password="password123")
+        cls.user7 = create_test_user(username="user7", password="password123")
         cls.user1.user_permissions.add(
             Permission.objects.get(codename='access_to_formation_fare'))
         cls.user1.user_permissions.add(
@@ -50,51 +53,42 @@ class NewRegisterFormTest(TestCase):
         cls.user3 = User.objects.get(pk=cls.user3.pk)
         cls.user4 = User.objects.get(pk=cls.user4.pk)
         cls.formation1 = create_test_formation(name="formation_test_1", code="AAAAA0001",
-                                           public_cible=ROLES_OSIS_CHOICES[1])
+                                               public_cible=ROLES_OSIS_CHOICES[1])
 
-        cls.person1 = create_test_person(name="Formateur1",
-                                         number_fgs="AAA01",
-                                         role_formation_metier=RoleFormationFareEnum.PARTICIPANT)
-        cls.person2 = create_test_person(name="Participant1",
-                                         number_fgs="AAA02",
-                                         role_formation_metier=RoleFormationFareEnum.PARTICIPANT)
-        cls.person3 = create_test_person(name="Participant2",
-                                         number_fgs="AAA03",
-                                         role_formation_metier=RoleFormationFareEnum.PARTICIPANT)
-        cls.person4 = create_test_person(name="Participant3",
-                                         number_fgs="AAA04",
-                                         role_formation_metier=RoleFormationFareEnum.PARTICIPANT)
-        cls.person5 = create_test_person(name="Participant4",
-                                         number_fgs="AAA05",
-                                         role_formation_metier=RoleFormationFareEnum.PARTICIPANT)
-        cls.person6 = create_test_person(name="Participant5",
-                                         number_fgs="AAA06",
-                                         role_formation_metier=RoleFormationFareEnum.PARTICIPANT)
-        cls.person7 = create_test_person(name="Participant6",
-                                         number_fgs="AAA07",
-                                         role_formation_metier=RoleFormationFareEnum.PARTICIPANT)
-
-        cls.formateur1 = create_test_formateur(person=cls.person1)
+        cls.employe_ucl1 = create_test_employe_ucl(name="Formateur1",
+                                              number_fgs="AAA01",
+                                              role_formation_metier=RoleFormationFareEnum.FORMATEUR, user=cls.user1)
+        cls.employe_ucl2 = create_test_employe_ucl(name="Participant1",
+                                              number_fgs="AAA02",
+                                              role_formation_metier=RoleFormationFareEnum.PARTICIPANT, user=cls.user2)
+        cls.employe_ucl3 = create_test_employe_ucl(name="Participant2",
+                                              number_fgs="AAA03",
+                                              role_formation_metier=RoleFormationFareEnum.PARTICIPANT, user=cls.user3)
+        cls.employe_ucl4 = create_test_employe_ucl(name="Participant3",
+                                              number_fgs="AAA04",
+                                              role_formation_metier=RoleFormationFareEnum.PARTICIPANT, user=cls.user4)
+        cls.employe_ucl5 = create_test_employe_ucl(name="Participant4",
+                                              number_fgs="AAA05",
+                                              role_formation_metier=RoleFormationFareEnum.PARTICIPANT, user=cls.user5)
+        cls.employe_ucl6 = create_test_employe_ucl(name="Participant5",
+                                              number_fgs="AAA06",
+                                              role_formation_metier=RoleFormationFareEnum.PARTICIPANT, user=cls.user6)
+        cls.employe_ucl7 = create_test_employe_ucl(name="Participant6",
+                                              number_fgs="AAA07",
+                                              role_formation_metier=RoleFormationFareEnum.PARTICIPANT, user=cls.user7)
 
         cls.seance1 = create_test_seance(formation=cls.formation1,
-                                          seance_date=cls.date,
-                                          participant_max_number=5,
-                                          local="L001",
-                                          formateur=cls.formateur1,
-                                          duree=60
-                                          )
+                                         seance_date=cls.date,
+                                         participant_max_number=5,
+                                         local="L001",
+                                         formateur=cls.employe_ucl1,
+                                         duree=60
+                                         )
 
-        cls.participant1 = create_test_participant(person=cls.person2)
-        cls.participant2 = create_test_participant(person=cls.person3)
-        cls.participant3 = create_test_participant(person=cls.person4)
-        cls.participant4 = create_test_participant(person=cls.person5)
-        cls.participant5 = create_test_participant(person=cls.person6)
-        cls.participant6 = create_test_participant(person=cls.person7)
-
-        cls.register1 = create_test_register(seance=cls.seance1, participant=cls.participant1)
-        cls.register2 = create_test_register(seance=cls.seance1, participant=cls.participant2)
-        cls.register3 = create_test_register(seance=cls.seance1, participant=cls.participant3)
-        cls.register4 = create_test_register(seance=cls.seance1, participant=cls.participant4)
+        cls.register1 = create_test_register(seance=cls.seance1, participant=cls.employe_ucl2)
+        cls.register2 = create_test_register(seance=cls.seance1, participant=cls.employe_ucl3)
+        cls.register3 = create_test_register(seance=cls.seance1, participant=cls.employe_ucl4)
+        cls.register4 = create_test_register(seance=cls.seance1, participant=cls.employe_ucl5)
 
     def test_get(self):
         self.client.force_login(user=self.user1)
@@ -127,7 +121,7 @@ class NewRegisterFormTest(TestCase):
         self.client.force_login(user=self.user1)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.seance1.id]))
         data = {"seance": self.seance1,
-                "participant": self.participant5.id
+                "participant": self.employe_ucl6.id
                 }
 
         request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[self.seance1.id]), data=data)
@@ -139,7 +133,7 @@ class NewRegisterFormTest(TestCase):
         self.client.force_login(user=self.user1)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.seance1.id]))
         data = {"seance": self.seance1,
-                "participant": self.participant4.id
+                "participant": self.employe_ucl5.id
                 }
 
         request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[self.seance1.id]), data=data)
@@ -153,11 +147,11 @@ class NewRegisterFormTest(TestCase):
         self.client.force_login(user=self.user1)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.seance1.id]))
         data1 = {"seance": self.seance1,
-                 "participant": self.participant5.id
+                 "participant": self.employe_ucl6.id
                  }
 
         data2 = {"seance": self.seance1,
-                 "participant": self.participant6.id
+                 "participant": self.employe_ucl7.id
                  }
 
         self.assertEqual(response.status_code, 200)

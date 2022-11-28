@@ -37,7 +37,7 @@ class NewRegistrationForm(ModelForm):
         for register in register_set:
             if register.participant == cleaned_data.get('participant'):
                 raise ValidationError(
-                    _("L'utilisateur {} est déja inscit à cette formation").format(register.participant.person.name))
+                    _("L'utilisateur {} est déja inscit à cette formation").format(register.participant.name))
         if self.seance.participant_max_number <= register_set.count():
             raise ValidationError(_("Le nombre maximal de participant inscit a cette seance est déjà atteint"))
         return cleaned_data

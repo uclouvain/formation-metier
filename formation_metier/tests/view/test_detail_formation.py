@@ -6,9 +6,9 @@ from django.test import TestCase
 from django.urls import reverse
 
 from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
-from formation_metier.models.person import RoleFormationFareEnum
+from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
 from formation_metier.tests.utils import create_test_formation, create_test_seance, create_test_user, \
-    create_test_formateur, create_test_person
+    create_test_employe_ucl
 
 URL_DETAIL_FORMATION_VIEW = 'formation_metier:detail_formation'
 
@@ -21,12 +21,11 @@ class DetailFormationViewTest(TestCase):
         cls.user1.user_permissions.add(Permission.objects.get(codename='access_to_formation_fare'))
         cls.user1.user_permissions.add(Permission.objects.get(codename='view_formation'))
         cls.user1 = User.objects.get(pk=cls.user1.pk)
-        cls.person1 = create_test_person(name="formateur1",
-                                         number_fgs="AAAA0001",
-                                         role_formation_metier=RoleFormationFareEnum.FORMATEUR,
-                                         user=cls.user1
-                                         )
-        cls.formateur1 = create_test_formateur(person=cls.person1)
+        cls.employe_ucl1 = create_test_employe_ucl(name="formateur1",
+                                                   number_fgs="AAAA0001",
+                                                   role_formation_metier=RoleFormationFareEnum.FORMATEUR,
+                                                   user=cls.user1
+                                                   )
 
         cls.formation1 = create_test_formation(name="Formation_name_1", code="AAAA01",
                                                public_cible=ROLES_OSIS_CHOICES[1])
@@ -35,26 +34,26 @@ class DetailFormationViewTest(TestCase):
         cls.formation3 = create_test_formation(name="Formation_name_3", code="AAAA03",
                                                public_cible=ROLES_OSIS_CHOICES[1])
         cls.seance1 = create_test_seance(formation=cls.formation2,
-                                          seance_date=cls.date,
-                                          participant_max_number=10,
-                                          local="L001",
-                                          formateur=cls.formateur1,
-                                          duree=60
-                                          )
+                                         seance_date=cls.date,
+                                         participant_max_number=10,
+                                         local="L001",
+                                         formateur=cls.employe_ucl1,
+                                         duree=60
+                                         )
         cls.seance2 = create_test_seance(formation=cls.formation1,
-                                          seance_date=cls.date,
-                                          participant_max_number=10,
-                                          local="L002",
-                                          formateur=cls.formateur1,
-                                          duree=60
-                                          )
+                                         seance_date=cls.date,
+                                         participant_max_number=10,
+                                         local="L002",
+                                         formateur=cls.employe_ucl1,
+                                         duree=60
+                                         )
         cls.seance3 = create_test_seance(formation=cls.formation1,
-                                          seance_date=cls.date,
-                                          participant_max_number=10,
-                                          local="L003",
-                                          formateur=cls.formateur1,
-                                          duree=60
-                                          )
+                                         seance_date=cls.date,
+                                         participant_max_number=10,
+                                         local="L003",
+                                         formateur=cls.employe_ucl1,
+                                         duree=60
+                                         )
 
     def test_without_seance(self):
         self.client.force_login(user=self.user1)

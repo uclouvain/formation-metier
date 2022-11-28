@@ -6,10 +6,10 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from django.urls import reverse
-from formation_metier.models.person import Person, RoleFormationFareEnum
+from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleFormationFareEnum
 from formation_metier.models.seance import Seance
-from formation_metier.tests.utils import create_test_formation, create_test_seance, create_test_person, \
-    create_test_formateur, create_test_user
+from formation_metier.tests.utils import create_test_formation, create_test_seance, create_test_employe_ucl, \
+    create_test_user
 from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
 
 URL_NEW_SESSION_VIEW = 'formation_metier:new_seance'
@@ -38,14 +38,14 @@ class NewSessionFormTest(TestCase):
 
         cls.formation1 = create_test_formation(name="formation_test_1", code="AAAAA0001",
                                                public_cible=ROLES_OSIS_CHOICES[1])
-        cls.person1 = create_test_person(name="test", number_fgs="AAA01",
-                                         role_formation_metier=RoleFormationFareEnum.PARTICIPANT)
-        cls.formateur1 = create_test_formateur(person=cls.person1)
+        cls.employe_ucl1 = create_test_employe_ucl(name="test", number_fgs="AAA01",
+                                                   role_formation_metier=RoleFormationFareEnum.FORMATEUR,
+                                                   user=cls.user1)
         cls.session1 = create_test_seance(formation=cls.formation1,
                                           seance_date=cls.date,
                                           participant_max_number=10,
                                           local="L001",
-                                          formateur=cls.formateur1,
+                                          formateur=cls.employe_ucl1,
                                           duree=60
                                           )
 
@@ -54,7 +54,7 @@ class NewSessionFormTest(TestCase):
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "<h2>Nouvelle seance</h2>", html=True)
+        self.assertContains(response, "<h2>Nouvelle séance</h2>", html=True)
         self.assertTemplateUsed('new_session.html')
 
     def test_get_without_force_login(self):
@@ -77,7 +77,7 @@ class NewSessionFormTest(TestCase):
                 "seance_date": self.date,
                 "participant_max_number": 10,
                 "local": "L002",
-                "formateur": self.formateur1,
+                "formateur": self.employe_ucl1,
                 "duree": 20
                 }
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]))
@@ -87,7 +87,7 @@ class NewSessionFormTest(TestCase):
                               seance_date=self.date,
                               participant_max_number=10,
                               local="L002",
-                              formateur=self.formateur1,
+                              formateur=self.employe_ucl1,
                               duree=20)
         self.assertEqual(request.status_code, 200)
         self.assertEqual(Seance.objects.count(), 2)
@@ -98,7 +98,7 @@ class NewSessionFormTest(TestCase):
                 "seance_date": self.date,
                 "participant_max_number": 10,
                 "local": "L001",
-                "formateur": self.formateur1,
+                "formateur": self.employe_ucl1,
                 'duree': 700}
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]))
         request = self.client.post(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]), data=data)
