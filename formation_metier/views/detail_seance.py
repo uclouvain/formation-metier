@@ -34,7 +34,8 @@ class DetailSeance(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, gener
 
     def get_queryset(self):
         return super().get_queryset().filter(id=self.kwargs['seance_id']).prefetch_related(
-            'register_set'
+            'register_set',
+            'register_set__participant'
         ).annotate(
             register_count=Count('register'),
         )
