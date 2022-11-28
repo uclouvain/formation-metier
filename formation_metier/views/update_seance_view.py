@@ -3,6 +3,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse
 from django.views import generic
 
+from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleFormationFareEnum
 from formation_metier.models.seance import Seance
 
 
@@ -14,6 +15,12 @@ class UpdateSeanceView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessa
     pk_url_kwarg = "seance_id"
     success_message = 'La seance a été modifiée.'
     name = 'update_seance'
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['formateur'].queryset = EmployeUCLouvain.objects.filter(
+            role_formation_metier=RoleFormationFareEnum.FORMATEUR)
+        return form
 
     def get_success_url(self):
         return reverse('formation_metier:detail_seance', kwargs={'seance_id': self.kwargs['seance_id']})
