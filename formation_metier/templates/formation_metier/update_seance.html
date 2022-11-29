@@ -30,7 +30,7 @@
     <div class="panel panel-default" style="padding: 10px">
         <form method="post">{% csrf_token %}
             {% bootstrap_form form %}
-            {% bootstrap_button "Update la formation" button_type="submit" button_class="btn-primary" %}
+            {% bootstrap_button "Mettre a jour la seance" button_type="submit" button_class="btn-primary" %}
             <a href="{% url 'formation_metier:detail_seance' seance.id %}" style="color: #333">
                 {% bootstrap_button "Annuler" button_type="button" button_class="btn-secondary" %}
             </a>
