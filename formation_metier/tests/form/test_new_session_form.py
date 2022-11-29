@@ -1,12 +1,9 @@
 from datetime import datetime
-from pprint import pprint
-
 from django.contrib.auth.models import Permission, User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-
 from django.urls import reverse
-from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleFormationFareEnum
+from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
 from formation_metier.models.seance import Seance
 from formation_metier.tests.utils import create_test_formation, create_test_seance, create_test_employe_ucl, \
     create_test_user
@@ -22,7 +19,6 @@ class NewSessionFormTest(TestCase):
         cls.user1 = create_test_user(username="user1", password="password123")
         cls.user1.user_permissions.add(
             Permission.objects.get(codename='access_to_formation_fare'))
-        # pk=29 => Permission : 'formation_metier.add_session'
         cls.user1.user_permissions.add(
             Permission.objects.get(codename='add_seance'))
         cls.user1 = User.objects.get(pk=cls.user1.pk)

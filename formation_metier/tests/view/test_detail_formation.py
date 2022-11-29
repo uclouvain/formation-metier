@@ -1,10 +1,7 @@
 from datetime import datetime
-from pprint import pprint
-
-from django.contrib.auth.models import Group, Permission, User
+from django.contrib.auth.models import Permission, User
 from django.test import TestCase
 from django.urls import reverse
-
 from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
 from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
 from formation_metier.tests.utils import create_test_formation, create_test_seance, create_test_user, \

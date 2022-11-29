@@ -1,5 +1,4 @@
 from django.contrib.auth.models import Permission, User
-from django.db.utils import IntegrityError
 from django.test import TestCase
 from datetime import datetime
 
@@ -69,7 +68,7 @@ class NewRegisterFormTest(TestCase):
         user3.user_permissions.add(Permission.objects.get(codename='add_register'))
         user3.user_permissions.add(Permission.objects.get(codename='view_register'))
         user3.user_permissions.add(Permission.objects.get(codename='view_seance'))
-        user2 = User.objects.get(pk=user3.pk)
+        user3 = User.objects.get(pk=user3.pk)
         self.client.force_login(user=user3)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.seance1.id]))
         self.assertEqual(response.status_code, 403)
