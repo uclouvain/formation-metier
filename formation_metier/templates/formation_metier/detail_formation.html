@@ -5,14 +5,6 @@
 {% load l10n %}
 {% block content %}
     {% include 'formation_metier/delete_formation.html' %}
-    <script>
-        $(document).ready(function () {
-            $('.seance_row').click(function () {
-                window.location = $(this).data('href');
-                return false;
-            });
-        });
-    </script>
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
@@ -90,8 +82,7 @@
                     </thead>
                     <tbody>
                     {% for seance in formation.seance_set.all %}
-                        <tr data-href="{% url 'formation_metier:detail_seance' seance.id %}" id="seance_row"
-                            class="seance_row">
+                        <tr>
                             <td>
                                 <a href="{% url 'formation_metier:detail_seance' seance.id %}">
                                     {{ seance.seance_date|date:"l j F o" }}
