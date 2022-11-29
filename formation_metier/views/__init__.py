@@ -10,3 +10,4 @@ from .delete_seance_view import delete_seance
 from .delete_formation_view import delete_formation
 from .delete_registration_view import delete_registration
 from .select_participant_widget_view import PersonAutoComplete
+from .add_self_registration_view import add_self_registration
