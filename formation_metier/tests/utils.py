@@ -8,7 +8,7 @@ from formation_metier.models.employe_uclouvain import EmployeUCLouvain
 
 def create_test_employe_ucl(name, number_fgs, role_formation_metier, user=None):
     return EmployeUCLouvain.objects.create(name=name,
-                                           numberFGS=number_fgs,
+                                           number_fgs=number_fgs,
                                            role_formation_metier=role_formation_metier,
                                            user=user
                                            )

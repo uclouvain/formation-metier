@@ -20,22 +20,12 @@ class NewSessionFormTest(TestCase):
     def setUpTestData(cls):
         cls.date = datetime.today()
         cls.user1 = create_test_user(username="user1", password="password123")
-        cls.user2 = create_test_user(username="user2", password="password123")
-        cls.user3 = create_test_user(username="user3", password="password123")
         cls.user1.user_permissions.add(
             Permission.objects.get(codename='access_to_formation_fare'))
         # pk=29 => Permission : 'formation_metier.add_session'
         cls.user1.user_permissions.add(
             Permission.objects.get(codename='add_seance'))
-        cls.user2.user_permissions.add(
-            Permission.objects.get(codename='add_seance'))
-        cls.user3.user_permissions.add(
-            Permission.objects.get(codename='access_to_formation_fare'))
         cls.user1 = User.objects.get(pk=cls.user1.pk)
-
-        cls.user2 = User.objects.get(pk=cls.user2.pk)
-        cls.user3 = User.objects.get(pk=cls.user3.pk)
-
         cls.formation1 = create_test_formation(name="formation_test_1", code="AAAAA0001",
                                                public_cible=ROLES_OSIS_CHOICES[1])
         cls.employe_ucl1 = create_test_employe_ucl(name="test", number_fgs="AAA01",
@@ -49,7 +39,7 @@ class NewSessionFormTest(TestCase):
                                           duree=60
                                           )
 
-    def test_get(self):
+    def test_should_authorise_access_to_formateur(self):
         self.client.force_login(user=self.user1)
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]))
 
@@ -57,21 +47,27 @@ class NewSessionFormTest(TestCase):
         self.assertContains(response, "<h2>Nouvelle séance</h2>", html=True)
         self.assertTemplateUsed('new_session.html')
 
-    def test_get_without_force_login(self):
+    def test_should_deny_access_case_user_not_logged(self):
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]))
         self.assertEqual(response.status_code, 302)
 
-    def test_get_without_permission_access_to_formation_fare(self):
-        self.client.force_login(user=self.user2)
+    def test_should_deny_access_case_user_not_have_permission_access_to_formation_fare(self):
+        user2 = create_test_user(username="user2", password="password123")
+        user2.user_permissions.add(Permission.objects.get(codename='add_seance'))
+        user2 = User.objects.get(pk=user2.pk)
+        self.client.force_login(user=user2)
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]))
         self.assertEqual(response.status_code, 403)
 
-    def test_get_without_permission_add_formation(self):
-        self.client.force_login(user=self.user3)
+    def test_should_deny_access_case_user_not_have_permission_add_seance(self):
+        user2 = create_test_user(username="user2", password="password123")
+        user2.user_permissions.add(Permission.objects.get(codename='access_to_formation_fare'))
+        user2 = User.objects.get(pk=user2.pk)
+        self.client.force_login(user=user2)
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]))
         self.assertEqual(response.status_code, 403)
 
-    def test_with_valid_data_and_respected_constaint(self):
+    def test_should_not_raise_exception(self):
         self.client.force_login(user=self.user1)
         data = {"formation": self.formation1,
                 "seance_date": self.date,
@@ -92,7 +88,23 @@ class NewSessionFormTest(TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertEqual(Seance.objects.count(), 2)
 
-    def test_with_invalid_data_formation(self):
+    def test_should_raise_validation_error_case_code_date_formateur_already_exist(self):
+        self.client.force_login(user=self.user1)
+        data = {"formation": "test",
+                "seance_date": self.date,
+                "participant_max_number": 10,
+                "local": "L001",
+                "formateur": self.employe_ucl1,
+                'duree': 60}
+        response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]))
+        request = self.client.post(reverse(URL_NEW_SESSION_VIEW, args=[self.formation1.id]), data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(request.status_code, 200)
+        self.assertEqual(Seance.objects.count(), 1)
+        self.assertRaisesMessage(ValidationError,
+                                 'Un objet Seance avec ces champs Seance date, Local et Formateur existe déjà.')
+
+    def test_should_raise_validation_error_case_duree_value(self):
         self.client.force_login(user=self.user1)
         data = {"formation": "test",
                 "seance_date": self.date,
@@ -105,7 +117,5 @@ class NewSessionFormTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(request.status_code, 200)
         self.assertEqual(Seance.objects.count(), 1)
-        self.assertRaisesMessage(ValidationError,
-                                 'Un objet Seance avec ces champs Seance date, Local et Formateur existe déjà.')
         self.assertRaisesMessage(ValidationError,
                                  'Assurez-vous que cette valeur est inférieure ou égale à 600.')
