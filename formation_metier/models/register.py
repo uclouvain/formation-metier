@@ -13,7 +13,7 @@ class Register(models.Model):
     register_date = models.DateTimeField(auto_now_add=True, blank=False)
 
     class Meta:
-        constraints = [UniqueConstraint(fields=['seance', 'participant'], name='unique_register')]
+        unique_together = ('seance', 'participant',)
 
 
 class RegisterAdmin(admin.ModelAdmin):

@@ -34,10 +34,9 @@ class NewRegistrationForm(ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        register_set = self.seance.register_set.all()
-        for register in register_set:
-            if register.participant == cleaned_data.get('participant'):
-                raise IntegrityError(_(f"L'utilisateur {register.participant.name} est déja inscit à cette formation"))
-        if self.seance.participant_max_number <= register_set.count():
+        particpant = cleaned_data.get('participant')
+        if Register.objects.filter(seance=self.seance, participant=particpant).exists():
+            raise IntegrityError(_(f"L'utilisateur {particpant} est déja inscit à cette formation"))
+        if self.seance.participant_max_number <= Register.objects.count():
             raise ValidationError(_("Le nombre maximal de participant inscit a cette seance est déjà atteint"))
         return cleaned_data
