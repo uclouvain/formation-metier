@@ -1,7 +1,6 @@
 {% extends 'formation_metier/base.html' %}
 {% load bootstrap3 %}
 {% load static %}
-{% load public_cible_display %}
 {% block content %}
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
@@ -65,10 +64,9 @@
                                 {{ formation.code }}
                             </td>
                             <td>
-                                {% public_cible_display formation %}
+                                {{ formation.get_public_cible_display }}
                             </td>
                         </tr>
-
                     {% endfor %}
                     </tbody>
                 </table>

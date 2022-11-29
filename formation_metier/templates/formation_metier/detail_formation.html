@@ -1,7 +1,6 @@
 {% extends 'formation_metier/base.html' %}
 {% load bootstrap3 %}
 {% load static %}
-{% load public_cible_display %}
 {% load l10n %}
 {% block content %}
     {% include 'formation_metier/delete_formation.html' %}
@@ -63,7 +62,7 @@
     <div class="panel panel-default" style="padding: 10px">
         <p>Code : {{ formation.code }}</p>
         <p>Description : {{ formation.description }}</p>
-        <p>Public cible : {% public_cible_display formation %}</p>
+        <p>Public cible : {{ formation.get_public_cible_display }}</p>
     </div>
     {% if formation.seance_set.count > 0 %}
 
