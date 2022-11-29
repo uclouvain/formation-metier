@@ -23,9 +23,10 @@ class DetailSeance(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, gener
     form_class = NewRegistrationForm
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = self.get_form()
-        return context
+        return {
+            **super().get_context_data(**kwargs),
+            'form': self.get_form()
+        }
 
     def get_form_kwargs(self):
         return {
@@ -57,14 +58,13 @@ class RegisterFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObject
         }
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = self.get_form()
-        context['seance'] = self.get_object()
-        return context
+        return {
+            **super().get_context_data(**kwargs),
+            'form': self.get_form(),
+            'seance': self.get_object(),
+        }
 
     def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return HttpResponseForbidden()
         if self.get_form().is_valid():
             register = self.get_form().save(commit=False)
             register.seance = self.get_object()
