@@ -8,6 +8,7 @@ from typing import List, Dict
 
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
+from rest_framework.exceptions import APIException
 
 from formation_metier import celery_app
 
@@ -19,6 +20,10 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 # Commande pour lancer Celery avec exécution du beat :  celery -A formation_metier worker -B -l INFO
 
+class ServiceUnavailable(APIException):
+    status_code = 503
+    default_detail = 'Service temporarily unavailable, try again later.'
+    default_code = 'service_unavailable'
 
 @celery_app.task
 def get_employe_ucl_from_osis() -> List[Dict]:
@@ -35,7 +40,7 @@ def get_employe_ucl_from_osis() -> List[Dict]:
         return persons.json()
     except Exception:
         logger.info("[Synchronize person] An error occurred during fetching employe_ucl from OSIS")
-        raise ValueError
+        raise ServiceUnavailable
 
 
 @celery_app.task()
@@ -49,14 +54,14 @@ def get_specific_employe_ucl_from_osis(person_id: str) -> List[Dict]:
         return person.json()
     except Exception:
         logger.info("[Synchronize person] An error occurred during fetching employe_ucl from OSIS")
-        raise ValueError
+        raise ServiceUnavailable
 
 
 def create_employe_ucl_object_from_api_response(person_list_json: list):
     if not person_list_json:
-        raise AssertionError
+        raise AssertionError('Auncune données reçue')
     if type(person_list_json) != list:
-        raise TypeError
+        raise TypeError('Mauvais type de données reçu, les données doivent être de type list')
     else:
         for person in person_list_json:
             name = str(person["firstname"]) + " " + str(person["lastname"])
