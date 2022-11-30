@@ -6,6 +6,7 @@ from django.urls import reverse
 
 from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
 from formation_metier.tests.utils import create_test_formation, create_test_user
+from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
 
 URL_LIST_FORMATION = 'formation_metier:list_formation'
 
@@ -18,6 +19,12 @@ class ListFormationViewTest(TestCase):
         cls.user1.user_permissions.add(Permission.objects.get(codename='access_to_formation_fare'))
         cls.user1.user_permissions.add(Permission.objects.get(codename='view_formation'))
         cls.user1 = User.objects.get(pk=cls.user1.pk)
+
+    def test_should_authorise_access_to_formateur(self):
+        employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare', 'view_formation')
+        self.client.force_login(user=employe_uclouvain.user)
+        response = self.client.get(reverse(URL_LIST_FORMATION))
+        self.assertEqual(response.status_code, 200)
 
     def test_without_formation(self):
         self.client.force_login(user=self.user1)

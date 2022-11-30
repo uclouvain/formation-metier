@@ -6,6 +6,7 @@ from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
 from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
 from formation_metier.tests.utils import create_test_formation, create_test_seance, create_test_user, \
     create_test_employe_ucl
+from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
 
 URL_DETAIL_FORMATION_VIEW = 'formation_metier:detail_formation'
 
@@ -23,7 +24,6 @@ class DetailFormationViewTest(TestCase):
                                                    role_formation_metier=RoleFormationFareEnum.FORMATEUR,
                                                    user=cls.user1
                                                    )
-
         cls.formation1 = create_test_formation(name="Formation_name_1", code="AAAA01",
                                                public_cible=ROLES_OSIS_CHOICES[1])
         cls.formation2 = create_test_formation(name="Formation_name_2", code="AAAA02",
