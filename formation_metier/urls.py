@@ -13,18 +13,18 @@ urlpatterns = [
     path('', HomeView.as_view(), name=HomeView.name),
     path('list_formation/', ListFormationView.as_view(), name=ListFormationView.name),
     # detail_view
-    path('formation/<int:formation_id>/', DetailFormation.as_view(), name=DetailFormation.name),
-    path('formation/seance/<int:seance_id>/', DetailSeanceView.as_view(), name=DetailSeanceView.name),
+    path('formation/<uuid:formation_id>/', DetailFormation.as_view(), name=DetailFormation.name),
+    path('formation/seance/<uuid:seance_id>/', DetailSeanceView.as_view(), name=DetailSeanceView.name),
     # new_view
     path('new_formation/', NewFormationFormView.as_view(), name=NewFormationFormView.name),
-    path('formation/new_seance/<int:formation_id>', NewSeanceFormView.as_view(), name=NewSeanceFormView.name),
-    path('formation/seance/<int:seance_id>', add_self_registration, name='add_self_registration'),
+    path('formation/new_seance/<uuid:formation_id>', NewSeanceFormView.as_view(), name=NewSeanceFormView.name),
+    path('formation/seance/<uuid:seance_id>', add_self_registration, name='add_self_registration'),
     # update_view
-    path('formation/update/<int:formation_id>/', UpdateFormationView.as_view(), name=UpdateFormationView.name),
-    path('formation/seance/update/<int:seance_id>/', UpdateSeanceView.as_view(), name=UpdateSeanceView.name),
+    path('formation/update/<uuid:formation_id>/', UpdateFormationView.as_view(), name=UpdateFormationView.name),
+    path('formation/seance/update/<uuid:seance_id>/', UpdateSeanceView.as_view(), name=UpdateSeanceView.name),
     # delete_view
-    path('formation/delete/<int:formation_id>/', delete_formation, name='delete_formation'),
-    path('formation/seance/delete/<int:seance_id>/', delete_seance, name='delete_seance'),
+    path('formation/delete/<uuid:formation_id>/', delete_formation, name='delete_formation'),
+    path('formation/seance/delete/<uuid:seance_id>/', delete_seance, name='delete_seance'),
     path('formation/seance/register/delete/', delete_registration, name='delete_registration'),
     # Autocomplete Widget
     path('autocompletePerson/', PersonAutoComplete.as_view(), name=PersonAutoComplete.name),

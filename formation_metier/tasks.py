@@ -1,3 +1,5 @@
+import uuid
+
 from celery import shared_task
 from django.conf import settings
 import requests
@@ -12,7 +14,7 @@ from rest_framework.exceptions import APIException
 
 from formation_metier import celery_app
 
-from formation_metier.exemple_data_from_api import data_person
+from formation_metier.exemple_data_from_api import data_employe_ucl
 from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleFormationFareEnum
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -26,60 +28,60 @@ class ServiceUnavailable(APIException):
     default_code = 'service_unavailable'
 
 @celery_app.task
-def get_employe_ucl_from_osis() -> List[Dict]:
+def get_employes_uclouvain_from_osis() -> List[Dict]:
     # En attendant de faire les vrai appel API
-    create_employe_ucl_object_from_api_response(data_person)
-    url = settings.API_PERSON_URL + "employeucl/"
+    create_employe_ucl_object_from_api_response(data_employe_ucl)
+    url = settings.API_GET_EMPLOYE_UCL_URL + "employes_ucl/"
     try:
-        persons = requests.get(
+        employes_ucl = requests.get(
             url,
             timeout=20
         )
         # a décommenter lorsque il y aura la vrai API
-        # create_employe_ucl_object_from_api_response(persons.json())
-        return persons.json()
+        # create_employe_ucl_object_from_api_response(employes_ucl.json())
+        return employes_ucl.json()
     except Exception:
-        logger.info("[Synchronize person] An error occurred during fetching employe_ucl from OSIS")
+        logger.info("[Synchronize employe_ucl] An error occurred during fetching employe_ucl from OSIS")
         raise ServiceUnavailable
 
 
 @celery_app.task()
-def get_specific_employe_ucl_from_osis(person_id: str) -> List[Dict]:
-    url = settings.API_PERSON_URL + "employe_ucl/" + str(person_id)
+def get_specific_employe_uclouvain_from_osis(enploye_ucl_id: uuid.UUID) -> List[Dict]:
+    url = settings.API_GET_EMPLOYE_UCL_URL + "employe_ucl/" + str(enploye_ucl_id)
     try:
-        person = requests.get(
+        employe_ucl = requests.get(
             url,
             timeout=20
         )
-        return person.json()
+        return employe_ucl.json()
     except Exception:
-        logger.info("[Synchronize person] An error occurred during fetching employe_ucl from OSIS")
+        logger.info("[Synchronize employe_ucl] An error occurred during fetching employe_ucl from OSIS")
         raise ServiceUnavailable
 
 
-def create_employe_ucl_object_from_api_response(person_list_json: list):
-    if not person_list_json:
+def create_employe_ucl_object_from_api_response(employe_ucl_list_json: list):
+    if not employe_ucl_list_json:
         raise AssertionError('Auncune données reçue')
-    if type(person_list_json) != list:
+    if type(employe_ucl_list_json) != list:
         raise TypeError('Mauvais type de données reçu, les données doivent être de type list')
     else:
-        for person in person_list_json:
-            name = str(person["firstname"]) + " " + str(person["lastname"])
-            numbers_fgs = person["matric_fgs"]
+        for employe_ucl in employe_ucl_list_json:
+            name = str(employe_ucl["firstname"]) + " " + str(employe_ucl["lastname"])
+            numbers_fgs = employe_ucl["matric_fgs"]
             user_object = User.objects.filter(username=name)
             if not user_object:
                 user_object = User.objects.create_user(username=name, password="osis")
             if type(user_object) is QuerySet:
-                person_object = EmployeUCLouvain(name=name,
-                                                 numberFGS=numbers_fgs,
+                employe_ucl_object = EmployeUCLouvain(name=name,
+                                                 number_fgs=numbers_fgs,
                                                  role_formation_metier=RoleFormationFareEnum.PARTICIPANT,
                                                  user=user_object[0]
                                                  )
             else:
-                person_object = EmployeUCLouvain(name=name,
-                                                 numberFGS=numbers_fgs,
+                employe_ucl_object = EmployeUCLouvain(name=name,
+                                                 number_fgs=numbers_fgs,
                                                  role_formation_metier=RoleFormationFareEnum.PARTICIPANT,
                                                  user=user_object
                                                  )
-            if not EmployeUCLouvain.objects.filter(numberFGS=person_object.number_fgs):
-                person_object.save()
+            if not EmployeUCLouvain.objects.filter(number_fgs=employe_ucl_object.number_fgs):
+                employe_ucl_object.save()

@@ -1,8 +1,10 @@
+import uuid
+
 import django.utils.timezone
 from django.contrib import admin
 from django.core.validators import MaxValueValidator
 from django.db import models
-from django.db.models import UniqueConstraint, CheckConstraint, Q
+from django.db.models import UniqueConstraint
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -20,6 +22,10 @@ def validate_formateur(formateur_id):
 
 
 class Seance(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False)
     formation = models.ForeignKey(formation.Formation, on_delete=models.CASCADE, blank=False)
     seance_date = models.DateTimeField(default=django.utils.timezone.now, blank=False)
     local = models.CharField(max_length=50, blank=False)
@@ -51,7 +57,7 @@ class SeanceAdmin(admin.ModelAdmin):
                  ('duree', {'fields': ['duree']})
                  ]
     list_display = (
-        'formation', 'seance_date', 'local', 'participant_max_number', 'formateur', 'duree')
+        'id', 'formation', 'seance_date', 'local', 'participant_max_number', 'formateur', 'duree')
 
 
 class SeanceInLine(admin.StackedInline):
