@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import UniqueConstraint
@@ -21,3 +22,12 @@ class Formation(models.Model):
 
     def get_public_cible(self) -> str:
         return self.CHOICES_PUBLIC_CIBLE[self.public_cible]
+
+
+class FormationAdmin(admin.ModelAdmin):
+    fieldsets = [('code', {'fields': ['code']}),
+                 ('name', {'fields': ['name']}),
+                 ('description', {'fields': ['description']}),
+                 ('public_cible', {'fields': ['public_cible']})
+                 ]
+    list_display = ('name', 'code', 'description', 'public_cible')

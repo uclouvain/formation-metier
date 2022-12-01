@@ -10,7 +10,4 @@ class ListFormationView(LoginRequiredMixin, PermissionRequiredMixin, generic.Lis
     template_name = "formation_metier/list_formation.html"
     context_object_name = 'formation_list'
     name = 'list_formation'
-
-    def get_queryset(self):
-        queryset = Formation.objects.all()
-        return queryset
+    queryset = Formation.objects.all()

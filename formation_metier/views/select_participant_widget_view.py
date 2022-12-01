@@ -10,14 +10,9 @@ class PersonAutoComplete(LoginRequiredMixin, PermissionRequiredMixin, autocomple
     name = 'widget_participant'
 
     def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            return EmployeUCLouvain.objects.none()
-
         qs = EmployeUCLouvain.objects.all()
-
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
-
         return qs
 
     def get_result_label(self, result):

@@ -1,17 +1,18 @@
 import django.utils.timezone
+from django.contrib import admin
 from django.core.validators import MaxValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint, CheckConstraint, Q
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from formation_metier.models import formation, employe_uclouvain
-from formation_metier.models.employe_uclouvain import EmployeUCLouvain
+from formation_metier.models import formation
+from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleFormationFareEnum
 
 
 def validate_formateur(formateur_id):
     employe_ucl = EmployeUCLouvain.objects.get(id=formateur_id)
-    if employe_ucl.role_formation_metier != employe_uclouvain.RoleFormationFareEnum.FORMATEUR:
+    if employe_ucl.role_formation_metier != RoleFormationFareEnum.FORMATEUR:
         raise ValidationError(
             _("%(formateur)s n'est pas un formateur du module : 'formation FARE'"),
             params={'formateur': employe_ucl},
@@ -23,7 +24,7 @@ class Seance(models.Model):
     seance_date = models.DateTimeField(default=django.utils.timezone.now, blank=False)
     local = models.CharField(max_length=50, blank=False)
     participant_max_number = models.PositiveSmallIntegerField(default=0, blank=False)
-    formateur = models.ForeignKey(employe_uclouvain.EmployeUCLouvain, on_delete=models.SET_NULL, null=True,
+    formateur = models.ForeignKey(EmployeUCLouvain, on_delete=models.SET_NULL, null=True,
                                   validators=[validate_formateur])
     duree = models.PositiveSmallIntegerField(validators=[MaxValueValidator(600)], default=60)
 
@@ -39,3 +40,20 @@ class Seance(models.Model):
 
     def time_format(self) -> str:
         return self.seance_date.__format__("%Hh%M")
+
+
+class SeanceAdmin(admin.ModelAdmin):
+    fieldsets = [('formation', {'fields': ['formation']}),
+                 ('seance_date', {'fields': ['seance_date']}),
+                 ('local', {'fields': ['local']}),
+                 ('participant_max_number', {'fields': ['participant_max_number']}),
+                 ('formateur', {'fields': ['formateur']}),
+                 ('duree', {'fields': ['duree']})
+                 ]
+    list_display = (
+        'formation', 'seance_date', 'local', 'participant_max_number', 'formateur', 'duree')
+
+
+class SeanceInLine(admin.StackedInline):
+    model = Seance
+    extra = 3

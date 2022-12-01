@@ -1,18 +1,9 @@
 {% extends 'formation_metier/base.html' %}
 {% load bootstrap3 %}
 {% load static %}
-{% load public_cible_display %}
 {% load l10n %}
 {% block content %}
     {% include 'formation_metier/delete_formation.html' %}
-    <script>
-        $(document).ready(function () {
-            $('.seance_row').click(function () {
-                window.location = $(this).data('href');
-                return false;
-            });
-        });
-    </script>
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
@@ -71,7 +62,7 @@
     <div class="panel panel-default" style="padding: 10px">
         <p>Code : {{ formation.code }}</p>
         <p>Description : {{ formation.description }}</p>
-        <p>Public cible : {% public_cible_display formation %}</p>
+        <p>Public cible : {{ formation.get_public_cible_display }}</p>
     </div>
     {% if formation.seance_set.count > 0 %}
 
@@ -90,8 +81,7 @@
                     </thead>
                     <tbody>
                     {% for seance in formation.seance_set.all %}
-                        <tr data-href="{% url 'formation_metier:detail_seance' seance.id %}" id="seance_row"
-                            class="seance_row">
+                        <tr>
                             <td>
                                 <a href="{% url 'formation_metier:detail_seance' seance.id %}">
                                     {{ seance.seance_date|date:"l j F o" }}

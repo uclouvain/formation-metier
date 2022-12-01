@@ -1,16 +1,7 @@
 {% extends 'formation_metier/base.html' %}
 {% load bootstrap3 %}
 {% load static %}
-{% load public_cible_display %}
 {% block content %}
-    <script>
-        $(document).ready(function () {
-            $(' .formation_row').click(function () {
-                window.location = $(this).data('href');
-                return false;
-            });
-        });
-    </script>
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
@@ -63,8 +54,7 @@
                     </thead>
                     <tbody>
                     {% for formation in formation_list %}
-                        <tr class="formation_row"
-                            data-href="{% url 'formation_metier:detail_formation' formation.id %}">
+                        <tr>
                             <td>
                                 <a href="{% url 'formation_metier:detail_formation' formation.id %}">
                                     {{ formation.name }}
@@ -74,10 +64,9 @@
                                 {{ formation.code }}
                             </td>
                             <td>
-                                {% public_cible_display formation %}
+                                {{ formation.get_public_cible_display }}
                             </td>
                         </tr>
-
                     {% endfor %}
                     </tbody>
                 </table>
