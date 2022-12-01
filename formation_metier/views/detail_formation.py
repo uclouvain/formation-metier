@@ -1,12 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.db.models import Count
 from django.views import generic
 
 from formation_metier.models.formation import Formation
 
 
 class DetailFormation(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView):
-    permission_required = ['formation_metier.view_formation', 'formation_metier.access_to_formation_fare']
+    permission_required = ['formation_metier.view_formation', 'formation_metier.view_seance',
+                           'formation_metier.access_to_formation_fare']
     model = Formation
     template_name = 'formation_metier/detail_formation.html'
     context_object_name = "formation"

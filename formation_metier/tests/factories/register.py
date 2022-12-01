@@ -1,4 +1,3 @@
-import factory.fuzzy
 import factory
 
 from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainParticipantFactory

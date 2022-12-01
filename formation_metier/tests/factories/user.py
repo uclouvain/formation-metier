@@ -1,7 +1,6 @@
 import datetime
 
 import factory
-from django.utils import timezone
 
 
 class UserFactory(factory.django.DjangoModelFactory):

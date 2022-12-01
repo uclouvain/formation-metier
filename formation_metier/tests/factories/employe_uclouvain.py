@@ -40,13 +40,19 @@ class EmployeUCLouvainParticipantFactory(EmployeUCLouvainFactory):
 
 
 class EmployeUCLouvainWithPermissionsFactory:
-    def __init__(self, *permissions, groups=None, **kwargs):
+    def __init__(self, *permissions, groups=None, role=None, **kwargs):
         perms_obj = [Permission.objects.get_or_create(defaults={"name": p}, codename=p)[0] for p in permissions]
-        self.employe_uclouvain = EmployeUCLouvainFactory(**kwargs)
-        self.employe_uclouvain.user.user_permissions.add(*perms_obj)
 
+        if role:
+            if role == RoleFormationFareEnum.PARTICIPANT:
+                self.employe_uclouvain = EmployeUCLouvainParticipantFactory(**kwargs)
+            if role == RoleFormationFareEnum.FORMATEUR:
+                self.employe_uclouvain = EmployeUCLouvainFormateurFactory(**kwargs)
+        else:
+            self.employe_uclouvain = EmployeUCLouvainFactory(**kwargs)
         if groups:
             add_employe_uclouvain_to_groups(self.employe_uclouvain, groups)
+        self.employe_uclouvain.user.user_permissions.add(*perms_obj)
 
     def __new__(cls, *permissions, **kwargs):
         obj = super().__new__(cls)

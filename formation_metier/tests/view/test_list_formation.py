@@ -1,12 +1,11 @@
 from datetime import datetime
 
-from django.contrib.auth.models import Permission, User
 from django.test import TestCase
 from django.urls import reverse
 
-from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
-from formation_metier.tests.utils import create_test_formation, create_test_user
+from formation_metier.tests.factories.formation import FormationFactory
 from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
+from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
 
 URL_LIST_FORMATION = 'formation_metier:list_formation'
 
@@ -15,47 +14,62 @@ class ListFormationViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.date = datetime.today()
-        cls.user1 = create_test_user(username="user1", password="password123")
-        cls.user1.user_permissions.add(Permission.objects.get(codename='access_to_formation_fare'))
-        cls.user1.user_permissions.add(Permission.objects.get(codename='view_formation'))
-        cls.user1 = User.objects.get(pk=cls.user1.pk)
+        cls.employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare',
+                                                                       'view_formation',
+                                                                       role=RoleFormationFareEnum.PARTICIPANT)
 
-    def test_should_authorise_access_to_formateur(self):
-        employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare', 'view_formation')
-        self.client.force_login(user=employe_uclouvain.user)
+    def test_should_authorise_access_to_user(self):
+        self.client.force_login(user=self.employe_uclouvain.user)
         response = self.client.get(reverse(URL_LIST_FORMATION))
         self.assertEqual(response.status_code, 200)
 
-    def test_without_formation(self):
-        self.client.force_login(user=self.user1)
+    def test_should_deny_access_user_case_not_logged(self):
+        response = self.client.get(reverse(URL_LIST_FORMATION))
+        self.assertEqual(response.status_code, 302)
+
+    def test_should_deny_access_user_case_not_have_perm_access_to_formation_fare(self):
+        employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('view_formation',
+                                                                   role=RoleFormationFareEnum.PARTICIPANT)
+        self.client.force_login(user=employe_uclouvain.user)
+        response = self.client.get(reverse(URL_LIST_FORMATION))
+        self.assertEqual(response.status_code, 403)
+
+    def test_should_deny_access_user_case_not_have_perm_view_formation(self):
+        employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare',
+                                                                   role=RoleFormationFareEnum.PARTICIPANT)
+        self.client.force_login(user=employe_uclouvain.user)
+        response = self.client.get(reverse(URL_LIST_FORMATION))
+        self.assertEqual(response.status_code, 403)
+
+    def test_should_display_any_formation(self):
+        self.client.force_login(user=self.employe_uclouvain.user)
         url = reverse(URL_LIST_FORMATION)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Il n'y a pas de formation organisée")
         self.assertQuerysetEqual(response.context['formation_list'], [])
 
-    def test_with_one_formation(self):
-        self.client.force_login(user=self.user1)
-        formation1 = create_test_formation(name="Formation_name_1", code="AAAAA0001",
-                                           public_cible=ROLES_OSIS_CHOICES[1])
+    def test_should_display_one_formation(self):
+        self.client.force_login(user=self.employe_uclouvain.user)
+        formation = FormationFactory()
+        url = reverse(URL_LIST_FORMATION)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, formation.name)
+        self.assertQuerysetEqual(
+            response.context['formation_list'],
+            [formation],
+        )
+
+    def test_should_display_two_formation(self):
+        self.client.force_login(user=self.employe_uclouvain.user)
+        formation1 = FormationFactory()
+        formation2 = FormationFactory()
         url = reverse(URL_LIST_FORMATION)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, formation1.name)
-        self.assertQuerysetEqual(
-            response.context['formation_list'],
-            [formation1],
-        )
-
-    def test_with_two_formation(self):
-        self.client.force_login(user=self.user1)
-        formation1 = create_test_formation(name="Formation_name_1", code="AAAAA0001",
-                                           public_cible=ROLES_OSIS_CHOICES[1])
-        formation2 = create_test_formation(name="Formation_name_2", code="AAAAA0002",
-                                           public_cible=ROLES_OSIS_CHOICES[1])
-        url = reverse(URL_LIST_FORMATION)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, formation2.name)
         self.assertQuerysetEqual(
             response.context['formation_list'],
             [formation1, formation2],
