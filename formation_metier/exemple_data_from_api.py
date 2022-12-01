@@ -1,4 +1,4 @@
-data_person = [
+data_employe_ucl = [
     {
         "matric_fgs": "1114561",
         "directory": "E",
