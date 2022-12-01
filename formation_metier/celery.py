@@ -6,8 +6,12 @@ app = Celery('formation_metier')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 app.conf.beat_schedule = {
-    'get_person_every_day': {
-        'task': 'formation_metier.tasks.get_person_from_osis',
+    'get_employe_ucl_every_day': {
+        'task': 'formation_metier.tasks.get_employes_uclouvain_from_osis',
         'schedule': crontab(hour="6"),
+    },
+    'get_employe_ucl_every_minute': {
+        'task': 'formation_metier.tasks.get_employes_uclouvain_from_osis',
+        'schedule': crontab(minute="*"),
     },
 }
