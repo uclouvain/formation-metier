@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib import admin
 from django.core.validators import RegexValidator
 from django.db import models
@@ -8,6 +10,10 @@ from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
 
 class Formation(models.Model):
     CHOICES_PUBLIC_CIBLE = ROLES_OSIS_CHOICES
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False)
     code = models.CharField(max_length=6, blank=False,
                             validators=[RegexValidator(r'^[A-Za-z]{1,4}[0-9]{1,2}$')])
     name = models.CharField(max_length=50, blank=False)

@@ -1,13 +1,17 @@
+import uuid
+
 from django.contrib import admin
 from django.db import models
-
-from django.db.models import UniqueConstraint
 
 from formation_metier.models.employe_uclouvain import EmployeUCLouvain
 from formation_metier.models.seance import Seance
 
 
 class Register(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False)
     seance = models.ForeignKey(Seance, on_delete=models.CASCADE, blank=False)
     participant = models.ForeignKey(EmployeUCLouvain, on_delete=models.CASCADE, blank=False)
     register_date = models.DateTimeField(auto_now_add=True, blank=False)

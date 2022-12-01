@@ -1,7 +1,9 @@
+import uuid
+
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import UniqueConstraint, CheckConstraint, Q, TextChoices
+from django.db.models import UniqueConstraint, TextChoices
 from django.utils.translation import gettext_lazy as _
 
 
@@ -12,6 +14,10 @@ class RoleFormationFareEnum(TextChoices):
 
 
 class EmployeUCLouvain(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False)
     name = models.CharField(max_length=50, blank=False)
     number_fgs = models.CharField(max_length=8, blank=False)
     role_formation_metier = models.CharField(choices=RoleFormationFareEnum.choices, max_length=50,
