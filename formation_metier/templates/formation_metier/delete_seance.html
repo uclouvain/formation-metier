@@ -14,10 +14,11 @@
                 {% endif %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-                <a href="{% url 'formation_metier:delete_seance' seance.id %}">
+                <form method="post" action="{% url 'formation_metier:delete_seance' seance.id %}">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Fermer</button>
                     {% bootstrap_button "Supprimer" button_type="submit" button_class="btn btn-sm btn-danger" %}
-                </a>
+                </form>
             </div>
         </div>
     </div>

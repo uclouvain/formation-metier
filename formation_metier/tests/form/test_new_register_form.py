@@ -1,9 +1,10 @@
+import uuid
+
 from django.test import TestCase
 from datetime import datetime
 
 from django.urls import reverse
 from django.core.exceptions import ValidationError
-
 
 from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
 from formation_metier.models.register import Register
@@ -120,11 +121,11 @@ class NewRegisterFormTest(TestCase):
     def test_should_raise_validation_error_case_sceance_not_exist(self):
         self.client.force_login(user=self.employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.register.seance.id]))
-        data = {"seance": "test",
+        data = {"seance": uuid.uuid4(),
                 "participant": 19
                 }
-
-        request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[self.register.seance.id]), data=data)
+        url = reverse(URL_NEW_REGISTRATION, args=[self.register.seance_id])
+        request = self.client.post(url, data=data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(request.status_code, 200)
         self.assertEqual(Register.objects.count(), 1)
