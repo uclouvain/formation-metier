@@ -1,10 +1,7 @@
-from typing import Union
+
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect
-from django.shortcuts import redirect
 from django.views import generic
 
 from formation_metier.models.formation import Formation

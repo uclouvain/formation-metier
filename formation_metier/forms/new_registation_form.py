@@ -1,4 +1,3 @@
-from django.db import IntegrityError
 from django.forms import ValidationError
 from django.forms import ModelForm
 from django_select2.forms import ModelSelect2Widget
