@@ -6,9 +6,6 @@
 {% block content %}
     {% include 'formation_metier/delete_seance.html' %}
     {% include 'formation_metier/delete_register.html' %}
-    <script src="{% static 'js/htmx.min.js' %}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
@@ -26,7 +23,6 @@
             Séance
         </li>
     </ol>
-
     {% if form.errors %}
         <div class="alert alert-danger alert-dismissible alert-link">
             {{ form.non_field_errors }}
@@ -87,14 +83,7 @@
             <p>Formateur : {{ seance.formateur }}</p>
             <h3> Inscription : </h3>
             <div>
-                {% if request.user|has_group:"ParticipantGroup" %}
-                    <form method="post" action="{% url 'formation_metier:add_self_registration' seance.id %}">
-                        {% csrf_token %}
-                        <div>
-                            {% bootstrap_button "S'inscrire" button_type="submit" button_class="btn btn-sm btn-primery" %}
-                        </div>
-                    </form>
-                {% else %}
+
                     <form method="post">
                         {% csrf_token %}
                         {{ form.media }}
@@ -107,7 +96,7 @@
                             </div>
                         </div>
                     </form>
-                {% endif %}
+
             </div>
             {% if seance.register_set.count > 0 %}
                 <table class="table">

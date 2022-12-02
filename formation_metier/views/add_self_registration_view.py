@@ -4,7 +4,9 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
+from django.views.generic.edit import FormView
 
+from formation_metier.forms.new_register_for_current_user import NewRegisterForCurrentUser
 from formation_metier.models.employe_uclouvain import EmployeUCLouvain
 from formation_metier.models.register import Register
 from formation_metier.models.seance import Seance
@@ -28,3 +30,10 @@ def add_self_registration(request, seance_id: str) -> HttpResponseRedirect:
         register_object.save()
         messages.success(request, f"Votre inscription à la séance ' {seance} ' a été ajouté.")
         return redirect('formation_metier:detail_seance', seance_id)
+
+class RegisterCurrentUser(FormView):
+    model = Register
+    form_class = NewRegisterForCurrentUser
+
+
+

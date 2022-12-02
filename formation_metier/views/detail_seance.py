@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.views import generic, View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormMixin
+from formation_metier.views.add_self_registration_view import RegisterCurrentUser
 
 from formation_metier.forms.new_registation_form import NewRegistrationForm
 from formation_metier.models.seance import Seance
@@ -83,8 +84,12 @@ class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         view = DetailSeance.as_view()
+        print(self.request.user.groups)
         return view(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        view = RegisterFormView.as_view()
+        if 'FormateurGroup' in self.request.user.groups:
+            view = RegisterFormView.as_view()
+        else:
+            view = RegisterCurrentUser.as_view()
         return view(request, *args, **kwargs)
