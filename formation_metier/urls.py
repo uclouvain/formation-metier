@@ -1,11 +1,10 @@
-from django.conf.urls import url
 from django.urls import path, include
 from schema_graph.views import Schema
 from django.contrib.auth import views as auth_views
 
 from formation_metier.views import ListFormationView, HomeView, NewFormationFormView, DetailFormation, \
-    DetailSeanceView, UpdateFormationView, UpdateSeanceView, NewSeanceFormView, delete_seance, delete_formation, \
-    PersonAutoComplete, delete_registration, add_self_registration
+    DetailSeanceView, UpdateFormationView, UpdateSeanceView, NewSeanceFormView, delete_seance, \
+    DeleteFormation, PersonAutoComplete, delete_registration, add_self_registration
 from formation_metier.api import urls_api
 
 app_name = 'formation_metier'
@@ -23,7 +22,7 @@ urlpatterns = [
     path('formation/update/<uuid:formation_id>/', UpdateFormationView.as_view(), name=UpdateFormationView.name),
     path('formation/seance/update/<uuid:seance_id>/', UpdateSeanceView.as_view(), name=UpdateSeanceView.name),
     # delete_view
-    path('formation/delete/<uuid:formation_id>/', delete_formation, name='delete_formation'),
+    path('formation/delete/<uuid:formation_id>/', DeleteFormation.as_view(), name='delete_formation'),
     path('formation/seance/delete/<uuid:seance_id>/', delete_seance, name='delete_seance'),
     path('formation/seance/register/delete/', delete_registration, name='delete_registration'),
     # Autocomplete Widget

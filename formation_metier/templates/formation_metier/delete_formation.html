@@ -7,17 +7,18 @@
                 <h5 class="modal-title" id="exampleModalLabel">Confirmation de suppression</h5>
             </div>
             <div class="modal-body">
-                <span>Voulez vous vraiment supprimer la formation : {{ formation.code }} {{ formation.name }} {{ formation.id }}</span>
+                <span>Voulez vous vraiment supprimer la formation : {{ formation.code }} {{ formation.name }}</span>
                 <br>
                 {% if formation.seance_set.count > 0 %}
                     <span>Attention : Vous allez égualement supprimer les {{ formation.seance_set.count }} séances ainsi que les insciptions liées </span>
                 {% endif %}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-                <a href="{% url 'formation_metier:delete_formation' formation.id %}">
-                    {% bootstrap_button "Supprimer" button_type="button" button_class="btn btn-sm btn-danger" %}
-                </a>
+                <form method="post" action="{% url 'formation_metier:delete_formation' formation.id %}">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                    {% bootstrap_button "Supprimer" button_type="submit" button_class="btn btn-sm btn-danger" %}
+                </form>
             </div>
         </div>
     </div>

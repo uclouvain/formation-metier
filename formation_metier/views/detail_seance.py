@@ -15,7 +15,7 @@ from formation_metier.models.seance import Seance
 
 
 class DetailSeance(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
-    permission_required = ('formation_metier.view_seance', 'formation_metier.view_register')
+    permission_required = ['formation_metier.view_seance', 'formation_metier.view_register']
     model = Seance
     template_name = 'formation_metier/detail_seance.html'
     context_object_name = "seance"
