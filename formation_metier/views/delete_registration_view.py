@@ -1,28 +1,27 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect
+
 from formation_metier.models.register import Register
-from formation_metier.models.seance import Seance
+from django.views.generic import DeleteView
 
 
-@login_required
-@permission_required('formation_metier.delete_register', raise_exception=True)
-@permission_required('formation_metier.access_to_formation_fare', raise_exception=True)
-def delete_registration(request) -> HttpResponseRedirect:
-    if request.method == "POST":
-        register_list = request.POST.getlist('inscription')
-        register_object_list = []
-        seance_id = request.POST.get("seance_id")
-        seance_register_set = Seance.objects.get(id=seance_id).register_set.all()
-        for register in register_list:
-            register_object = get_object_or_404(Register, pk=register)
-            if register_object not in seance_register_set:
-                raise ValueError("l'inscription n'appartient pas à la seance actuelle")
-            else:
-                register_object_list.append(register_object)
-        for register_object in register_object_list:
-            register_object.delete()
-            messages.success(request, "L'inscription de l'utilisateur '{}' a été supprimée.".format(
-                register_object.participant.name))
-        return redirect('formation_metier:detail_seance', seance_id)
+class DeleteRegister(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
+    permission_required = ['formation_metier.delete_register', 'formation_metier.access_to_formation_fare']
+    model = Register
+    pk_url_kwarg = "session_id"
+
+    def get_queryset(self):
+        register_list = self.request.POST.getlist('inscription')
+        return Register.objects.filter(id__in=register_list, seance_id=self.request.POST.get("seance_id"))
+
+    def delete(self, request, *args, **kwargs):
+        if request.method == "POST":
+            register_list = self.get_queryset()
+            seance_id = request.POST.get("seance_id")
+            for register_object in register_list:
+                messages.success(request, "L'inscription de l'utilisateur '{}' a été supprimée.".format(
+                    register_object.participant.name))
+            register_list.delete()
+            return redirect('formation_metier:detail_seance', seance_id)
