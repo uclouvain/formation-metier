@@ -1,0 +1,23 @@
+{% load bootstrap3 %}
+<div class="modal fade" id="SelfRegisterDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmation de désinscription</h5>
+            </div>
+            <div class="modal-body">
+                <span>Voulez vous vraiment vous désiscrire de la session du {{ seance.seance_date}} de la formation {{ seance.formation.name }}</span>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <form method="post" action="{% url 'formation_metier:delete_self_registration'%}">
+                    {% csrf_token %}
+                    <input name="seance_id" class="hidden" type="text" value="{{ seance.id }}" readonly>
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Fermer</button>
+                    {% bootstrap_button "Se désinscrire" button_type="submit" button_class="btn btn-sm btn-danger" %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

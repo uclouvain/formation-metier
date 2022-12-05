@@ -1,4 +1,5 @@
 {% extends 'formation_metier/base.html' %}
+{% load est_membre_du_groupe %}
 {% load bootstrap3 %}
 {% load static %}
 {% block content %}
@@ -22,9 +23,11 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-large row text-right pull-right">
-                        <li>
-                            <a href="{% url 'formation_metier:new_formation' %}">Nouvelle formation</a>
-                        </li>
+                        {% if user|has_group:'FormateurGroup' %}
+                            <li>
+                                <a href="{% url 'formation_metier:new_formation' %}">Nouvelle formation</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

@@ -1,14 +1,13 @@
 {% extends 'formation_metier/base.html' %}
 {% load est_membre_du_groupe %}
+{% load est_inscrit_a_la_seance %}
 {% load bootstrap3 %}
 {% load static %}
 {% load l10n %}
 {% block content %}
     {% include 'formation_metier/delete_seance.html' %}
     {% include 'formation_metier/delete_register.html' %}
-    <script src="{% static 'js/htmx.min.js' %}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
+    {% include 'formation_metier/delete_self_register.html' %}
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
@@ -26,7 +25,6 @@
             Séance
         </li>
     </ol>
-
     {% if form.errors %}
         <div class="alert alert-danger alert-dismissible alert-link">
             {{ form.non_field_errors }}
@@ -53,25 +51,27 @@
                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Actions
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu dropdown-menu-large row ">
-                    <li>
-                        <a href="{% url 'formation_metier:new_seance' seance.formation.id %}" class="no_spinner">
-                            <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'formation_metier:update_seance' seance.id %} " class="no_spinner">
-                            <form method="post" style="margin: 0">Modifier la seance</form>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
-                    </li>
-                    {% if seance.register_set.count != 0 %}
+                <ul class="dropdown-menu dropdown-menu-large row">
+                    {% if user|has_group:'FormateurGroup' %}
                         <li>
-                            <a href="#" data-toggle="modal" data-target="#registerDeleteModal">Supprimer des
-                                inscription</a>
+                            <a href="{% url 'formation_metier:new_seance' seance.formation.id %}" class="no_spinner">
+                                <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
+                            </a>
                         </li>
+                        <li>
+                            <a href="{% url 'formation_metier:update_seance' seance.id %} " class="no_spinner">
+                                <form method="post" style="margin: 0">Modifier la seance</form>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
+                        </li>
+                        {% if seance.register_set.count != 0 %}
+                            <li>
+                                <a href="#" data-toggle="modal" data-target="#registerDeleteModal">Supprimer des
+                                    inscription</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
                 </ul>
             </div>
@@ -87,13 +87,10 @@
             <p>Formateur : {{ seance.formateur }}</p>
             <h3> Inscription : </h3>
             <div>
-                {% if request.user|has_group:"ParticipantGroup" %}
-                    <form method="post" action="{% url 'formation_metier:add_self_registration' seance.id %}">
-                        {% csrf_token %}
-                        <div>
-                            {% bootstrap_button "S'inscrire" button_type="submit" button_class="btn btn-sm btn-primery" %}
-                        </div>
-                    </form>
+                {% if user|is_register:seance %}
+                    <a href="#" data-toggle="modal" data-target="#SelfRegisterDeleteModal">
+                        {% bootstrap_button "Se désinscrire" button_class="btn-primary btn-danger" %}
+                    </a>
                 {% else %}
                     <form method="post">
                         {% csrf_token %}

@@ -1,7 +1,7 @@
 from .home_view import HomeView
 from .list_formation_view import ListFormationView
-from .detail_formation import DetailFormation
-from .detail_seance import DetailSeanceView
+from .detail_formation_view import DetailFormation
+from .detail_seance_view import DetailSeanceView
 from .new_formation_form_view import NewFormationFormView
 from .new_seance_form_view import NewSeanceFormView
 from .update_formation_view import UpdateFormationView
@@ -10,4 +10,4 @@ from .delete_seance_view import DeleteSeance
 from .delete_formation_view import DeleteFormation
 from .delete_registration_view import DeleteRegister
 from .select_participant_widget_view import PersonAutoComplete
-from .add_self_registration_view import add_self_registration
+from .delete_self_register_view import DeleteSelfRegister
