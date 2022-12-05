@@ -26,7 +26,8 @@ class EmployeUCLouvain(models.Model):
 
     class Meta:
         constraints = [UniqueConstraint(fields=['number_fgs'], name='unique_person')]
-        permissions = (('access_to_formation_fare', 'Global access to module formation FARE'),)
+        permissions = [('access_to_formation_fare', 'Global access to module formation FARE'),
+                       ('delete_self_register', 'Can delete self register'), ]
 
     def __str__(self):
         return f"{self.name}"

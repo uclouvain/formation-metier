@@ -10,7 +10,7 @@ from django.views.generic import DeleteView
 class DeleteRegister(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
     permission_required = ['formation_metier.delete_register', 'formation_metier.access_to_formation_fare']
     model = Register
-    pk_url_kwarg = "session_id"
+    pk_url_kwarg = "seance_id"
 
     def get_queryset(self):
         register_list = self.request.POST.getlist('inscription')
