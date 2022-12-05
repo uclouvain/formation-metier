@@ -4,16 +4,15 @@ from django.db.models import Count
 from django.views.generic import FormView
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views import generic, View
+from django.views import generic
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormMixin
-from formation_metier.views.add_self_registration_view import RegisterCurrentUser
 
-from formation_metier.forms.new_registation_form import NewRegistrationForm
+from formation_metier.forms.new_register_for_formateur_form import NewRegistrationForm
 from formation_metier.models.seance import Seance
 
 
-class DetailSeance(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
+class DetailSeanceForFormateur(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
     permission_required = ['formation_metier.view_seance', 'formation_metier.view_register']
     model = Seance
     template_name = 'formation_metier/detail_seance.html'
@@ -42,7 +41,7 @@ class DetailSeance(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, gener
         )
 
 
-class RegisterFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObjectMixin, FormView):
+class RegisterForFormateurFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObjectMixin, FormView):
     permission_required = 'formation_metier.add_register'
     template_name = 'formation_metier/detail_seance.html'
     form_class = NewRegistrationForm
@@ -76,20 +75,3 @@ class RegisterFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObject
 
     def get_success_url(self):
         return reverse('formation_metier:detail_seance', kwargs={'seance_id': self.get_object().pk})
-
-
-class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    permission_required = 'formation_metier.access_to_formation_fare'
-    name = 'detail_seance'
-
-    def get(self, request, *args, **kwargs):
-        view = DetailSeance.as_view()
-        print(self.request.user.groups)
-        return view(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        if 'FormateurGroup' in self.request.user.groups:
-            view = RegisterFormView.as_view()
-        else:
-            view = RegisterCurrentUser.as_view()
-        return view(request, *args, **kwargs)
