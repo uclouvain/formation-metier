@@ -1,14 +1,12 @@
 import uuid
-
-from celery import shared_task
 from django.conf import settings
 import requests
 import logging
-from pprint import pprint
 
 from typing import List, Dict
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ImproperlyConfigured
 from django.db.models import QuerySet
 from rest_framework.exceptions import APIException
 
@@ -27,22 +25,52 @@ class ServiceUnavailable(APIException):
     default_detail = 'Service temporarily unavailable, try again later.'
     default_code = 'service_unavailable'
 
+
 @celery_app.task
 def get_employes_uclouvain_from_osis() -> List[Dict]:
     # En attendant de faire les vrai appel API
-    create_employe_ucl_object_from_api_response(data_employe_ucl)
-    url = settings.API_GET_EMPLOYE_UCL_URL + "employes_ucl/"
+    # create_employe_ucl_object_from_api_response(data_employe_ucl)
+    # url = settings.API_GET_EMPLOYE_UCL_URL + "employes_ucl/"
+
+    if not all([settings.API_OSIS_URL, settings.OSIS_EMPLOYER_ENDPOINT]):
+        raise ImproperlyConfigured('ESB_API_URL / ESB_ENTITIES_HISTORY_ENDPOINT must be set in configuration')
+
+    endpoint = settings.OSIS_EMPLOYER_ENDPOINT
+    url = "{esb_api}/{endpoint}".format(esb_api=settings.API_OSIS_URL, endpoint=endpoint)
+    employes_ucl = []
+    compteur_page = 1
+    print(url)
     try:
-        employes_ucl = requests.get(
+        api_response_data = requests.get(
             url,
-            timeout=20
+            headers={"Authorization: settings.OSIS_AUTHORIZATION"},
+            timeout=20,
+            data={'page': compteur_page,
+                  'pageSize': 50},
         )
-        # a décommenter lorsque il y aura la vrai API
-        # create_employe_ucl_object_from_api_response(employes_ucl.json())
-        return employes_ucl.json()
+        employes_ucl += api_response_data.json()
+        compteur_page += 1
     except Exception:
         logger.info("[Synchronize employe_ucl] An error occurred during fetching employe_ucl from OSIS")
         raise ServiceUnavailable
+    while compteur_page < 4:
+        try:
+            api_response_data = requests.get(
+                url,
+                headers={"Authorization: settings.OSIS_AUTHORIZATION"},
+                timeout=20,
+                data={'page': compteur_page,
+                      'pageSize': 50},
+            )
+            employes_ucl += api_response_data['persons']["person"].json()
+            compteur_page += 1
+            print(len(employes_ucl))
+
+        except Exception:
+            logger.info("[Synchronize employe_ucl] An error occurred during fetching employe_ucl from OSIS")
+            raise ServiceUnavailable
+    print(employes_ucl)
+    # return create_employe_ucl_object_from_api_response(employes_ucl)
 
 
 @celery_app.task()
@@ -73,15 +101,15 @@ def create_employe_ucl_object_from_api_response(employe_ucl_list_json: list):
                 user_object = User.objects.create_user(username=name, password="osis")
             if type(user_object) is QuerySet:
                 employe_ucl_object = EmployeUCLouvain(name=name,
-                                                 number_fgs=numbers_fgs,
-                                                 role_formation_metier=RoleFormationFareEnum.PARTICIPANT,
-                                                 user=user_object[0]
-                                                 )
+                                                      number_fgs=numbers_fgs,
+                                                      role_formation_metier=RoleFormationFareEnum.PARTICIPANT,
+                                                      user=user_object[0]
+                                                      )
             else:
                 employe_ucl_object = EmployeUCLouvain(name=name,
-                                                 number_fgs=numbers_fgs,
-                                                 role_formation_metier=RoleFormationFareEnum.PARTICIPANT,
-                                                 user=user_object
-                                                 )
+                                                      number_fgs=numbers_fgs,
+                                                      role_formation_metier=RoleFormationFareEnum.PARTICIPANT,
+                                                      user=user_object
+                                                      )
             if not EmployeUCLouvain.objects.filter(number_fgs=employe_ucl_object.number_fgs):
                 employe_ucl_object.save()
