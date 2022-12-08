@@ -11,7 +11,7 @@
                 <br>
             </div>
             <div class="modal-footer">
-                <form method="post" action="{% url 'formation_metier:delete_self_registration'%}">
+                <form method="post" action="{% url 'formation_metier:suppression_inscription_par_participant'%}">
                     {% csrf_token %}
                     <input name="seance_id" class="hidden" type="text" value="{{ seance.id }}" readonly>
                     <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Fermer</button>

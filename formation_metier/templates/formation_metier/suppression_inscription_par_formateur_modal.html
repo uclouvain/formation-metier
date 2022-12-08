@@ -6,14 +6,14 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Suppression d' inscription</h5>
             </div>
-            <form method="post" action="{% url 'formation_metier:delete_registration' %}">
+            <form method="post" action="{% url 'formation_metier:suppression_inscription_par_formateur' %}">
                 {% csrf_token %}
                 <input name="seance_id" class="hidden" type="text" value="{{ seance.id }}" readonly>
                 <span style="padding-left: 15px">Cochez la/les inscription(s) a supprimer pour cette seance</span>
                 <div class="modal-body">
-                    {% for register in seance.register_set.all %}
-                        <input  type="checkbox" name="inscription" value="{{ register.id }}">
-                        <label>{{ register.participant }}</label>
+                    {% for inscription in seance.inscription_set.all %}
+                        <input  type="checkbox" name="inscription" value="{{ inscription.id }}">
+                        <label>{{ inscription.participant }}</label>
                         <br>
                     {% endfor %}
                 </div>

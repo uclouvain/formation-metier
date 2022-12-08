@@ -5,10 +5,10 @@ from django.urls import reverse
 from formation_metier.models.seance import Seance
 from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
 from formation_metier.tests.factories.seance import SeanceFactory
-URL_NEW_SESSION_VIEW = 'formation_metier:new_seance'
+URL_NEW_SESSION_VIEW = 'formation_metier:nouvelle_seance'
 
 
-class NewSeanceFormTest(TestCase):
+class NouvelleSeanceFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.date = datetime.today()

@@ -16,6 +16,6 @@ class DetailFormation(LoginRequiredMixin, PermissionRequiredMixin, generic.Detai
     def get_queryset(self):
         return super().get_queryset().filter(id=self.kwargs['formation_id']).prefetch_related(
             'seance_set',
-            'seance_set__register_set',
+            'seance_set__inscription_set',
             'seance_set__formateur',
         )

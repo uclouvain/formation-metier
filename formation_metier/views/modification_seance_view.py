@@ -7,14 +7,14 @@ from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleForm
 from formation_metier.models.seance import Seance
 
 
-class UpdateSeanceView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, generic.edit.UpdateView):
+class ModificationSeanceView(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, generic.edit.UpdateView):
     permission_required = ['formation_metier.change_seance', 'formation_metier.access_to_formation_fare']
     model = Seance
     fields = ['seance_date', 'local', 'participant_max_number', 'formateur', 'duree']
-    template_name = 'formation_metier/update_seance.html'
+    template_name = 'formation_metier/modification_seance_form.html'
     pk_url_kwarg = "seance_id"
     success_message = 'La seance a été modifiée.'
-    name = 'update_seance'
+    name = 'modification_seance'
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)

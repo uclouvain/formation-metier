@@ -6,16 +6,16 @@ from django.views import generic
 
 from formation_metier.models.formation import Formation
 from formation_metier.models.seance import Seance
-from formation_metier.forms.new_seance_form import NewSeanceForm
+from formation_metier.forms.nouvelle_seance_form import NouvelleSeanceForm
 
 
-class NewSeanceFormView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
+class NouvelleSeanceFormView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     permission_required = ['formation_metier.add_seance', 'formation_metier.access_to_formation_fare']
     model = Seance
-    template_name = 'formation_metier/new_seance_form.html'
-    form_class = NewSeanceForm
+    template_name = 'formation_metier/nouvelle_seance_form.html'
+    form_class = NouvelleSeanceForm
     pk_url_kwarg = "formation_id"
-    name = 'new_seance'
+    name = 'nouvelle_seance'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

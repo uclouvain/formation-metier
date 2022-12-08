@@ -4,9 +4,9 @@ from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleForm
 from formation_metier.models.seance import Seance
 
 
-class NewSeanceForm(ModelForm):
+class NouvelleSeanceForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        super(NewSeanceForm, self).__init__(*args, **kwargs)
+        super(NouvelleSeanceForm, self).__init__(*args, **kwargs)
         self.fields['formateur'].queryset = EmployeUCLouvain.objects.filter(
             role_formation_metier=RoleFormationFareEnum.FORMATEUR)
 

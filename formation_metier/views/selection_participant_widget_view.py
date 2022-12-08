@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from formation_metier.models.employe_uclouvain import EmployeUCLouvain
 
 
-class PersonAutoComplete(LoginRequiredMixin, PermissionRequiredMixin, autocomplete.Select2QuerySetView):
+class SelectionParticipantView(LoginRequiredMixin, PermissionRequiredMixin, autocomplete.Select2QuerySetView):
     permission_required = ['formation_metier.view_participant', 'formation_metier.access_to_formation_fare']
     name = 'widget_participant'
 

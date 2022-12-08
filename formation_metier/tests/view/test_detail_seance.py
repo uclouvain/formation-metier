@@ -6,7 +6,7 @@ from django.utils import timezone
 from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
 from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
 from formation_metier.tests.factories.seance import SeanceFactory
-from formation_metier.tests.factories.register import RegisterFactory
+from formation_metier.tests.factories.inscription import InscriptionFactory
 
 URL_DETAIL_SEANCE_VIEW = 'formation_metier:detail_seance'
 
@@ -76,10 +76,10 @@ class DetailSeanceViewTest(TestCase):
 
     def test_should_not_display_all_register(self):
         self.client.force_login(user=self.employe_uclouvain.user)
-        register1 = RegisterFactory()
-        register2 = RegisterFactory(seance=register1.seance)
-        register3 = RegisterFactory()
-        register4 = RegisterFactory()
+        register1 = InscriptionFactory()
+        register2 = InscriptionFactory(seance=register1.seance)
+        register3 = InscriptionFactory()
+        register4 = InscriptionFactory()
         url = reverse(URL_DETAIL_SEANCE_VIEW, args=[register1.seance.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

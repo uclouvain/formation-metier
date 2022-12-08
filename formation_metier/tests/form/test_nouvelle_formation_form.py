@@ -6,11 +6,11 @@ from formation_metier.models.formation import Formation
 from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
 from formation_metier.tests.factories.formation import FormationFactory
 
-URL_NEW_FORMATION_VIEW = reverse('formation_metier:new_formation')
+URL_NEW_FORMATION_VIEW = reverse('formation_metier:nouvelle_formation')
 FORMATION_DESCRIPTION = "formation de test"
 
 
-class NewFormationFormTest(TestCase):
+class NouvelleFormationFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.employe_ucl = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare', 'add_formation')

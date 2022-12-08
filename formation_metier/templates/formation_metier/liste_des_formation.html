@@ -23,9 +23,9 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-large row text-right pull-right">
-                        {% if user|has_group:'FormateurGroup' %}
+                        {% if user|est_membre_du_groupe:'FormateurGroup' %}
                             <li>
-                                <a href="{% url 'formation_metier:new_formation' %}">Nouvelle formation</a>
+                                <a href="{% url 'formation_metier:nouvelle_formation' %}">Nouvelle formation</a>
                             </li>
                         {% endif %}
                     </ul>
@@ -46,7 +46,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            {% if formation_list %}
+            {% if formation_liste %}
                 <table class="table">
                     <thead>
                     <tr>
@@ -56,7 +56,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for formation in formation_list %}
+                    {% for formation in formation_liste %}
                         <tr>
                             <td>
                                 <a href="{% url 'formation_metier:detail_formation' formation.id %}">
