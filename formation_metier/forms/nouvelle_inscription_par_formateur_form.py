@@ -5,22 +5,22 @@ from dal import autocomplete
 from django.utils.translation import gettext_lazy as _
 
 from formation_metier.models.employe_uclouvain import EmployeUCLouvain
-from formation_metier.models.register import Register
+from formation_metier.models.inscription import Inscription
 
 
-class NewRegistrationParticipantWidget(ModelSelect2Widget):
+class SelectionParticipantWidget(ModelSelect2Widget):
     model = EmployeUCLouvain
     search_fields = ["name__icontains"]
 
 
-class NewRegistrationForm(ModelForm):
+class NouvelleInscriptionParFormateurForm(ModelForm):
     def __init__(self, seance, *args, **kwargs):
         self.seance = seance
         super().__init__(*args, **kwargs)
 
     class Meta:
         template_name = 'formation_metier/detail_seance.html'
-        model = Register
+        model = Inscription
         fields = ('participant',)
         widgets = {
             "participant": autocomplete.ModelSelect2(url='formation_metier:widget_participant',
@@ -34,8 +34,8 @@ class NewRegistrationForm(ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         particpant = cleaned_data.get('participant')
-        if Register.objects.filter(seance=self.seance, participant=particpant).exists():
+        if Inscription.objects.filter(seance=self.seance, participant=particpant).exists():
             raise ValidationError(_(f"L'utilisateur {particpant} est déja inscit à cette formation"))
-        if self.seance.register_set.count() >= self.seance.participant_max_number:
+        if self.seance.inscription_set.count() >= self.seance.participant_max_number:
             raise ValidationError(_("Le nombre maximal de participant inscit a cette seance est déjà atteint"))
         return cleaned_data

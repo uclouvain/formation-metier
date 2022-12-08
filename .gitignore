@@ -4,3 +4,4 @@
 /celerybeat-schedule.db
 *.sqlite3
 module_formation/.env
+/.env.local

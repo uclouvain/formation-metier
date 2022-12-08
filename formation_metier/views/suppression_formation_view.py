@@ -7,12 +7,13 @@ from django.views import generic
 from formation_metier.models.formation import Formation
 
 
-class DeleteFormation(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, generic.DeleteView):
+class SuppressionFormation(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, generic.DeleteView):
     permission_required = ['formation_metier.delete_formation', 'formation_metier.access_to_formation_fare']
     model = Formation
     pk_url_kwarg = "formation_id"
+    name = 'suppression_formation'
 
     def get_success_url(self):
         success_message = f'La formation {self.object.name} a été supprimée.'
         messages.success(self.request, success_message)
-        return '/list_formation'
+        return '/liste_formation'

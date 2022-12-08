@@ -3,16 +3,16 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.views import generic
 
 from formation_metier.models.formation import Formation
-from formation_metier.forms.new_formation_form import NewFormationForm
+from formation_metier.forms.nouvelle_formation_form import NouvelleFormationForm
 
 
-class NewFormationFormView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
+class NouvelleFormationFormView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
     permission_required = ['formation_metier.add_formation', 'formation_metier.access_to_formation_fare']
     model = Formation
-    template_name = 'formation_metier/new_formation_form.html'
-    form_class = NewFormationForm
-    success_url = '/list_formation'
-    name = 'new_formation'
+    template_name = 'formation_metier/nouvelle_formation_form.html'
+    form_class = NouvelleFormationForm
+    success_url = '/liste_formation'
+    name = 'nouvelle_formation'
 
     def form_valid(self, form):
         messages.success(self.request, 'La formation {} a été ajouté.'.format(form.cleaned_data['name']))

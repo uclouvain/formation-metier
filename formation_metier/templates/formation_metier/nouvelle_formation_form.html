@@ -6,32 +6,22 @@
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
         <li>
-            <a href="{% url 'formation_metier:list_formation' %}">
+            <a href="{% url 'formation_metier:liste_formation' %}">
                 Liste des formation
             </a>
         </li>
-        <li>
-            <a href="{% url 'formation_metier:detail_formation' seance.formation.id %}">
-                Formation
-            </a>
-        </li>
-        <li>
-            <a href="{% url 'formation_metier:detail_seance' seance.id %}">
-                Seance
-            </a>
-        </li>
         <li class="active">
-            Modification de seance
+            New Formation
         </li>
     </ol>
     <div class="page-header">
-        <h2>Update la seance du {{ seance.seance_date }} de la formation {{ seance.formation.name }}</h2>
+        <h2>Nouvelle formation</h2>
     </div>
     <div class="panel panel-default" style="padding: 10px">
         <form method="post">{% csrf_token %}
             {% bootstrap_form form %}
-            {% bootstrap_button "Mettre a jour la seance" button_type="submit" button_class="btn-primary" %}
-            <a href="{% url 'formation_metier:detail_seance' seance.id %}" style="color: #333">
+            {% bootstrap_button "Créer la formation" button_type="submit" button_class="btn-primary" %}
+            <a href="{% url 'formation_metier:liste_formation' %}" style="color: #333">
                 {% bootstrap_button "Annuler" button_type="button" button_class="btn-secondary" %}
             </a>
         </form>

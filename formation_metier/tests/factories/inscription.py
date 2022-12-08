@@ -4,9 +4,9 @@ from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainP
 from formation_metier.tests.factories.seance import SeanceFactory
 
 
-class RegisterFactory(factory.django.DjangoModelFactory):
+class InscriptionFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = 'formation_metier.Register'
+        model = 'formation_metier.Inscription'
 
     seance = factory.SubFactory(SeanceFactory)
     participant = factory.SubFactory(EmployeUCLouvainParticipantFactory)

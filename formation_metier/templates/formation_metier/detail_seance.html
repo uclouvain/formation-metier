@@ -5,14 +5,14 @@
 {% load static %}
 {% load l10n %}
 {% block content %}
-    {% include 'formation_metier/delete_seance.html' %}
-    {% include 'formation_metier/delete_register.html' %}
-    {% include 'formation_metier/delete_self_register.html' %}
+    {% include 'formation_metier/suppression_seance_modal.html' %}
+    {% include 'formation_metier/suppression_inscription_par_formateur_modal.html' %}
+    {% include 'formation_metier/suppression_inscription_par_participant_modal.html' %}
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
         <li>
-            <a href="{% url 'formation_metier:list_formation' %}">
+            <a href="{% url 'formation_metier:liste_formation' %}">
                 Liste des formation
             </a>
         </li>
@@ -52,21 +52,22 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-large row">
-                    {% if user|has_group:'FormateurGroup' %}
+                    {% if user|est_membre_du_groupe:'FormateurGroup' %}
                         <li>
-                            <a href="{% url 'formation_metier:new_seance' seance.formation.id %}" class="no_spinner">
+                            <a href="{% url 'formation_metier:nouvelle_seance' seance.formation.id %}"
+                               class="no_spinner">
                                 <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
                             </a>
                         </li>
                         <li>
-                            <a href="{% url 'formation_metier:update_seance' seance.id %} " class="no_spinner">
+                            <a href="{% url 'formation_metier:modification_seance' seance.id %} " class="no_spinner">
                                 <form method="post" style="margin: 0">Modifier la seance</form>
                             </a>
                         </li>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
                         </li>
-                        {% if seance.register_set.count != 0 %}
+                        {% if seance.inscription_set.count != 0 %}
                             <li>
                                 <a href="#" data-toggle="modal" data-target="#registerDeleteModal">Supprimer des
                                     inscription</a>
@@ -83,14 +84,28 @@
             <p>Heure : {{ seance.time_format }}</p>
             <p>Local : {{ seance.local }}</p>
             <p>Durée ( en minutes) : {{ seance.duree }}</p>
-            <p>Participants : {{ seance.register_count }} / {{ seance.participant_max_number }}</p>
+            <p>Participants : {{ seance.inscription_count }} / {{ seance.participant_max_number }}</p>
             <p>Formateur : {{ seance.formateur }}</p>
             <h3> Inscription : </h3>
             <div>
-                {% if user|is_register:seance %}
-                    <a href="#" data-toggle="modal" data-target="#SelfRegisterDeleteModal">
-                        {% bootstrap_button "Se désinscrire" button_class="btn-primary btn-danger" %}
-                    </a>
+                {% if user|est_membre_du_groupe:'ParticipantGroup' %}
+                    {% if user|est_inscrit:seance %}
+                        <a href="#" data-toggle="modal" data-target="#SelfRegisterDeleteModal" class="col-md-2" style="padding-left: 0">
+                            {% bootstrap_button "Se désinscrire" button_class="btn-primary btn-danger" %}
+                        </a>
+
+                    {% else %}
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.media }}
+                            <div class="row">
+                                {% bootstrap_form form layout='inline' error_types='none' %}
+                                <div class="col-md-2">
+                                    {% bootstrap_button "S'inscrire" button_type="submit" button_class="btn-primary" %}
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
                 {% else %}
                     <form method="post">
                         {% csrf_token %}
@@ -106,7 +121,7 @@
                     </form>
                 {% endif %}
             </div>
-            {% if seance.register_set.count > 0 %}
+            {% if seance.inscription_set.count > 0 %}
                 <table class="table">
                     <thead>
                     <tr>
@@ -116,10 +131,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for register in seance.register_set.all %}
+                    {% for inscription in seance.inscription_set.all %}
                         <tr style="max-height: 40px">
-                            <td>{{ register.participant.name }}</td>
-                            <td> {{ register.participant.number_fgs }}</td>
+                            <td>{{ inscription.participant.name }}</td>
+                            <td> {{ inscription.participant.number_fgs }}</td>
                         </tr>
                     {% endfor %}
                     <div>

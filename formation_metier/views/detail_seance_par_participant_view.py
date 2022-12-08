@@ -7,17 +7,17 @@ from django.views import generic
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormMixin, FormView
 
-from formation_metier.forms.new_register_for_participant_form import NewRegisterForCurrentUserForm
+from formation_metier.forms.nouvelle_inscription_par_participant_form import NouvelleInscriptionParParticipantForm
 from formation_metier.models.seance import Seance
 
 
 class DetailSeanceForParticipant(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
-    permission_required = ['formation_metier.view_seance', 'formation_metier.view_register']
+    permission_required = ['formation_metier.view_seance', 'formation_metier.view_inscription']
     model = Seance
     template_name = 'formation_metier/detail_seance.html'
     context_object_name = "seance"
     pk_url_kwarg = 'seance_id'
-    form_class = NewRegisterForCurrentUserForm
+    form_class = NouvelleInscriptionParParticipantForm
 
     def get_context_data(self, **kwargs):
         return {
@@ -33,17 +33,17 @@ class DetailSeanceForParticipant(LoginRequiredMixin, PermissionRequiredMixin, Fo
 
     def get_queryset(self):
         return super().get_queryset().filter(id=self.kwargs['seance_id']).prefetch_related(
-            'register_set',
-            'register_set__participant'
+            'inscription_set',
+            'inscription_set__participant'
         ).annotate(
-            register_count=Count('register'),
+            inscription_count=Count('inscription'),
         )
 
 
-class RegisterForParticipantFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObjectMixin, FormView):
-    permission_required = 'formation_metier.add_register'
+class InscriptionParParticipantFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObjectMixin, FormView):
+    permission_required = 'formation_metier.add_inscription'
     template_name = 'formation_metier/detail_seance.html'
-    form_class = NewRegisterForCurrentUserForm
+    form_class = NouvelleInscriptionParParticipantForm
     model = Seance
     context_object_name = "seance"
     pk_url_kwarg = 'seance_id'
@@ -73,9 +73,9 @@ class RegisterForParticipantFormView(LoginRequiredMixin, PermissionRequiredMixin
         return super().post(self, request, *args, **kwargs)
 
     def form_valid(self, form):
-        register = self.get_form().save(commit=False)
-        register.seance = self.get_object()
-        register.save()
+        inscription = self.get_form().save(commit=False)
+        inscription.seance = self.get_object()
+        inscription.save()
         messages.success(self.request,
                          'Le participant {} a été ajouté.'.format(form.data['participant'].name))
         return redirect(self.get_success_url())

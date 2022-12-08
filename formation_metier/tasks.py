@@ -7,12 +7,9 @@ from typing import List, Dict
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
-from django.db.models import QuerySet
 from rest_framework.exceptions import APIException
 
 from formation_metier import celery_app
-
-from formation_metier.exemple_data_from_api import data_employe_ucl
 from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleFormationFareEnum
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)

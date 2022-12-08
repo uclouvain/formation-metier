@@ -7,7 +7,7 @@ from formation_metier.tests.factories.formation import FormationFactory
 from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
 from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
 
-URL_LIST_FORMATION = 'formation_metier:list_formation'
+URL_LIST_FORMATION = 'formation_metier:liste_formation'
 
 
 class ListFormationViewTest(TestCase):
@@ -47,7 +47,7 @@ class ListFormationViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Il n'y a pas de formation organisée")
-        self.assertQuerysetEqual(response.context['formation_list'], [])
+        self.assertQuerysetEqual(response.context['formation_liste'], [])
 
     def test_should_display_one_formation(self):
         self.client.force_login(user=self.employe_uclouvain.user)
@@ -57,7 +57,7 @@ class ListFormationViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, formation.name)
         self.assertQuerysetEqual(
-            response.context['formation_list'],
+            response.context['formation_liste'],
             [formation],
         )
 
@@ -71,7 +71,7 @@ class ListFormationViewTest(TestCase):
         self.assertContains(response, formation1.name)
         self.assertContains(response, formation2.name)
         self.assertQuerysetEqual(
-            response.context['formation_list'],
+            response.context['formation_liste'],
             [formation1, formation2],
             ordered=False,
         )

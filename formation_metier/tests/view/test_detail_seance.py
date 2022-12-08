@@ -6,7 +6,7 @@ from django.utils import timezone
 from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
 from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
 from formation_metier.tests.factories.seance import SeanceFactory
-from formation_metier.tests.factories.register import RegisterFactory
+from formation_metier.tests.factories.inscription import InscriptionFactory
 
 URL_DETAIL_SEANCE_VIEW = 'formation_metier:detail_seance'
 
@@ -16,8 +16,8 @@ class DetailSeanceViewTest(TestCase):
     def setUpTestData(cls):
         cls.date = timezone.now()
         cls.employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare',
-                                                                       'view_register',
-                                                                       'add_register',
+                                                                       'view_inscription',
+                                                                       'add_inscription',
                                                                        'view_seance',
                                                                        role=RoleFormationFareEnum.PARTICIPANT)
         cls.seance = SeanceFactory()
@@ -35,8 +35,8 @@ class DetailSeanceViewTest(TestCase):
 
     def test_should_deny_access_user_case_not_have_perm_access_to_formation_fare(self):
         employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('view_seance',
-                                                                   'add_register',
-                                                                   'view_register',
+                                                                   'add_inscription',
+                                                                   'view_inscription',
                                                                    role=RoleFormationFareEnum.PARTICIPANT)
         self.client.force_login(user=employe_uclouvain.user)
         url = reverse(URL_DETAIL_SEANCE_VIEW, args=[self.seance.id])
@@ -45,8 +45,8 @@ class DetailSeanceViewTest(TestCase):
 
     def test_should_deny_access_user_case_not_have_perm_view_seance(self):
         employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare',
-                                                                   'add_register',
-                                                                   'view_register',
+                                                                   'add_inscription',
+                                                                   'view_inscription',
                                                                    role=RoleFormationFareEnum.PARTICIPANT)
         self.client.force_login(user=employe_uclouvain.user)
         url = reverse(URL_DETAIL_SEANCE_VIEW, args=[self.seance.id])
@@ -56,7 +56,7 @@ class DetailSeanceViewTest(TestCase):
     def test_should_deny_access_user_case_not_have_perm_view_register(self):
         employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare',
                                                                    'view_seance',
-                                                                   'add_register',
+                                                                   'add_inscription',
                                                                    role=RoleFormationFareEnum.PARTICIPANT)
         self.client.force_login(user=employe_uclouvain.user)
         url = reverse(URL_DETAIL_SEANCE_VIEW, args=[self.seance.id])
@@ -76,10 +76,10 @@ class DetailSeanceViewTest(TestCase):
 
     def test_should_not_display_all_register(self):
         self.client.force_login(user=self.employe_uclouvain.user)
-        register1 = RegisterFactory()
-        register2 = RegisterFactory(seance=register1.seance)
-        register3 = RegisterFactory()
-        register4 = RegisterFactory()
+        register1 = InscriptionFactory()
+        register2 = InscriptionFactory(seance=register1.seance)
+        register3 = InscriptionFactory()
+        register4 = InscriptionFactory()
         url = reverse(URL_DETAIL_SEANCE_VIEW, args=[register1.seance.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
