@@ -16,8 +16,8 @@ class DetailSeanceViewTest(TestCase):
     def setUpTestData(cls):
         cls.date = timezone.now()
         cls.employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare',
-                                                                       'view_register',
-                                                                       'add_register',
+                                                                       'view_inscription',
+                                                                       'add_inscription',
                                                                        'view_seance',
                                                                        role=RoleFormationFareEnum.PARTICIPANT)
         cls.seance = SeanceFactory()
@@ -35,8 +35,8 @@ class DetailSeanceViewTest(TestCase):
 
     def test_should_deny_access_user_case_not_have_perm_access_to_formation_fare(self):
         employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('view_seance',
-                                                                   'add_register',
-                                                                   'view_register',
+                                                                   'add_inscription',
+                                                                   'view_inscription',
                                                                    role=RoleFormationFareEnum.PARTICIPANT)
         self.client.force_login(user=employe_uclouvain.user)
         url = reverse(URL_DETAIL_SEANCE_VIEW, args=[self.seance.id])
@@ -45,8 +45,8 @@ class DetailSeanceViewTest(TestCase):
 
     def test_should_deny_access_user_case_not_have_perm_view_seance(self):
         employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare',
-                                                                   'add_register',
-                                                                   'view_register',
+                                                                   'add_inscription',
+                                                                   'view_inscription',
                                                                    role=RoleFormationFareEnum.PARTICIPANT)
         self.client.force_login(user=employe_uclouvain.user)
         url = reverse(URL_DETAIL_SEANCE_VIEW, args=[self.seance.id])
@@ -56,7 +56,7 @@ class DetailSeanceViewTest(TestCase):
     def test_should_deny_access_user_case_not_have_perm_view_register(self):
         employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare',
                                                                    'view_seance',
-                                                                   'add_register',
+                                                                   'add_inscription',
                                                                    role=RoleFormationFareEnum.PARTICIPANT)
         self.client.force_login(user=employe_uclouvain.user)
         url = reverse(URL_DETAIL_SEANCE_VIEW, args=[self.seance.id])

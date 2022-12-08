@@ -76,12 +76,11 @@ class NouvelleFormationFormTest(TestCase):
         seance = SeanceFactory()
         participant = EmployeUCLouvainParticipantFactory()
         self.client.force_login(user=self.employe_ucl.user)
-        response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]))
+        response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[seance.id]))
         data = {
             "participant": participant
         }
-        request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]), data=data, )
-        test = Inscription.objects.all()
+        request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[seance.id]), data=data, )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(request.status_code, 302)
         self.assertEqual(Inscription.objects.count(), 2)
@@ -89,7 +88,7 @@ class NouvelleFormationFormTest(TestCase):
     def test_should_raise_validation_error_case_inscription_already_exist(self):
         self.client.force_login(user=self.employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]))
-        data = {"seance": self.inscription.seance,
+        data = {"seance": self.inscription.seance.id,
                 "participant": self.employe_ucl.id
                 }
 
@@ -101,24 +100,25 @@ class NouvelleFormationFormTest(TestCase):
                                  f"L'utilisateur {self.employe_ucl} est déja inscit à cette formation")
 
     def test_should_raise_validation_error_case_sceance_max_participant_number(self):
+        seance = SeanceFactory(participant_max_number=2)
+        inscription = InscriptionFactory(seance=seance)
         participant1 = EmployeUCLouvainParticipantFactory()
         participant2 = EmployeUCLouvainParticipantFactory()
         self.client.force_login(user=self.employe_ucl.user)
-        response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]))
+        response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[seance.id]))
         data1 = {
+            "seance": seance,
             "participant": participant1.id
         }
-
         data2 = {"seance": self.inscription.seance,
                  "participant": participant2.id
                  }
         self.assertEqual(response.status_code, 200)
-        first_request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]), data=data1)
+        first_request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[seance.id]), data=data1)
         self.assertEqual(first_request.status_code, 302)
-        second_request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]), data=data2)
+        second_request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[seance.id]), data=data2)
         self.assertEqual(second_request.status_code, 200)
-        test = Inscription.objects.all()
-        self.assertEqual(Inscription.objects.count(), 2)
+        self.assertEqual(Inscription.objects.count(), 3)
         self.assertRaisesMessage(ValidationError,
                                  'Le nombre maximal de participant inscit a cette seance est déjà atteint')
 
