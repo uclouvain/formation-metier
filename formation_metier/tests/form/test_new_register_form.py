@@ -6,10 +6,10 @@ from datetime import datetime
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 
-from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
+from formation_metier.models.employe_uclouvain import RoleFormationFareEnum, EmployeUCLouvain
 from formation_metier.models.register import Register
 from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory, \
-    EmployeUCLouvainParticipantFactory
+    EmployeUCLouvainParticipantFactory, add_employe_uclouvain_to_groups
 from formation_metier.tests.factories.register import RegisterFactory
 from formation_metier.tests.factories.seance import SeanceFactory
 
@@ -23,6 +23,8 @@ class NewRegisterFormTest(TestCase):
         cls.employe_ucl = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare', 'view_register',
                                                                  'add_register', 'view_seance',
                                                                  role=RoleFormationFareEnum.FORMATEUR)
+        add_employe_uclouvain_to_groups(cls.employe_ucl, 'FromateurGroup')
+        cls.employe_ucl = EmployeUCLouvain.objects.get(id=cls.employe_ucl.id)
         cls.register = RegisterFactory(participant=cls.employe_ucl, seance__participant_max_number=2)
 
     def test_should_authorise_access_to_formateur(self):
@@ -75,10 +77,11 @@ class NewRegisterFormTest(TestCase):
         participant = EmployeUCLouvainParticipantFactory()
         self.client.force_login(user=self.employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.register.seance.id]))
-        data = {"seance": seance,
-                "participant": participant.id
-                }
-        request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[self.register.seance.id]), data=data)
+        data = {
+            "participant": participant
+        }
+        request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[self.register.seance.id]), data=data, )
+        test = Register.objects.all()
         self.assertEqual(response.status_code, 200)
         self.assertEqual(request.status_code, 302)
         self.assertEqual(Register.objects.count(), 2)
@@ -95,16 +98,16 @@ class NewRegisterFormTest(TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertEqual(Register.objects.count(), 1)
         self.assertRaisesMessage(ValidationError,
-                                 f"L'utilisateur {self.employe_ucl.name} est déja inscit à cette formation")
+                                 f"L'utilisateur {self.employe_ucl} est déja inscit à cette formation")
 
     def test_should_raise_validation_error_case_sceance_max_participant_number(self):
         participant1 = EmployeUCLouvainParticipantFactory()
         participant2 = EmployeUCLouvainParticipantFactory()
         self.client.force_login(user=self.employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.register.seance.id]))
-        data1 = {"seance": self.register.seance,
-                 "participant": participant1.id
-                 }
+        data1 = {
+            "participant": participant1.id
+        }
 
         data2 = {"seance": self.register.seance,
                  "participant": participant2.id
@@ -114,6 +117,7 @@ class NewRegisterFormTest(TestCase):
         self.assertEqual(first_request.status_code, 302)
         second_request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[self.register.seance.id]), data=data2)
         self.assertEqual(second_request.status_code, 200)
+        test = Register.objects.all()
         self.assertEqual(Register.objects.count(), 2)
         self.assertRaisesMessage(ValidationError,
                                  'Le nombre maximal de participant inscit a cette seance est déjà atteint')

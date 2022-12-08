@@ -10,8 +10,11 @@ from formation_metier.tests.factories.user import UserFactory
 
 
 def add_employe_uclouvain_to_groups(employe_uclouvain, groups):
-    groups_obj = [Group.objects.get_or_create(name=name)[0] for name in groups]
-    employe_uclouvain.user.groups.add(*groups_obj)
+    if type(groups) == str:
+        employe_uclouvain.user.groups.add(Group.objects.get_or_create(name=groups)[0])
+    else:
+        groups_obj = [Group.objects.get_or_create(name=name)[0] for name in groups]
+        employe_uclouvain.user.groups.add(*groups_obj)
 
 
 def generate_number_fgs() -> str:

@@ -68,16 +68,20 @@ class RegisterForParticipantFormView(LoginRequiredMixin, PermissionRequiredMixin
         form = self.get_form()
         form.data._mutable = True
         form.data['participant'] = self.request.user.employeuclouvain
+        form.data['seance'] = self.get_object()
         form.data._mutable = False
-        if form.is_valid():
-            register = self.get_form().save(commit=False)
-            register.seance = self.get_object()
-            register.save()
-            messages.success(request,
-                             'Le participant {} a été ajouté.'.format(register.participant.name))
-        else:
-            return render(request, self.template_name, {'seance': self.get_object(), 'form': self.get_form()})
+        return super().post(self, request, *args, **kwargs)
+
+    def form_valid(self, form):
+        register = self.get_form().save(commit=False)
+        register.seance = self.get_object()
+        register.save()
+        messages.success(self.request,
+                         'Le participant {} a été ajouté.'.format(form.data['participant'].name))
         return redirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        return render(self.request, self.template_name, {'seance': self.get_object(), 'form': self.get_form()})
 
     def get_success_url(self):
         return reverse('formation_metier:detail_seance', kwargs={'seance_id': self.get_object().pk})

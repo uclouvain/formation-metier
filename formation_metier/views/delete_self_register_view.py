@@ -5,7 +5,6 @@ from django.shortcuts import redirect
 from django.views.generic import DeleteView
 
 from formation_metier.models.register import Register
-from formation_metier.models.seance import Seance
 
 
 class DeleteSelfRegister(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):

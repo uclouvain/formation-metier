@@ -22,7 +22,7 @@ class EmployeUCLouvain(models.Model):
     number_fgs = models.CharField(max_length=8, blank=False)
     role_formation_metier = models.CharField(choices=RoleFormationFareEnum.choices, max_length=50,
                                              default=RoleFormationFareEnum.PARTICIPANT, )
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
 
     class Meta:
         constraints = [UniqueConstraint(fields=['number_fgs'], name='unique_person')]
