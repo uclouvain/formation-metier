@@ -17,7 +17,7 @@ def add_employe_uclouvain_to_groups(employe_uclouvain, groups):
         employe_uclouvain.user.groups.add(*groups_obj)
 
 
-def generate_number_fgs() -> str:
+def generate_matricule_fgs() -> str:
     text_code = [random.choice(string.ascii_uppercase) for _ in range(4)]
     digit_code = [random.choice(string.digits) for _ in range(4)]
     return "".join(text_code + digit_code)
@@ -31,7 +31,7 @@ class EmployeUCLouvainFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     name = factory.LazyAttribute(lambda employe_uclouvain:
                                  employe_uclouvain.user.username if employe_uclouvain.user else factory.Faker('name'))
-    number_fgs = factory.LazyFunction(generate_number_fgs)
+    matricule_fgs = factory.LazyFunction(generate_matricule_fgs)
 
 
 class EmployeUCLouvainFormateurFactory(EmployeUCLouvainFactory):

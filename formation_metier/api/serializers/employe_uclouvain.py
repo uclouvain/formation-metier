@@ -9,6 +9,6 @@ class EmployeUCLSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'name',
-            'number_fgs',
+            'matricule_fgs',
             'role_formation_metier'
         ]
