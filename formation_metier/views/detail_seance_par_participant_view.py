@@ -12,7 +12,10 @@ from formation_metier.models.seance import Seance
 
 
 class DetailSeanceForParticipant(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
-    permission_required = ['formation_metier.view_seance', 'formation_metier.view_inscription']
+    permission_required = [
+        'formation_metier.view_seance',
+        'formation_metier.view_inscription'
+    ]
     model = Seance
     template_name = 'formation_metier/detail_seance.html'
     context_object_name = "seance"
@@ -76,12 +79,26 @@ class InscriptionParParticipantFormView(LoginRequiredMixin, PermissionRequiredMi
         inscription = self.get_form().save(commit=False)
         inscription.seance = self.get_object()
         inscription.save()
-        messages.success(self.request,
-                         'Le participant {} a été ajouté.'.format(form.data['participant'].name))
+        messages.success(
+            self.request,
+            f"Le participant {form.data['participant'].name} a été ajouté."
+        )
         return redirect(self.get_success_url())
 
     def form_invalid(self, form):
-        return render(self.request, self.template_name, {'seance': self.get_object(), 'form': self.get_form()})
+        return render(
+            self.request,
+            self.template_name,
+            {
+                'seance': self.get_object(),
+                'form': self.get_form()
+            }
+        )
 
     def get_success_url(self):
-        return reverse('formation_metier:detail_seance', kwargs={'seance_id': self.get_object().pk})
+        return reverse(
+            'formation_metier:detail_seance',
+            kwargs={
+                'seance_id': self.get_object().pk
+            }
+        )

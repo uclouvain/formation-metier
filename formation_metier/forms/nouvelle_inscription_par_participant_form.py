@@ -12,8 +12,12 @@ class NouvelleInscriptionParParticipantForm(ModelForm):
 
     class Meta:
         model = Inscription
-        fields = ('participant',)
-        widgets = {'participant': HiddenInput(), }
+        fields = (
+            'participant',
+        )
+        widgets = {
+            'participant': HiddenInput(),
+        }
 
     def clean(self):
         cleaned_data = super().clean()

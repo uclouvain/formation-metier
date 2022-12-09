@@ -17,17 +17,35 @@ class EmployeUCLouvain(models.Model):
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
-        editable=False)
-    name = models.CharField(max_length=50, blank=False)
-    number_fgs = models.CharField(max_length=8, blank=False)
-    role_formation_metier = models.CharField(choices=RoleFormationFareEnum.choices, max_length=50,
-                                             default=RoleFormationFareEnum.PARTICIPANT, )
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+        editable=False
+    )
+    name = models.CharField(
+        max_length=50,
+        blank=False
+    )
+    number_fgs = models.CharField(
+        max_length=8,
+        blank=False
+    )
+    role_formation_metier = models.CharField(
+        choices=RoleFormationFareEnum.choices,
+        max_length=50,
+        default=RoleFormationFareEnum.PARTICIPANT,
+    )
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        null=True
+    )
 
     class Meta:
-        constraints = [UniqueConstraint(fields=['number_fgs'], name='unique_person')]
-        permissions = [('access_to_formation_fare', 'Global access to module formation FARE'),
-                       ('suppression_inscription_par_participant', 'Can delete self inscription'), ]
+        constraints = [
+            UniqueConstraint(fields=['number_fgs'], name='unique_person')
+        ]
+        permissions = [
+            ('access_to_formation_fare', 'Global access to module formation FARE'),
+            ('suppression_inscription_par_participant', 'Can delete self inscription'),
+        ]
 
     def __str__(self):
         return f"{self.name}"
@@ -35,9 +53,15 @@ class EmployeUCLouvain(models.Model):
 
 class EmployeUCLouvainAdmin(admin.ModelAdmin):
     search_fields = ['name']
-    fieldsets = [('name', {'fields': ['name']}),
-                 ('number_fgs', {'fields': ['number_fgs']}),
-                 ('role_formation_metier', {'fields': ['role_formation_metier']}),
-                 ('user', {'fields': ['user']}),
-                 ]
-    list_display = ('name', 'number_fgs', 'role_formation_metier', 'user')
+    fieldsets = [
+        ('name', {'fields': ['name']}),
+        ('number_fgs', {'fields': ['number_fgs']}),
+        ('role_formation_metier', {'fields': ['role_formation_metier']}),
+        ('user', {'fields': ['user']}),
+    ]
+    list_display = (
+        'name',
+        'number_fgs',
+        'role_formation_metier',
+        'user'
+    )

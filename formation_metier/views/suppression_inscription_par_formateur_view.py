@@ -1,14 +1,16 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 
 from formation_metier.models.inscription import Inscription
 from django.views.generic import DeleteView
 
 
-class SuppressionInscriptionParFormateur(LoginRequiredMixin, PermissionRequiredMixin, SuccessMessageMixin, DeleteView):
-    permission_required = ['formation_metier.delete_inscription', 'formation_metier.access_to_formation_fare']
+class SuppressionInscriptionParFormateur(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = [
+        'formation_metier.delete_inscription',
+        'formation_metier.access_to_formation_fare'
+    ]
     model = Inscription
     pk_url_kwarg = "seance_id"
     name = 'suppression_inscription_par_formateur'

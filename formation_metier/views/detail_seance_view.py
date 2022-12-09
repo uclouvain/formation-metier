@@ -16,11 +16,19 @@ class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, View):
             view = DetailSeanceParFormateur.as_view()
         else:
             view = DetailSeanceForParticipant.as_view()
-        return view(request, *args, **kwargs)
+        return view(
+            request,
+            *args,
+            **kwargs
+        )
 
     def post(self, request, *args, **kwargs):
         if self.request.user.groups.filter(name='FormateurGroup').exists():
             view = InscriptionParFormateurFormView.as_view()
         else:
             view = InscriptionParParticipantFormView.as_view()
-        return view(request, *args, **kwargs)
+        return view(
+            request,
+            *args,
+            **kwargs
+        )

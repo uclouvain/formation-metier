@@ -12,4 +12,10 @@ class NouvelleSeanceForm(ModelForm):
 
     class Meta:
         model = Seance
-        fields = ('seance_date', 'local', 'participant_max_number', 'formateur', 'duree')
+        fields = (
+            'seance_date',
+            'local',
+            'participant_max_number',
+            'formateur',
+            'duree'
+        )

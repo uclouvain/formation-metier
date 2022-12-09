@@ -21,14 +21,18 @@ class NouvelleInscriptionParFormateurForm(ModelForm):
     class Meta:
         template_name = 'formation_metier/detail_seance.html'
         model = Inscription
-        fields = ('participant',)
+        fields = (
+            'participant',
+        )
         widgets = {
-            "participant": autocomplete.ModelSelect2(url='formation_metier:widget_participant',
-                                                     attrs={
-                                                         'data-placeholder': 'Ajouter un participant',
-                                                         'data-minimum-input-length': 1,
-                                                         'data-html': True},
-                                                     )
+            "participant": autocomplete.ModelSelect2(
+                url='formation_metier:widget_participant',
+                attrs={
+                    'data-placeholder': 'Ajouter un participant',
+                    'data-minimum-input-length': 1,
+                    'data-html': True
+                },
+            )
         }
 
     def clean(self):

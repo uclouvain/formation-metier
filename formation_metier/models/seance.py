@@ -26,17 +26,32 @@ class Seance(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False)
-    formation = models.ForeignKey(formation.Formation, on_delete=models.CASCADE, blank=False)
-    seance_date = models.DateTimeField(default=django.utils.timezone.now, blank=False)
-    local = models.CharField(max_length=50, blank=False)
-    participant_max_number = models.PositiveSmallIntegerField(default=0, blank=False)
-    formateur = models.ForeignKey(EmployeUCLouvain, on_delete=models.SET_NULL, null=True,
-                                  validators=[validate_formateur])
-    duree = models.PositiveSmallIntegerField(validators=[MaxValueValidator(600)], default=60)
+    formation = models.ForeignKey(
+        formation.Formation,
+        on_delete=models.CASCADE,
+        blank=False)
+    seance_date = models.DateTimeField(
+        default=django.utils.timezone.now,
+        blank=False)
+    local = models.CharField(
+        max_length=50,
+        blank=False)
+    participant_max_number = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False)
+    formateur = models.ForeignKey(
+        EmployeUCLouvain,
+        on_delete=models.SET_NULL,
+        null=True,
+        validators=[validate_formateur])
+    duree = models.PositiveSmallIntegerField(
+        validators=[MaxValueValidator(600)],
+        default=60)
 
     class Meta:
-        constraints = [UniqueConstraint(fields=['seance_date', 'local', 'formateur'], name='unique_session'),
-                       ]
+        constraints = [
+            UniqueConstraint(fields=['seance_date', 'local', 'formateur'], name='unique_session'),
+        ]
 
     def __str__(self):
         return "{} - {}".format(self.formation.name, str(self.seance_date))
@@ -49,15 +64,23 @@ class Seance(models.Model):
 
 
 class SeanceAdmin(admin.ModelAdmin):
-    fieldsets = [('formation', {'fields': ['formation']}),
-                 ('seance_date', {'fields': ['seance_date']}),
-                 ('local', {'fields': ['local']}),
-                 ('participant_max_number', {'fields': ['participant_max_number']}),
-                 ('formateur', {'fields': ['formateur']}),
-                 ('duree', {'fields': ['duree']})
-                 ]
+    fieldsets = [
+        ('formation', {'fields': ['formation']}),
+        ('seance_date', {'fields': ['seance_date']}),
+        ('local', {'fields': ['local']}),
+        ('participant_max_number', {'fields': ['participant_max_number']}),
+        ('formateur', {'fields': ['formateur']}),
+        ('duree', {'fields': ['duree']})
+    ]
     list_display = (
-        'id', 'formation', 'seance_date', 'local', 'participant_max_number', 'formateur', 'duree')
+        'id',
+        'formation',
+        'seance_date',
+        'local',
+        'participant_max_number',
+        'formateur',
+        'duree'
+    )
 
 
 class SeanceInLine(admin.StackedInline):

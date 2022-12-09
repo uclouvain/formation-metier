@@ -10,7 +10,10 @@ from formation_metier.forms.nouvelle_seance_form import NouvelleSeanceForm
 
 
 class NouvelleSeanceFormView(LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView):
-    permission_required = ['formation_metier.add_seance', 'formation_metier.access_to_formation_fare']
+    permission_required = [
+        'formation_metier.add_seance',
+        'formation_metier.access_to_formation_fare'
+    ]
     model = Seance
     template_name = 'formation_metier/nouvelle_seance_form.html'
     form_class = NouvelleSeanceForm
@@ -23,12 +26,17 @@ class NouvelleSeanceFormView(LoginRequiredMixin, PermissionRequiredMixin, generi
         return context
 
     def get_success_url(self):
-        return reverse('formation_metier:detail_formation', kwargs={'formation_id': self.kwargs['formation_id']})
+        return reverse(
+            'formation_metier:detail_formation',
+            kwargs={'formation_id': self.kwargs['formation_id']}
+        )
 
     def form_valid(self, form):
-        formation = get_object_or_404(Formation, id=self.kwargs['formation_id'])
-        form.instance.formation = formation
-        messages.success(self.request, 'La seance du {} à {} a été ajouté.'.format(
-            form.cleaned_data['seance_date'].__format__("%A %d %B %Y"),
-            form.cleaned_data['seance_date'].__format__("%Hh%M")))
+        formation_object = get_object_or_404(Formation, id=self.kwargs['formation_id'])
+        form.instance.formation = formation_object
+        messages.success(
+            self.request,
+            f"La seance du {form.cleaned_data['seance_date'].__format__('%A %d %B %Y')}"
+            f" à {form.cleaned_data['seance_date'].__format__('%Hh%M')} a été ajouté."
+        )
         return super().form_valid(form)

@@ -14,14 +14,31 @@ class Formation(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False)
-    code = models.CharField(max_length=6, blank=False,
-                            validators=[RegexValidator(r'^[A-Za-z]{1,4}[0-9]{1,2}$')])
-    name = models.CharField(max_length=50, blank=False)
-    description = models.CharField(max_length=200, blank=False)
-    public_cible = models.CharField(max_length=50, choices=CHOICES_PUBLIC_CIBLE, default=None)
+    code = models.CharField(
+        max_length=6,
+        blank=False,
+        validators=[
+            RegexValidator(r'^[A-Za-z]{1,4}[0-9]{1,2}$')
+        ]
+    )
+    name = models.CharField(
+        max_length=50,
+        blank=False
+    )
+    description = models.CharField(
+        max_length=200,
+        blank=False
+    )
+    public_cible = models.CharField(
+        max_length=50,
+        choices=CHOICES_PUBLIC_CIBLE,
+        default=None
+    )
 
     class Meta:
-        constraints = [UniqueConstraint(fields=['code'], name='unique_formation_code'), ]
+        constraints = [
+            UniqueConstraint(fields=['code'], name='unique_formation_code'),
+        ]
 
     def __str__(self):
         return f"{self.name}"
@@ -31,9 +48,15 @@ class Formation(models.Model):
 
 
 class FormationAdmin(admin.ModelAdmin):
-    fieldsets = [('code', {'fields': ['code']}),
-                 ('name', {'fields': ['name']}),
-                 ('description', {'fields': ['description']}),
-                 ('public_cible', {'fields': ['public_cible']})
-                 ]
-    list_display = ('name', 'code', 'description', 'public_cible')
+    fieldsets = [
+        ('code', {'fields': ['code']}),
+        ('name', {'fields': ['name']}),
+        ('description', {'fields': ['description']}),
+        ('public_cible', {'fields': ['public_cible']})
+    ]
+    list_display = (
+        'name',
+        'code',
+        'description',
+        'public_cible'
+    )
