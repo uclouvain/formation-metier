@@ -29,7 +29,7 @@ class EmployeUCLouvain(models.Model):
         max_length=MAX_LENGTH_NAME,
         blank=False
     )
-    number_fgs = models.CharField(
+    matricule_fgs = models.CharField(
         max_length=MAX_LENGTH_MATRICULE_FGS,
         blank=False
     )
@@ -46,7 +46,7 @@ class EmployeUCLouvain(models.Model):
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=['number_fgs'], name='unique_person')
+            UniqueConstraint(fields=['matricule_fgs'], name='unique_person')
         ]
         permissions = [
             ('access_to_formation_fare', 'Global access to module formation FARE'),
@@ -61,13 +61,13 @@ class EmployeUCLouvainAdmin(admin.ModelAdmin):
     search_fields = ['name']
     fieldsets = [
         ('name', {'fields': ['name']}),
-        ('number_fgs', {'fields': ['number_fgs']}),
+        ('matricule_fgs', {'fields': ['matricule_fgs']}),
         ('role_formation_metier', {'fields': ['role_formation_metier']}),
         ('user', {'fields': ['user']}),
     ]
     list_display = (
         'name',
-        'number_fgs',
+        'matricule_fgs',
         'role_formation_metier',
         'user'
     )

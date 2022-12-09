@@ -134,7 +134,7 @@
                     {% for inscription in seance.inscription_set.all %}
                         <tr style="max-height: 40px">
                             <td>{{ inscription.participant.name }}</td>
-                            <td> {{ inscription.participant.number_fgs }}</td>
+                            <td> {{ inscription.participant.matricule_fgs }}</td>
                         </tr>
                     {% endfor %}
                     <div>
