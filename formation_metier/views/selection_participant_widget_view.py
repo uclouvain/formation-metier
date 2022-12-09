@@ -6,7 +6,7 @@ from formation_metier.models.employe_uclouvain import EmployeUCLouvain
 
 
 class SelectionParticipantView(LoginRequiredMixin, PermissionRequiredMixin, autocomplete.Select2QuerySetView):
-    permission_required = ['formation_metier.view_participant', 'formation_metier.access_to_formation_fare']
+    permission_required = ['formation_metier.view_employeuclouvain', 'formation_metier.access_to_formation_fare']
     name = 'widget_participant'
 
     def get_queryset(self):

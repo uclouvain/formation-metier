@@ -71,7 +71,7 @@ class DetailSeanceViewTest(TestCase):
         self.assertContains(response, self.seance.formation)
         self.assertContains(response, self.seance.formateur)
         self.assertContains(response, self.seance.participant_max_number)
-        self.assertEqual(response.context["seance"].register_set.count(), 0)
+        self.assertEqual(response.context["seance"].inscription_set.count(), 0)
         self.assertContains(response, "Il n'y a aucun participant d'inscrit pour l'instant")
 
     def test_should_not_display_all_register(self):
@@ -98,4 +98,4 @@ class DetailSeanceViewTest(TestCase):
         self.assertEqual(response.context["seance"], register2.seance)
         self.assertNotEqual(response.context["seance"], register3.seance)
         self.assertNotEqual(response.context["seance"], register4.seance)
-        self.assertEqual(response.context["seance"].register_set.count(), 2)
+        self.assertEqual(response.context["seance"].inscription_set.count(), 2)
