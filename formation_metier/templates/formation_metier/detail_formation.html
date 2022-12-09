@@ -1,8 +1,9 @@
 {% extends 'formation_metier/base.html' %}
+{% load est_inscrit_a_la_formation %}
 {% load bootstrap3 %}
 {% load static %}
 {% load l10n %}
-{%  load est_membre_du_groupe %}
+{% load est_membre_du_groupe %}
 {% block content %}
     {% include 'formation_metier/suppression_formation_modal.html' %}
     <ol class="breadcrumb">
@@ -59,7 +60,21 @@
                                 <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
                             </a>
                         </li>
+                    {% elif user|est_membre_du_groupe:'ParticipantGroup' %}
+                        <li>
+                            <a href="{% url 'formation_metier:inscription_formation' formation.id %}"
+                               class="no_spinner">
+                                <form method="post" style="margin: 0">
+                                    {% if user|est_inscrit_formation:formation %}
+                                        Modifier ses inscriptions
+                                    {% else %}
+                                        S'inscrire à la formation
+                                    {% endif %}
+                                </form>
+                            </a>
+                        </li>
                     {% endif %}
+
                 </ul>
             </div>
         </div>
