@@ -29,7 +29,7 @@ class NouvelleInscriptionParFormateurForm(ModelForm):
                 url='formation_metier:widget_participant',
                 attrs={
                     'data-placeholder': 'Ajouter un participant',
-                    'data-minimum-input-length': 1,
+                    'data-minimum-input-length': 3,
                     'data-html': True
                 },
             )
