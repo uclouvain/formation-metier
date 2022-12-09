@@ -29,7 +29,10 @@ class Inscription(models.Model):
     )
 
     class Meta:
-        unique_together = ('seance', 'participant',)
+        unique_together = (
+            'seance',
+            'participant',
+        )
 
 
 class InscriptionAdmin(admin.ModelAdmin):
