@@ -7,31 +7,35 @@ from django.db.models import UniqueConstraint
 
 from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
 
+MAX_LENGTH_CODE = 6
+MAX_LENGTH_NAME = 50
+MAX_LENGTH_DESCRIPTION = 200
+MAX_LENGTH_PUBLIC_CIBLE = 200
+
 
 class Formation(models.Model):
-    CHOICES_PUBLIC_CIBLE = ROLES_OSIS_CHOICES
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
         editable=False)
     code = models.CharField(
-        max_length=6,
+        max_length=MAX_LENGTH_CODE,
         blank=False,
         validators=[
             RegexValidator(r'^[A-Za-z]{1,4}[0-9]{1,2}$')
         ]
     )
     name = models.CharField(
-        max_length=50,
+        max_length=MAX_LENGTH_NAME,
         blank=False
     )
     description = models.CharField(
-        max_length=200,
+        max_length=MAX_LENGTH_DESCRIPTION,
         blank=False
     )
     public_cible = models.CharField(
-        max_length=50,
-        choices=CHOICES_PUBLIC_CIBLE,
+        max_length=MAX_LENGTH_PUBLIC_CIBLE,
+        choices=ROLES_OSIS_CHOICES,
         default=None
     )
 
@@ -42,9 +46,6 @@ class Formation(models.Model):
 
     def __str__(self):
         return f"{self.name}"
-
-    def get_public_cible(self) -> str:
-        return self.CHOICES_PUBLIC_CIBLE[self.public_cible]
 
 
 class FormationAdmin(admin.ModelAdmin):

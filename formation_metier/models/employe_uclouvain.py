@@ -13,6 +13,12 @@ class RoleFormationFareEnum(TextChoices):
     ADMIN = "ADMIN", _('Administrateur')
 
 
+MAX_LENGTH_NAME = 50
+MAX_LENGTH_MATRICULE_FGS = 8
+MAX_LENGTH_DESCRIPTION = 200
+MAX_LENGTH_ROLE_FORMATION_METIER = 200
+
+
 class EmployeUCLouvain(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -20,16 +26,16 @@ class EmployeUCLouvain(models.Model):
         editable=False
     )
     name = models.CharField(
-        max_length=50,
+        max_length=MAX_LENGTH_NAME,
         blank=False
     )
     number_fgs = models.CharField(
-        max_length=8,
+        max_length=MAX_LENGTH_MATRICULE_FGS,
         blank=False
     )
     role_formation_metier = models.CharField(
         choices=RoleFormationFareEnum.choices,
-        max_length=50,
+        max_length=MAX_LENGTH_ROLE_FORMATION_METIER,
         default=RoleFormationFareEnum.PARTICIPANT,
     )
     user = models.OneToOneField(

@@ -21,6 +21,12 @@ def validate_formateur(formateur_id):
         )
 
 
+DEFAULT_DUREE = 60
+DEFAULT_PARTICIPANT_NUMBER = 20
+MAX_DUREE = 600
+MAX_LENGTH_LOCAL = 50
+
+
 class Seance(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -34,10 +40,10 @@ class Seance(models.Model):
         default=django.utils.timezone.now,
         blank=False)
     local = models.CharField(
-        max_length=50,
+        max_length=MAX_LENGTH_LOCAL,
         blank=False)
     participant_max_number = models.PositiveSmallIntegerField(
-        default=0,
+        default=DEFAULT_PARTICIPANT_NUMBER,
         blank=False)
     formateur = models.ForeignKey(
         EmployeUCLouvain,
@@ -45,12 +51,19 @@ class Seance(models.Model):
         null=True,
         validators=[validate_formateur])
     duree = models.PositiveSmallIntegerField(
-        validators=[MaxValueValidator(600)],
-        default=60)
+        validators=[MaxValueValidator(MAX_DUREE)],
+        default=DEFAULT_DUREE)
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=['seance_date', 'local', 'formateur'], name='unique_session'),
+            UniqueConstraint(
+                fields=[
+                    'seance_date',
+                    'local',
+                    'formateur'
+                ],
+                name='unique_session'
+            ),
         ]
 
     def __str__(self):
