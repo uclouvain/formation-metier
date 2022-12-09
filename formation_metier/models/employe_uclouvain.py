@@ -34,6 +34,7 @@ class EmployeUCLouvain(models.Model):
 
 
 class EmployeUCLouvainAdmin(admin.ModelAdmin):
+    search_fields = ['name']
     fieldsets = [('name', {'fields': ['name']}),
                  ('number_fgs', {'fields': ['number_fgs']}),
                  ('role_formation_metier', {'fields': ['role_formation_metier']}),

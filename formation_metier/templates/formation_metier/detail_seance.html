@@ -89,7 +89,7 @@
             <h3> Inscription : </h3>
             <div>
                 {% if user|est_membre_du_groupe:'ParticipantGroup' %}
-                    {% if user|est_inscrit:seance %}
+                    {% if user|est_inscrit_seance:seance %}
                         <a href="#" data-toggle="modal" data-target="#SelfRegisterDeleteModal" class="col-md-2" style="padding-left: 0">
                             {% bootstrap_button "Se désinscrire" button_class="btn-primary btn-danger" %}
                         </a>
