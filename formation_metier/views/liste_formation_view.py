@@ -13,4 +13,4 @@ class ListeFormationView(LoginRequiredMixin, PermissionRequiredMixin, generic.Li
     template_name = "formation_metier/liste_des_formation.html"
     context_object_name = 'formation_liste'
     name = 'liste_formation'
-    queryset = Formation.objects.all()
+    queryset = Formation.objects.all().order_by('name')
