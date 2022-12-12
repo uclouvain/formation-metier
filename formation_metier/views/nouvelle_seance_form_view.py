@@ -36,7 +36,7 @@ class NouvelleSeanceFormView(LoginRequiredMixin, PermissionRequiredMixin, generi
         form.instance.formation = formation_object
         messages.success(
             self.request,
-            f"La seance du {form.cleaned_data['seance_date'].__format__('%A %d %B %Y')}"
+            f"La seance du {form.cleaned_data['seance_date'].__format__('%d/%m/%Y')}"
             f" à {form.cleaned_data['seance_date'].__format__('%Hh%M')} a été ajouté."
         )
         return super().form_valid(form)
