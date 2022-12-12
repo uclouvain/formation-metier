@@ -15,7 +15,7 @@ class SelectionParticipantView(LoginRequiredMixin, PermissionRequiredMixin, auto
     def get_queryset(self):
         qs = EmployeUCLouvain.objects.all()
         if self.q:
-            qs = qs.filter(name__istartswith=self.q)
+            qs = qs.filter(name__icontains=self.q).order_by('name')
         return qs
 
     def get_result_label(self, result):
