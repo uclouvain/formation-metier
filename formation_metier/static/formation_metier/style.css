@@ -24,12 +24,15 @@ div#main {
     box-sizing: inherit;
 }
 
-nav {display: inline-block}
+nav {
+    display: inline-block
+}
 
 div#formation_session_table th, div#formation_session_table td {
 
     text-align: center;
 }
+
 span.select2-container span.select2-selection--single {
     height: 34px;
 }
@@ -43,14 +46,44 @@ span.select2-container span.select2-selection--single {
 }
 
 table#inscription_seance_table {
-    width: 100%;
+    width: 60%;
+    align-self: center;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
 }
-td#seance_complete{
+
+table#inscription_seance_table th, td {
+    border-bottom: 1px solid #ddd;
+}
+
+table#inscription_seance_table th {
+    text-align: left;
+}
+
+table#inscription_seance_table tr {
+    text-align: left;
+}
+
+tr#seance_complete td#etat {
     color: red;
 }
-tr#seance_fermee{
+
+tr#seance_fermee {
     color: darkgrey;
 }
-td#seance_ouverte{
+
+tr#seance_ouverte td#etat {
     color: darkgreen;
+}
+
+div#inscription_submit {
+    text-align: center;
+    padding-top: 20px;
+}
+
+h3#h3_inscription_formation {
+    text-align: center;
+    padding-bottom: 20px;
+
 }
