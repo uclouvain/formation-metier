@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import generic
@@ -8,7 +9,7 @@ from formation_metier.models.inscription import Inscription
 from formation_metier.models.seance import Seance
 
 
-class InscriptionAUneFormation(generic.DetailView):
+class InscriptionAUneFormation(LoginRequiredMixin, generic.DetailView):
     permission_required = [
         'formation_metier.add_inscription',
         'formation_metier.suppression_inscription_par_participant',
@@ -17,7 +18,7 @@ class InscriptionAUneFormation(generic.DetailView):
     model = Formation
     pk_url_kwarg = 'formation_id'
     context_object_name = "formation"
-    template_name = "formation_metier/inscription_a_une_formation.html"
+    template_name = "formation_metier/inscription_formation_pour_participant.html"
     name = "inscription_formation"
 
     def get_queryset(self):
@@ -28,7 +29,7 @@ class InscriptionAUneFormation(generic.DetailView):
 
     def get_success_url(self):
         return reverse(
-            'formation_metier:detail_formation',
+            'formation_metier:inscription_formation',
             kwargs={
                 'formation_id': self.get_object().id
             }
@@ -46,7 +47,7 @@ class InscriptionAUneFormation(generic.DetailView):
                     inscription_existante.delete()
                     messages.success(
                         request,
-                        f"Votre inscription pour la seance du {inscription_existante.seance.seance_date} a été supprimée"
+                        f"Votre inscription pour la seance du {inscription_existante.seance.datetime_format()} a été supprimée"
                     )
             for seance_id in seance_list_apres_post:
                 if not Inscription.objects.filter(participant__user=request.user, seance__id=seance_id).exists():
@@ -57,7 +58,7 @@ class InscriptionAUneFormation(generic.DetailView):
                     )
                     messages.success(
                         request,
-                        f"Votre inscription pour la seance du {inscription_cree.seance.seance_date} a été sauvegardée"
+                        f"Votre inscription pour la seance du {inscription_cree.seance.datetime_format()} a été sauvegardée"
                     )
             return redirect(
                 self.get_success_url()

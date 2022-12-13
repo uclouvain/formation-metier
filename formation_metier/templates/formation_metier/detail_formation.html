@@ -44,37 +44,21 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-large row ">
-                    {% if user|est_membre_du_groupe:'FormateurGroup' %}
-                        <li>
-                            <a href="{% url 'formation_metier:modification_formation' formation.id %} "
-                               class="no_spinner">
-                                <form method="post" style="margin: 0">Modifier la formation</form>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#formationDeleteModal">Supprimer la
-                                formation</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'formation_metier:nouvelle_seance' formation.id %}" class="no_spinner">
-                                <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
-                            </a>
-                        </li>
-                    {% elif user|est_membre_du_groupe:'ParticipantGroup' %}
-                        <li>
-                            <a href="{% url 'formation_metier:inscription_formation' formation.id %}"
-                               class="no_spinner">
-                                <form method="post" style="margin: 0">
-                                    {% if user|est_inscrit_formation:formation %}
-                                        Modifier ses inscriptions
-                                    {% else %}
-                                        S'inscrire à la formation
-                                    {% endif %}
-                                </form>
-                            </a>
-                        </li>
-                    {% endif %}
-
+                    <li>
+                        <a href="{% url 'formation_metier:modification_formation' formation.id %} "
+                           class="no_spinner">
+                            <form method="post" style="margin: 0">Modifier la formation</form>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#formationDeleteModal">Supprimer la
+                            formation</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'formation_metier:nouvelle_seance' formation.id %}" class="no_spinner">
+                            <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

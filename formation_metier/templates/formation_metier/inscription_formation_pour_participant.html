@@ -1,0 +1,140 @@
+{% extends 'formation_metier/base.html' %}
+{% load est_membre_du_groupe %}
+{% load est_inscrit_a_la_seance %}
+{% load est_inscrit_a_la_formation %}
+{% load est_seance_passee %}
+{% load bootstrap3 %}
+{% load static %}
+{% load l10n %}
+{% block content %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                                 aria-hidden="true"></span></a></li>
+        <li>
+            <a href="{% url 'formation_metier:liste_formation' %}">
+                Liste des formation
+            </a>
+        </li>
+        <li class="active">
+            Inscription à une formation
+        </li>
+    </ol>
+    {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible alert-link">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    {% if messages %}
+        <div class="alert alert-success alert-dismissable alert-link">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Inscription à la formation : {{ formation.name }} </h2>
+        </div>
+    </div>
+    {% if formation.seance_set.count > 0 %}
+        <div class="panel panel-default" style="padding: 10px">
+            <div class="panel-body">
+
+                <p>Code : {{ formation.code }}</p>
+                <p>Description : {{ formation.description }}</p>
+                <p>Public cible : {{ formation.get_public_cible_display }}</p>
+
+            </div>
+        </div>
+        <div class="panel panel-default" style="padding: 10px">
+            <div class="panel-body">
+                <h3 id="h3_inscription_formation">Choix des séances:</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    <table id="inscription_seance_table">
+                        <thead>
+                        <tr>
+                            <th id="checkbox"></th>
+                            <th id="date">Date</th>
+                            <th id="heure">Heure</th>
+                            <th id="duree">Durée (min)</th>
+                            <th id="local">Local</th>
+                            <th id="etat">Etat</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for seance in formation.seance_set.all.order_by|dictsort:"seance_date" %}
+                            {% if seance|est_seance_passee %}
+                                <tr id="seance_fermee">
+                                    <td id="checkbox">
+                                        <input class="form-check-input" type="checkbox" name="seance"
+                                               disabled="disabled"
+                                               value={{ seance.id }} id="{{ seance }}">
+                                        <label class="form-check-label" style="color: darkgrey">
+                                        </label>
+                                    </td>
+                                    <td id="date">{{ seance.seance_date.date }}</td>
+                                    <td id="heure">{{ seance.seance_date.time }}</td>
+                                    <td id="duree">{{ seance.duree }}</td>
+                                    <td id="local">{{ seance.local }}</td>
+                                    <td id="etat"> Séance fermée</td>
+                                </tr>
+                            {% elif seance.inscription_set.count == seance.participant_max_number and not user|est_inscrit_seance:seance %}
+                                <tr id="seance_complete">
+                                    <td id="checkbox">
+                                        <input class="form-check-input" type="checkbox" name="seance"
+                                               disabled="disabled"
+                                               value={{ seance.id }} id="{{ seance }}">
+                                        <label class="form-check-label" style="color: darkgrey">
+                                        </label>
+                                    </td>
+                                    <td id="date">{{ seance.seance_date.date }}</td>
+                                    <td id="heure">{{ seance.seance_date.time }}</td>
+                                    <td id="duree">{{ seance.duree }}</td>
+                                    <td id="local">{{ seance.local }}</td>
+                                    <td id="etat"> Séance complète</td>
+                                </tr>
+                            {% else %}
+                                <tr id="seance_ouverte">
+                                    <td id="checkbox">
+                                        {% if user|est_inscrit_seance:seance %}
+                                            <input class="form-check-input" type="checkbox" name="seance"
+                                                   value={{ seance.id }} id="{{ seance }}" checked="checked">
+                                        {% else %}
+                                            <input class="form-check-input" type="checkbox" name="seance"
+                                                   value={{ seance.id }} id="{{ seance }}">
+                                        {% endif %}
+                                        <label class="form-check-label"></label>
+                                    </td>
+                                    <td id="date">{{ seance.seance_date.date }}</td>
+                                    <td id="heure">{{ seance.seance_date.time }}</td>
+                                    <td id="duree">{{ seance.duree }}</td>
+                                    <td id="local">{{ seance.local }}</td>
+                                    <td id="etat"> Séance ouverte</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div id="inscription_submit">
+                        {% if user|est_inscrit_formation:formation %}
+                            {% bootstrap_button "Modifier les insciptions" button_type="submit" button_class="btn-primary"%}
+                        {% else %}
+                            {% bootstrap_button "Sauvegarder les inscriptions" button_type="submit" button_class="btn-primary"%}
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="panel panel-default" style="padding: 10px">
+            <div class="panel-body">
+                <p> Il n'y a aucune séance prévue actuellement pour la formation {{ formation.name }}</p>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

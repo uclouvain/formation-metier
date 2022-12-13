@@ -4,11 +4,7 @@ from django.views import generic
 from formation_metier.models.formation import Formation
 
 
-class ListeFormationView(LoginRequiredMixin, PermissionRequiredMixin, generic.ListView):
-    permission_required = [
-        'formation_metier.view_formation',
-        'formation_metier.access_to_formation_fare'
-    ]
+class ListeFormationView(LoginRequiredMixin, generic.ListView):
     model = Formation
     template_name = "formation_metier/liste_des_formation.html"
     context_object_name = 'formation_liste'

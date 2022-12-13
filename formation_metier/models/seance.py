@@ -70,7 +70,7 @@ class Seance(models.Model):
         return "{} - {}".format(self.formation.name, str(self.seance_date))
 
     def datetime_format(self) -> str:
-        return self.seance_date.__format__("%A %d %B %Y %Hh%M")
+        return self.seance_date.__format__("%x à %Hh%M")
 
     def time_format(self) -> str:
         return self.seance_date.__format__("%Hh%M")

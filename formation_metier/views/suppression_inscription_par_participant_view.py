@@ -33,6 +33,6 @@ class SuppressionInscriptionParParticipant(LoginRequiredMixin, PermissionRequire
                                  f"Votre inscription à la seance du {inscription.seance.seance_date.date()} pour la formation '{inscription.seance.formation}'  a été supprimée.")
                 inscription.delete()
             return redirect(
-                'formation_metier:detail_seance',
+                'formation_metier:inscription_seance',
                 seance_id
             )

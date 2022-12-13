@@ -59,9 +59,15 @@
                     {% for formation in formation_liste %}
                         <tr>
                             <td>
-                                <a href="{% url 'formation_metier:detail_formation' formation.id %}">
-                                    {{ formation.name }}
-                                </a>
+                                {% if user|est_membre_du_groupe:'FormateurGroup' %}
+                                    <a href="{% url 'formation_metier:detail_formation' formation.id %}">
+                                        {{ formation.name }}
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'formation_metier:inscription_formation' formation.id %}">
+                                        {{ formation.name }}
+                                    </a>
+                                {% endif %}
                             </td>
                             <td>
                                 {{ formation.code }}

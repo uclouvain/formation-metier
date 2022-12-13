@@ -88,38 +88,18 @@
             <p>Formateur : {{ seance.formateur }}</p>
             <h3> Inscription : </h3>
             <div>
-                {% if user|est_membre_du_groupe:'ParticipantGroup' %}
-                    {% if user|est_inscrit_seance:seance %}
-                        <a href="#" data-toggle="modal" data-target="#SelfRegisterDeleteModal" class="col-md-2" style="padding-left: 0">
-                            {% bootstrap_button "Se désinscrire" button_class="btn-primary btn-danger" %}
-                        </a>
-
-                    {% else %}
-                        <form method="post">
-                            {% csrf_token %}
-                            {{ form.media }}
-                            <div class="row">
-                                {% bootstrap_form form layout='inline' error_types='none' %}
-                                <div class="col-md-2">
-                                    {% bootstrap_button "S'inscrire" button_type="submit" button_class="btn-primary" %}
-                                </div>
-                            </div>
-                        </form>
-                    {% endif %}
-                {% else %}
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.media }}
-                        <div class="row">
-                            <div class="col-lg-8 mb-3">
-                                {% bootstrap_form form layout='inline' error_types='none' %}
-                            </div>
-                            <div>
-                                {% bootstrap_button "Inscrire" button_type="submit" button_class="btn-primary" %}
-                            </div>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.media }}
+                    <div class="row">
+                        <div class="col-lg-8 mb-3">
+                            {% bootstrap_form form layout='inline' error_types='none' %}
                         </div>
-                    </form>
-                {% endif %}
+                        <div>
+                            {% bootstrap_button "Inscrire" button_type="submit" button_class="btn-primary" %}
+                        </div>
+                    </div>
+                </form>
             </div>
             {% if seance.inscription_set.count > 0 %}
                 <table class="table">

@@ -1,0 +1,88 @@
+{% extends 'formation_metier/base.html' %}
+{% load est_inscrit_a_la_seance %}
+{% load bootstrap3 %}
+{% load static %}
+{% load l10n %}
+{% block content %}
+    {% include 'formation_metier/suppression_inscription_par_participant_modal.html' %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                                 aria-hidden="true"></span></a></li>
+        <li>
+            <a href="{% url 'formation_metier:liste_formation' %}">
+                Liste des formation
+            </a>
+        </li>
+        <li class="active">
+            Inscription à une séance
+        </li>
+    </ol>
+    {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible alert-link">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    {% if messages %}
+        <div class="alert alert-success alert-dismissable alert-link">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if seance.inscription_count == seance.participant_max_number and not user|est_inscrit_seance:seance %}
+        <div class="alert alert-danger alert-dismissable alert-link">
+            <ul class="messages">
+                <li class="danger">
+                    Vous ne pouvez pas vous inscire à cette séance : il n'y a plus de places libres.
+                    <br>
+                    <a href="{% url 'formation_metier:liste_formation' %}">
+                        Retour à la liste des formation
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <br>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Formation : {{ seance.formation.name }} </h2>
+        </div>
+    </div>
+    <div class="panel panel-default" style="padding: 10px">
+        <div class="panel-body">
+            <p>Date : {{ seance.seance_date|date:"l j F o" }}</p>
+            <p>Heure : {{ seance.time_format }}</p>
+            <p>Local : {{ seance.local }}</p>
+            <p>Durée ( en minutes) : {{ seance.duree }}</p>
+            <p>Participants : {{ seance.inscription_count }} / {{ seance.participant_max_number }}</p>
+            <p>Formateur : {{ seance.formateur }}</p>
+            <div>
+                {% if user|est_inscrit_seance:seance %}
+                    <a href="#" data-toggle="modal" data-target="#SelfRegisterDeleteModal" class="col-md-2"
+                       style="padding-left: 0">
+                        {% bootstrap_button "Se désinscrire" button_class="btn-primary btn-danger" %}
+                    </a>
+                {% else %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        <div class="row">
+                            {% bootstrap_form form layout='inline' error_types='none' %}
+                            <div class="col-md-2">
+                                {% if seance.inscription_count == seance.participant_max_number %}
+                                    <button type="submit" class="btn btn-secondary" disabled>S'inscrire</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-primary">S'inscrire</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

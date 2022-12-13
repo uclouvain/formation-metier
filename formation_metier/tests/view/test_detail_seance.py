@@ -3,8 +3,9 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
-from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
+from formation_metier.models.employe_uclouvain import RoleFormationFareEnum, EmployeUCLouvain
+from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory, \
+    add_employe_uclouvain_to_groups
 from formation_metier.tests.factories.seance import SeanceFactory
 from formation_metier.tests.factories.inscription import InscriptionFactory
 
@@ -21,6 +22,8 @@ class DetailSeanceViewTest(TestCase):
                                                                        'view_seance',
                                                                        role=RoleFormationFareEnum.PARTICIPANT)
         cls.seance = SeanceFactory()
+        add_employe_uclouvain_to_groups(cls.employe_uclouvain, 'FormateurGroup')
+        cls.employe_ucl = EmployeUCLouvain.objects.get(id=cls.employe_uclouvain.id)
 
     def test_should_authorise_access_to_user(self):
         self.client.force_login(user=self.employe_uclouvain.user)
