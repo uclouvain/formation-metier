@@ -41,3 +41,16 @@ span.select2-container span.select2-selection--single {
     left: 0;
     background-color: #f5f5f5;
 }
+
+table#inscription_seance_table {
+    width: 100%;
+}
+td#seance_complete{
+    color: red;
+}
+tr#seance_fermee{
+    color: darkgrey;
+}
+td#seance_ouverte{
+    color: darkgreen;
+}

@@ -23,7 +23,7 @@ class NouvelleFormationFormTest(TestCase):
         cls.employe_ucl = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare', 'view_inscription',
                                                                  'add_inscription', 'view_seance',
                                                                  role=RoleFormationFareEnum.FORMATEUR)
-        add_employe_uclouvain_to_groups(cls.employe_ucl, 'FromateurGroup')
+        add_employe_uclouvain_to_groups(cls.employe_ucl, 'FormateurGroup')
         cls.employe_ucl = EmployeUCLouvain.objects.get(id=cls.employe_ucl.id)
         cls.inscription = InscriptionFactory(participant=cls.employe_ucl, seance__participant_max_number=2)
 
@@ -63,6 +63,8 @@ class NouvelleFormationFormTest(TestCase):
     def test_should_deny_access_case_user_not_have_permission_add_inscription(self):
         employe_ucl = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare', 'view_inscription',
                                                              'view_seance')
+        add_employe_uclouvain_to_groups(employe_ucl, 'FormateurGroup')
+        employe_ucl = EmployeUCLouvain.objects.get(id=employe_ucl.id)
         self.client.force_login(user=employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]))
         self.assertEqual(response.status_code, 200)
@@ -125,9 +127,11 @@ class NouvelleFormationFormTest(TestCase):
     def test_should_raise_validation_error_case_sceance_not_exist(self):
         self.client.force_login(user=self.employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]))
-        data = {"seance": uuid.uuid4(),
-                "participant": 19
-                }
+        data = {
+            "id": uuid.uuid4(),
+            "seance": uuid.uuid4(),
+            "participant": 19
+        }
         url = reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance_id])
         request = self.client.post(url, data=data)
         self.assertEqual(response.status_code, 200)

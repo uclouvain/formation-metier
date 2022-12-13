@@ -1,14 +1,15 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import Count, Prefetch
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View, generic
-from django.views.generic.edit import FormMixin
+from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.edit import FormMixin, FormView
 
 from formation_metier.forms.nouvelle_inscription_par_formateur_form import NouvelleInscriptionParFormateurForm
-from formation_metier.forms.nouvelle_inscription_par_participant_form import NouvelleInscriptionParParticipantForm
 from formation_metier.models.inscription import Inscription
 from formation_metier.models.seance import Seance
-from formation_metier.views.inscription_seance_pour_formateur_view import InscriptionSeancePourFormateurFormView
-from formation_metier.views.inscription_seance_pour_participant_view import InscriptionSeancePourParticipantFormView
 
 
 class DetailSeance(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
@@ -44,10 +45,57 @@ class DetailSeance(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, gener
         )
 
     def get_form_class(self):
-        if self.request.user.groups.filter(name='FormateurGroup').exists():
-            return NouvelleInscriptionParFormateurForm
-        elif self.request.user.groups.filter(name='ParticipantGroup').exists():
-            return NouvelleInscriptionParParticipantForm
+        return NouvelleInscriptionParFormateurForm
+
+
+class InscriptionSeancePourFormateurFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObjectMixin, FormView):
+    permission_required = 'formation_metier.add_inscription'
+    template_name = 'formation_metier/detail_seance.html'
+    form_class = NouvelleInscriptionParFormateurForm
+    model = Seance
+    context_object_name = "seance"
+    pk_url_kwarg = 'seance_id'
+
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            'seance': self.get_object()
+        }
+
+    def get_context_data(self, **kwargs):
+        return {
+            **super().get_context_data(**kwargs),
+            'form': self.get_form(),
+            'seance': self.get_object(),
+        }
+
+    def form_valid(self, form, *args, **kwargs):
+        inscription = self.get_form().save(commit=False)
+        inscription.seance = self.get_object()
+        inscription.save()
+        messages.success(
+            self.request,
+            f'Le participant {inscription.participant.name} a été ajouté.'
+        )
+        return redirect(self.get_success_url())
+
+    def form_invalid(self, form, *args, **kwargs):
+        return render(
+            self.request,
+            self.template_name,
+            {
+                'seance': self.get_object(),
+                'form': self.get_form()
+            }
+        )
+
+    def get_success_url(self):
+        return reverse(
+            'formation_metier:detail_seance',
+            kwargs={
+                'seance_id': self.get_object().pk
+            }
+        )
 
 
 class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, View):
@@ -63,10 +111,7 @@ class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, View):
         )
 
     def post(self, request, *args, **kwargs):
-        if self.request.user.groups.filter(name='FormateurGroup').exists():
-            view = InscriptionSeancePourFormateurFormView.as_view()
-        else:
-            view = InscriptionSeancePourParticipantFormView.as_view()
+        view = InscriptionSeancePourFormateurFormView.as_view()
         return view(
             request,
             *args,
