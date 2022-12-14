@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -98,8 +98,7 @@ class InscriptionSeancePourParticipantDetailSeance(LoginRequiredMixin, FormMixin
         return NouvelleInscriptionParParticipantForm
 
 
-class InscriptionSeancePourParticipantView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    permission_required = 'formation_metier.access_to_formation_fare'
+class InscriptionSeancePourParticipantView(LoginRequiredMixin, View):
     name = 'inscription_seance'
 
     def get(self, request, *args, **kwargs):
