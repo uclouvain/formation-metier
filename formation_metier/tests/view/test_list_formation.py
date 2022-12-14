@@ -27,20 +27,6 @@ class ListFormationViewTest(TestCase):
         response = self.client.get(reverse(URL_LIST_FORMATION))
         self.assertEqual(response.status_code, 302)
 
-    def test_should_deny_access_user_case_not_have_perm_access_to_formation_fare(self):
-        employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('view_formation',
-                                                                   role=RoleFormationFareEnum.PARTICIPANT)
-        self.client.force_login(user=employe_uclouvain.user)
-        response = self.client.get(reverse(URL_LIST_FORMATION))
-        self.assertEqual(response.status_code, 403)
-
-    def test_should_deny_access_user_case_not_have_perm_view_formation(self):
-        employe_uclouvain = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare',
-                                                                   role=RoleFormationFareEnum.PARTICIPANT)
-        self.client.force_login(user=employe_uclouvain.user)
-        response = self.client.get(reverse(URL_LIST_FORMATION))
-        self.assertEqual(response.status_code, 403)
-
     def test_should_display_any_formation(self):
         self.client.force_login(user=self.employe_uclouvain.user)
         url = reverse(URL_LIST_FORMATION)
