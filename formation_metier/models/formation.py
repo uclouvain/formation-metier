@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.urls import reverse
 
 from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
 
@@ -46,6 +47,14 @@ class Formation(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    def get_inscription_lien(self):
+        return reverse(
+            'formation_metier:inscription_formation',
+            kwargs={
+                'formation_id': self.id
+            }
+        )
 
 
 class FormationAdmin(admin.ModelAdmin):

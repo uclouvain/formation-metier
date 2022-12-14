@@ -8,6 +8,7 @@ from django.core.validators import MaxValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from formation_metier.models import formation
@@ -87,6 +88,14 @@ class Seance(models.Model):
                 return str(int(duree_calcule_en_heure[1])) + " h " + str(duree_minutes)
             else:
                 return str(int(duree_calcule_en_heure[1])) + " h 0" + str(duree_minutes)
+
+    def get_inscription_lien(self):
+        return reverse(
+            'formation_metier:inscription_seance',
+            kwargs={
+                'seance_id': self.id
+            }
+        )
 
 
 class SeanceAdmin(admin.ModelAdmin):
