@@ -27,7 +27,6 @@ class ListFormationViewTest(TestCase):
         response = self.client.get(reverse(URL_LIST_FORMATION))
         self.assertEqual(response.status_code, 302)
 
-
     def test_should_display_any_formation(self):
         self.client.force_login(user=self.employe_uclouvain.user)
         url = reverse(URL_LIST_FORMATION)
