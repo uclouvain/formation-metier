@@ -41,6 +41,7 @@ class InscriptionAdmin(admin.ModelAdmin):
         ('participant', {'fields': ['participant']}),
     ]
     list_display = (
+        'id',
         'seance',
         'participant',
         'inscription_date'

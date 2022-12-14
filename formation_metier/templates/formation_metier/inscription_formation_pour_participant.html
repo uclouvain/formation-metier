@@ -39,16 +39,17 @@
             <h2>Inscription à la formation : {{ formation.name }} </h2>
         </div>
     </div>
-    {% if formation.seance_set.count > 0 %}
-        <div class="panel panel-default" style="padding: 10px">
-            <div class="panel-body">
 
-                <p>Code : {{ formation.code }}</p>
-                <p>Description : {{ formation.description }}</p>
-                <p>Public cible : {{ formation.get_public_cible_display }}</p>
+    <div class="panel panel-default" style="padding: 10px">
+        <div class="panel-body">
 
-            </div>
+            <p>Code : {{ formation.code }}</p>
+            <p>Description : {{ formation.description }}</p>
+            <p>Public cible : {{ formation.get_public_cible_display }}</p>
+
         </div>
+    </div>
+    {% if formation.seance_set.count > 0 %}
         <div class="panel panel-default" style="padding: 10px">
             <div class="panel-body">
                 <h3 id="h3_inscription_formation">Choix des séances:</h3>
@@ -60,7 +61,7 @@
                             <th id="checkbox"></th>
                             <th id="date">Date</th>
                             <th id="heure">Heure</th>
-                            <th id="duree">Durée (min)</th>
+                            <th id="duree">Durée</th>
                             <th id="local">Local</th>
                             <th id="etat">Etat</th>
                         </tr>
@@ -78,7 +79,7 @@
                                     </td>
                                     <td id="date">{{ seance.seance_date.date }}</td>
                                     <td id="heure">{{ seance.seance_date.time }}</td>
-                                    <td id="duree">{{ seance.duree }}</td>
+                                    <td id="duree">{{ seance.duree_en_heure }}</td>
                                     <td id="local">{{ seance.local }}</td>
                                     <td id="etat"> Séance fermée</td>
                                 </tr>
@@ -93,7 +94,7 @@
                                     </td>
                                     <td id="date">{{ seance.seance_date.date }}</td>
                                     <td id="heure">{{ seance.seance_date.time }}</td>
-                                    <td id="duree">{{ seance.duree }}</td>
+                                    <td id="duree">{{ seance.duree_en_heure }}</td>
                                     <td id="local">{{ seance.local }}</td>
                                     <td id="etat"> Séance complète</td>
                                 </tr>
@@ -111,7 +112,7 @@
                                     </td>
                                     <td id="date">{{ seance.seance_date.date }}</td>
                                     <td id="heure">{{ seance.seance_date.time }}</td>
-                                    <td id="duree">{{ seance.duree }}</td>
+                                    <td id="duree">{{ seance.duree_en_heure }}</td>
                                     <td id="local">{{ seance.local }}</td>
                                     <td id="etat"> Séance ouverte</td>
                                 </tr>
@@ -121,9 +122,9 @@
                     </table>
                     <div id="inscription_submit">
                         {% if user|est_inscrit_formation:formation %}
-                            {% bootstrap_button "Modifier les insciptions" button_type="submit" button_class="btn-primary"%}
+                            {% bootstrap_button "Modifier les insciptions" button_type="submit" button_class="btn-primary" %}
                         {% else %}
-                            {% bootstrap_button "Sauvegarder les inscriptions" button_type="submit" button_class="btn-primary"%}
+                            {% bootstrap_button "Sauvegarder les inscriptions" button_type="submit" button_class="btn-primary" %}
                         {% endif %}
                     </div>
                 </form>

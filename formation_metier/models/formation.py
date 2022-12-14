@@ -56,6 +56,7 @@ class FormationAdmin(admin.ModelAdmin):
         ('public_cible', {'fields': ['public_cible']})
     ]
     list_display = (
+        'id',
         'name',
         'code',
         'description',

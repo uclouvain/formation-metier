@@ -15,22 +15,24 @@
             <div class="col-md-10">
                 <h2>Formation organisée</h2>
             </div>
-            <div class="col-md-2" style="margin-top: 20px">
-                <div class="btn-group pull-right">
-                    <button id="btn-action" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="true">
-                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Actions
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-large row text-right pull-right">
-                        {% if user|est_membre_du_groupe:'FormateurGroup' %}
+            {% if user|est_membre_du_groupe:'FormateurGroup' %}
+                <div class="col-md-2" style="margin-top: 20px">
+                    <div class="btn-group pull-right">
+                        <button id="btn-action" type="button" class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="true">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-large row text-right pull-right">
+
                             <li>
                                 <a href="{% url 'formation_metier:nouvelle_formation' %}">Nouvelle formation</a>
                             </li>
-                        {% endif %}
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 

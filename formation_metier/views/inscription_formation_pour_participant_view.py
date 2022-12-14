@@ -10,11 +10,6 @@ from formation_metier.models.seance import Seance
 
 
 class InscriptionAUneFormation(LoginRequiredMixin, generic.DetailView):
-    permission_required = [
-        'formation_metier.add_inscription',
-        'formation_metier.suppression_inscription_par_participant',
-        'formation_metier.access_to_formation_fare'
-    ]
     model = Formation
     pk_url_kwarg = 'formation_id'
     context_object_name = "formation"

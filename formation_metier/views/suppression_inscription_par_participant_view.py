@@ -1,16 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views.generic import DeleteView
 
 from formation_metier.models.inscription import Inscription
 
 
-class SuppressionInscriptionParParticipant(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
-    permission_required = [
-        'formation_metier.suppression_inscription_par_participant',
-        'formation_metier.access_to_formation_fare'
-    ]
+class SuppressionInscriptionParParticipant(LoginRequiredMixin, DeleteView):
     model = Inscription
     name = 'suppression_inscription_par_participant'
 

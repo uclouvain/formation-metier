@@ -46,11 +46,12 @@ span.select2-container span.select2-selection--single {
 }
 
 table#inscription_seance_table {
-    width: 60%;
+    width: 50%;
     align-self: center;
     text-align: left;
     margin-left: auto;
     margin-right: auto;
+    padding: 5px;
 }
 
 table#inscription_seance_table th, td {
@@ -86,4 +87,7 @@ h3#h3_inscription_formation {
     text-align: center;
     padding-bottom: 20px;
 
+}
+td#date {
+    width: 200px;
 }

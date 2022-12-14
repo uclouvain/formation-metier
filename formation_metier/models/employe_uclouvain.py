@@ -66,6 +66,7 @@ class EmployeUCLouvainAdmin(admin.ModelAdmin):
         ('user', {'fields': ['user']}),
     ]
     list_display = (
+        'id',
         'name',
         'matricule_fgs',
         'role_formation_metier',
