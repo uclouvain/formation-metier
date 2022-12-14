@@ -80,7 +80,7 @@ class NouvelleFormationFormTest(TestCase):
         self.client.force_login(user=self.employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[seance.id]))
         data = {
-            "participant": participant
+            "participant": participant.id
         }
         request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[seance.id]), data=data, )
         self.assertEqual(response.status_code, 200)
@@ -126,15 +126,14 @@ class NouvelleFormationFormTest(TestCase):
 
     def test_should_raise_validation_error_case_sceance_not_exist(self):
         self.client.force_login(user=self.employe_ucl.user)
-        response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]))
+        participant1 = EmployeUCLouvainParticipantFactory()
+        seance_id = uuid.uuid4()
+        response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[seance_id]))
         data = {
-            "id": uuid.uuid4(),
-            "seance": uuid.uuid4(),
-            "participant": 19
+            "participant": participant1.id
         }
-        url = reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance_id])
-        request = self.client.post(url, data=data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(request.status_code, 200)
+        request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[seance_id]), data=data)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(request.status_code, 404)
         self.assertEqual(Inscription.objects.count(), 1)
         self.assertRaises(ValueError)
