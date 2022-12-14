@@ -1,4 +1,6 @@
+import math
 import uuid
+from datetime import timedelta
 
 import django.utils.timezone
 from django.contrib import admin
@@ -74,6 +76,17 @@ class Seance(models.Model):
 
     def time_format(self) -> str:
         return self.seance_date.__format__("%Hh%M")
+
+    def duree_en_heure(self) -> str:
+        duree_calcule_en_heure = math.modf(self.duree / 60)
+        if duree_calcule_en_heure[0] == 0.0:
+            return str(int(duree_calcule_en_heure[1])) + " h"
+        else:
+            duree_minutes = self.duree - (60 * int(duree_calcule_en_heure[1]))
+            if duree_minutes > 9:
+                return str(int(duree_calcule_en_heure[1])) + " h " + str(duree_minutes)
+            else:
+                return str(int(duree_calcule_en_heure[1])) + " h 0" + str(duree_minutes)
 
 
 class SeanceAdmin(admin.ModelAdmin):
