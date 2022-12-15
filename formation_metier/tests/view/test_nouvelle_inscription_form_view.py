@@ -16,7 +16,7 @@ from formation_metier.tests.factories.seance import SeanceFactory
 URL_NEW_REGISTRATION = 'formation_metier:detail_seance'
 
 
-class NouvelleFormationFormTest(TestCase):
+class NouvelleFormationFormViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.date = datetime.today()

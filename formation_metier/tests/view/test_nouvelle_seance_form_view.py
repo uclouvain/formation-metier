@@ -8,7 +8,7 @@ from formation_metier.tests.factories.seance import SeanceFactory
 URL_NEW_SESSION_VIEW = 'formation_metier:nouvelle_seance'
 
 
-class NouvelleSeanceFormTest(TestCase):
+class NouvelleSeanceFormViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.date = datetime.today()
@@ -41,24 +41,18 @@ class NouvelleSeanceFormTest(TestCase):
 
     def test_should_not_raise_exception(self):
         self.client.force_login(user=self.employe_ucl.user)
-        data = {"formation": self.seance.formation,
+        data = {
                 "seance_date": self.date,
                 "participant_max_number": 10,
                 "local": "L002",
-                "formateur": self.employe_ucl,
+                "formateur": self.employe_ucl.id,
                 "duree": 20
                 }
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.seance.formation.id]))
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(Seance.objects.count(), 1)
         request = self.client.post(reverse(URL_NEW_SESSION_VIEW, args=[self.seance.formation.id]), data=data)
-        Seance.objects.create(formation=self.seance.formation,
-                              seance_date=self.date,
-                              participant_max_number=10,
-                              local="L002",
-                              formateur=self.employe_ucl,
-                              duree=20)
         self.assertEqual(request.status_code, 200)
-        self.assertEqual(Seance.objects.count(), 2)
 
     def test_should_raise_validation_error_case_code_date_formateur_already_exist(self):
         self.client.force_login(user=self.employe_ucl.user)
