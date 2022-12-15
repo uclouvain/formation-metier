@@ -13,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 
 from formation_metier.models import formation
 from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleFormationFareEnum
+from module_formation.settings import URL_BASE_MODULE
 
 
 def validate_formateur(formateur_id):
@@ -90,7 +91,7 @@ class Seance(models.Model):
                 return str(int(duree_calcule_en_heure[1])) + " h 0" + str(duree_minutes)
 
     def get_inscription_lien(self):
-        return reverse(
+        return URL_BASE_MODULE + reverse(
             'formation_metier:inscription_seance',
             kwargs={
                 'seance_id': self.id
