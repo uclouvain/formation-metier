@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'formation_metier.apps.FormationMetierConfig',
     'bootstrap3',
     'schema_graph',
-    'django_htmx',
     'django_select2',
     'jquery',
     'rest_framework',
@@ -61,7 +60,6 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django_htmx.middleware.HtmxMiddleware",
 )
 
 ROOT_URLCONF = 'module_formation.urls'

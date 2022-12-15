@@ -81,11 +81,11 @@ def create_employe_ucl_object_from_api_response(employe_ucl_list_json: list):
     else:
         for employe_ucl in employe_ucl_list_json:
             if str(employe_ucl["lastname"]) == ".":
-                name = str(employe_ucl["firstname"])
+                name = f"{employe_ucl['firstname']}"
             elif str(employe_ucl["firstname"]) == ".":
-                name = str(employe_ucl["lastname"])
+                name = f"{employe_ucl['lastname']}"
             else:
-                name = str(employe_ucl["firstname"]) + " " + str(employe_ucl["lastname"])
+                name = f"{employe_ucl['firstname']} {employe_ucl['lastname']}"
             number_fgs = employe_ucl["matric_fgs"]
             if not User.objects.filter(employeuclouvain__number_fgs=number_fgs).exists():
                 user_object = User.objects.create_user(username=number_fgs,
