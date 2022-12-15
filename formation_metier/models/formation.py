@@ -4,8 +4,10 @@ from django.contrib import admin
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.urls import reverse
 
 from formation_metier.enums.roles_osis_enum import ROLES_OSIS_CHOICES
+from module_formation.settings import URL_BASE_MODULE
 
 MAX_LENGTH_CODE = 6
 MAX_LENGTH_NAME = 50
@@ -46,6 +48,14 @@ class Formation(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    def get_inscription_lien(self):
+        return URL_BASE_MODULE + reverse(
+            'formation_metier:inscription_formation',
+            kwargs={
+                'formation_id': self.id
+            }
+        )
 
 
 class FormationAdmin(admin.ModelAdmin):

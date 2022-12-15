@@ -8,6 +8,7 @@
     {% include 'formation_metier/suppression_seance_modal.html' %}
     {% include 'formation_metier/suppression_inscription_par_formateur_modal.html' %}
     {% include 'formation_metier/suppression_inscription_par_participant_modal.html' %}
+    {% include 'formation_metier/generation_lien_inscription_seance_modal.html' %}
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
@@ -66,6 +67,9 @@
                         </li>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionSeanceModal">Générer un lien d'inscription</a>
                         </li>
                         {% if seance.inscription_set.count != 0 %}
                             <li>

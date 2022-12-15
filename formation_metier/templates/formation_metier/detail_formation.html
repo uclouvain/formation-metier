@@ -6,6 +6,7 @@
 {% load est_membre_du_groupe %}
 {% block content %}
     {% include 'formation_metier/suppression_formation_modal.html' %}
+    {% include 'formation_metier/generation_lien_inscription_formation_modal.html' %}
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
@@ -57,6 +58,11 @@
                     <li>
                         <a href="{% url 'formation_metier:nouvelle_seance' formation.id %}" class="no_spinner">
                             <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionFormationModal">
+                            Générer un lien d'inscription
                         </a>
                     </li>
                 </ul>

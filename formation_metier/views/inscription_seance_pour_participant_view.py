@@ -45,7 +45,7 @@ class InscriptionSeancePourParticipantFormView(LoginRequiredMixin, SingleObjectM
         inscription.save()
         messages.success(
             self.request,
-            f"Le participant {form.data['participant'].name} a été ajouté."
+            f"Votre inscription a été sauvegardée."
         )
         return redirect(self.get_success_url())
 
