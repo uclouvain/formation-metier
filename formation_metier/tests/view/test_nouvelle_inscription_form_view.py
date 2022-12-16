@@ -32,7 +32,6 @@ class NouvelleFormationFormViewTest(TestCase):
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, f"<h2>Formation : {self.inscription.seance.formation.name}</h2>", html=True)
         self.assertTemplateUsed('detail_seance.html')
 
     def test_should_deny_access_user_case_not_logged(self):
@@ -116,6 +115,7 @@ class NouvelleFormationFormViewTest(TestCase):
                  "participant": participant2.id
                  }
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(Inscription.objects.count(), 3)
         first_request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[seance.id]), data=data1)
         self.assertEqual(first_request.status_code, 302)
         second_request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[seance.id]), data=data2)

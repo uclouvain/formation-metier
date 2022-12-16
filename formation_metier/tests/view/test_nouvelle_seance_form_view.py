@@ -2,9 +2,12 @@ from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
+
+from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
 from formation_metier.models.seance import Seance
 from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
 from formation_metier.tests.factories.seance import SeanceFactory
+
 URL_NEW_SESSION_VIEW = 'formation_metier:nouvelle_seance'
 
 
@@ -12,7 +15,8 @@ class NouvelleSeanceFormViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.date = datetime.today()
-        cls.employe_ucl = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare', 'add_seance')
+        cls.employe_ucl = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare', 'add_seance','view_seance',
+                                                                 'view_formation', role=RoleFormationFareEnum.FORMATEUR)
         cls.seance = SeanceFactory()
 
     def test_should_authorise_access_to_formateur(self):
@@ -20,7 +24,6 @@ class NouvelleSeanceFormViewTest(TestCase):
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.seance.formation.id]))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "<h2>Nouvelle séance</h2>", html=True)
         self.assertTemplateUsed('new_session.html')
 
     def test_should_deny_access_case_user_not_logged(self):
@@ -42,17 +45,22 @@ class NouvelleSeanceFormViewTest(TestCase):
     def test_should_not_raise_exception(self):
         self.client.force_login(user=self.employe_ucl.user)
         data = {
-                "seance_date": self.date,
-                "participant_max_number": 10,
-                "local": "L002",
-                "formateur": self.employe_ucl.id,
-                "duree": 20
-                }
+            "seance_date": self.date,
+            "participant_max_number": 10,
+            "local": "L002",
+            "formateur": self.employe_ucl.id,
+            "duree": 20
+        }
         response = self.client.get(reverse(URL_NEW_SESSION_VIEW, args=[self.seance.formation.id]))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Seance.objects.count(), 1)
         request = self.client.post(reverse(URL_NEW_SESSION_VIEW, args=[self.seance.formation.id]), data=data)
-        self.assertEqual(request.status_code, 200)
+        self.assertEqual(Seance.objects.count(), 2)
+        self.assertEqual(request.status_code, 302)
+        self.assertRedirects(request, expected_url=reverse(
+            'formation_metier:detail_formation',
+            kwargs={'formation_id': self.seance.formation.id}
+        ))
 
     def test_should_raise_validation_error_case_code_date_formateur_already_exist(self):
         self.client.force_login(user=self.employe_ucl.user)
