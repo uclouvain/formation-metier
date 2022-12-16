@@ -1,5 +1,5 @@
 from .home_view import HomeView
-from .liste_formation_view import ListeFormationView
+from .liste_formations_view import ListeFormationView
 from .detail_formation_view import DetailFormation
 from .detail_seance_view import DetailSeanceView
 from .nouvelle_formation_form_view import NouvelleFormationFormView
