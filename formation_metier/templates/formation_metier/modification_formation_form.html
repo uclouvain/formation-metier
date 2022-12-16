@@ -7,15 +7,15 @@
                                                                                  aria-hidden="true"></span></a></li>
         <li>
             <a href="{% url 'formation_metier:liste_formation' %}">
-                Liste des formation
+                Liste des formations
             </a>
         </li>
         <li class="active">
-            Update Formation
+            Modification Formation
         </li>
     </ol>
     <div class="page-header">
-        <h2>Update formation : {{ formation.name }}</h2>
+        <h2>Modification de la formation : {{ formation.name }}</h2>
     </div>
     <div class="panel panel-default" style="padding: 10px">
         <form method="post">{% csrf_token %}

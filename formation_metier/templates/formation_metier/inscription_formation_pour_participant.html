@@ -12,7 +12,7 @@
                                                                                  aria-hidden="true"></span></a></li>
         <li>
             <a href="{% url 'formation_metier:liste_formation' %}">
-                Liste des formation
+                Liste des formations
             </a>
         </li>
         <li class="active">
@@ -28,7 +28,12 @@
         <div class="alert alert-success alert-dismissable alert-link">
             <ul class="messages">
                 {% for message in messages %}
-                    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+                    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
@@ -55,7 +60,7 @@
                 <h3 id="h3_inscription_formation">Choix des séances:</h3>
                 <form method="post">
                     {% csrf_token %}
-                    <table id="inscription_seance_table">
+                    <table id="inscription_seance_table" class="table table-condensed">
                         <thead>
                         <tr>
                             <th id="checkbox"></th>
@@ -71,7 +76,7 @@
                             {% if seance|est_seance_passee %}
                                 <tr id="seance_fermee">
                                     <td id="checkbox">
-                                        <input class="form-check-input" type="checkbox" name="seance"
+                                        <input class="form-check-input checkbox disabled" type="checkbox" name="seance"
                                                disabled="disabled"
                                                value={{ seance.id }} id="{{ seance }}">
                                         <label class="form-check-label" style="color: darkgrey">
@@ -81,7 +86,7 @@
                                     <td id="heure">{{ seance.seance_date.time }}</td>
                                     <td id="duree">{{ seance.duree_en_heure }}</td>
                                     <td id="local">{{ seance.local }}</td>
-                                    <td id="etat"> Séance fermée</td>
+                                    <td id="etat"> <span id="badge" class="badge badge-secondary">Fermée</span> </td>
                                 </tr>
                             {% elif seance.inscription_set.count == seance.participant_max_number and not user|est_inscrit_seance:seance %}
                                 <tr id="seance_complete">
@@ -96,7 +101,7 @@
                                     <td id="heure">{{ seance.seance_date.time }}</td>
                                     <td id="duree">{{ seance.duree_en_heure }}</td>
                                     <td id="local">{{ seance.local }}</td>
-                                    <td id="etat"> Séance complète</td>
+                                    <td id="etat"> <span id="badge" class="badge badge-danger">Complète</span></td>
                                 </tr>
                             {% else %}
                                 <tr id="seance_ouverte">
@@ -114,7 +119,7 @@
                                     <td id="heure">{{ seance.seance_date.time }}</td>
                                     <td id="duree">{{ seance.duree_en_heure }}</td>
                                     <td id="local">{{ seance.local }}</td>
-                                    <td id="etat"> Séance ouverte</td>
+                                    <td id="etat"> <span id="badge" class="badge badge-success">Ouverte</span></td>
                                 </tr>
                             {% endif %}
                         {% endfor %}
@@ -122,7 +127,7 @@
                     </table>
                     <div id="inscription_submit">
                         {% if user|est_inscrit_formation:formation %}
-                            {% bootstrap_button "Modifier les insciptions" button_type="submit" button_class="btn-primary" %}
+                            {% bootstrap_button "Sauvegarder les modifications" button_type="submit" button_class="btn-primary" %}
                         {% else %}
                             {% bootstrap_button "Sauvegarder les inscriptions" button_type="submit" button_class="btn-primary" %}
                         {% endif %}

@@ -14,7 +14,7 @@
                                                                                  aria-hidden="true"></span></a></li>
         <li>
             <a href="{% url 'formation_metier:liste_formation' %}">
-                Liste des formation
+                Liste des formations
             </a>
         </li>
         <li>
@@ -35,7 +35,12 @@
         <div class="alert alert-success alert-dismissable alert-link">
             <ul class="messages">
                 {% for message in messages %}
-                    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+                    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
@@ -69,7 +74,8 @@
                             <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
                         </li>
                         <li>
-                            <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionSeanceModal">Générer un lien d'inscription</a>
+                            <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionSeanceModal">Générer
+                                un lien d'inscription</a>
                         </li>
                         {% if seance.inscription_set.count != 0 %}
                             <li>
