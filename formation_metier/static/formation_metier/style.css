@@ -46,7 +46,7 @@ span.select2-container span.select2-selection--single {
 }
 
 table#inscription_seance_table {
-    width: 50%;
+    width: 90%;
     align-self: center;
     text-align: left;
     margin-left: auto;
@@ -66,16 +66,8 @@ table#inscription_seance_table tr {
     text-align: left;
 }
 
-tr#seance_complete td#etat {
-    color: red;
-}
-
 tr#seance_fermee {
     color: darkgrey;
-}
-
-tr#seance_ouverte td#etat {
-    color: darkgreen;
 }
 
 div#inscription_submit {
@@ -89,5 +81,26 @@ h3#h3_inscription_formation {
 
 }
 td#date {
-    width: 200px;
+    width: 300px;
+}
+td#checkbox {
+    width: 100px;
+}
+td#etat{
+    width: 100px;
+}
+.badge-danger{
+    background-color: #dc3545
+}
+.badge-secondary{
+    background-color: #6c757d
+}
+.badge-success{
+    background-color: #28a745
+}
+span#badge{
+    width: 70px;
+}
+td th{
+    padding: 8px;
 }
