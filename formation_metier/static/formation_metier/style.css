@@ -104,3 +104,6 @@ span#badge{
 td th{
     padding: 8px;
 }
+td#etat_inscription_formation{
+    width: 50px;
+}

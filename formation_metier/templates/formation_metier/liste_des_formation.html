@@ -1,5 +1,6 @@
 {% extends 'formation_metier/base.html' %}
 {% load est_membre_du_groupe %}
+{% load est_inscrit_a_la_formation %}
 {% load bootstrap3 %}
 {% load static %}
 {% block content %}
@@ -54,6 +55,9 @@
                         <td>Nom</td>
                         <td>Code</td>
                         <td>Public cible</td>
+                        {% if not user|est_membre_du_groupe:'FormateurGroup' %}
+                            <td id="etat_inscription_formation">Inscrit</td>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -76,6 +80,19 @@
                             <td>
                                 {{ formation.get_public_cible_display }}
                             </td>
+                            {% if not user|est_membre_du_groupe:'FormateurGroup' %}
+                                {% if user|est_inscrit_formation:formation %}
+                                    <td id="etat_inscription_formation">
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"
+                                              style="color: #333"></span>
+                                    </td>
+                                {% else %}
+                                    <td id="etat_inscription_formation">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"
+                                              style="color: #333"></span>
+                                    </td>
+                                {% endif %}
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -83,7 +100,6 @@
             {% else %}
                 <span> Il n'y a pas de formation organisée</span>
             {% endif %}
-
         </div>
     </div>
 {% endblock %}
