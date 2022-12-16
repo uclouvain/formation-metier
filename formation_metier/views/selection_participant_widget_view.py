@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.utils.html import format_html
 
 from formation_metier.models.employe_uclouvain import EmployeUCLouvain
+from formation_metier.models.inscription import Inscription
 
 
 class SelectionParticipantView(LoginRequiredMixin, PermissionRequiredMixin, autocomplete.Select2QuerySetView):
@@ -13,7 +14,9 @@ class SelectionParticipantView(LoginRequiredMixin, PermissionRequiredMixin, auto
     name = 'widget_participant'
 
     def get_queryset(self):
-        qs = EmployeUCLouvain.objects.all()
+        seance = self.forwarded['seance']
+        inscription_list = [x.participant.name for x in Inscription.objects.filter(seance__id=seance)]
+        qs = EmployeUCLouvain.objects.exclude(name__in=inscription_list)
         if self.q:
             qs = qs.filter(name__icontains=self.q).order_by('name')
         return qs
