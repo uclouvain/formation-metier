@@ -1,5 +1,6 @@
+{% load static %}
 {% load bootstrap3 %}
-
+<script src="{% static '/formation_metier/copier_lien_inscription.js' %}"></script>
 <div class="modal fade" id="GenerationLienInscriptionSeanceModal" tabindex="-1" role="dialog"
      aria-labelledby="exampleModalLabel"
      aria-hidden="true">
@@ -9,7 +10,10 @@
                 <h5 class="modal-title" id="exampleModalLabel">Lien d'inscription à la séance pour les participants</h5>
             </div>
             <div class="modal-body">
-                {{ seance.get_inscription_lien }}
+                <a href="{{ seance.get_inscription_lien }}">
+                    <span id="lien_inscription">{{ seance.get_inscription_lien }}</span>
+                </a>
+                <button id="btn_copier_lien_inscription_seance" class="btn btn-primary" onclick="CopierText()">Copier le lien</button>
             </div>
         </div>
     </div>
