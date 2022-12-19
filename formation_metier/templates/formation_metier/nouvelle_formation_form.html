@@ -6,7 +6,7 @@
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
         <li>
-            <a href="{% url 'formation_metier:liste_formation' %}">
+            <a href="{% url 'formation_metier:liste_formations' %}">
                 Liste des formations
             </a>
         </li>
@@ -21,7 +21,7 @@
         <form method="post">{% csrf_token %}
             {% bootstrap_form form %}
             {% bootstrap_button "Créer la formation" button_type="submit" button_class="btn-primary" %}
-            <a href="{% url 'formation_metier:liste_formation' %}" style="color: #333">
+            <a href="{% url 'formation_metier:liste_formations' %}" style="color: #333">
                 {% bootstrap_button "Annuler" button_type="button" button_class="btn-secondary" %}
             </a>
         </form>

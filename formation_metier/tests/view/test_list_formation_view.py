@@ -7,7 +7,7 @@ from formation_metier.tests.factories.formation import FormationFactory
 from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
 from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
 
-URL_LIST_FORMATION = 'formation_metier:liste_formation'
+URL_LIST_FORMATION = 'formation_metier:liste_formations'
 
 
 class ListFormationViewTest(TestCase):

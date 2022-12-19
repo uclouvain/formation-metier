@@ -14,7 +14,7 @@ class NouvelleFormationFormView(LoginRequiredMixin, PermissionRequiredMixin, gen
     model = Formation
     template_name = 'formation_metier/nouvelle_formation_form.html'
     form_class = NouvelleFormationForm
-    success_url = '/liste_formation'
+    success_url = '/liste_formations'
     name = 'nouvelle_formation'
 
     def form_valid(self, form):
