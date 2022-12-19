@@ -20,7 +20,6 @@ class NouvelleFormationFormViewTest(TestCase):
         self.client.force_login(user=self.employe_ucl.user)
         response = self.client.get(URL_NEW_FORMATION_VIEW)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "<h2>Nouvelle formation</h2>", html=True)
 
     def test_should_deny_access_user_case_not_logged(self):
         response = self.client.get(URL_NEW_FORMATION_VIEW)
