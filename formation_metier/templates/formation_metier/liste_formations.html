@@ -53,7 +53,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            {% if formation_liste %}
+            {% if liste_formations %}
                 <table class="table">
                     <thead>
                     <tr>
@@ -66,7 +66,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for formation in formation_liste %}
+                    {% for formation in liste_formations %}
                         <tr>
                             <td>
                                 {% if user|est_membre_du_groupe:'FormateurGroup' %}
