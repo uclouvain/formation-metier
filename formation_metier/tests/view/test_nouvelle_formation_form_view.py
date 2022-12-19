@@ -40,19 +40,20 @@ class NouvelleFormationFormViewTest(TestCase):
 
     def test_should_not_raise_exception(self):
         self.client.force_login(user=self.employe_ucl.user)
+        print(ROLES_OSIS_CHOICES[1])
         data = {"name": "formation_test_2",
-                "code": "AAAA02",
+                "code": "AAA02",
                 "description": FORMATION_DESCRIPTION,
-                'public_cible': ROLES_OSIS_CHOICES[1]}
+                'public_cible': ROLES_OSIS_CHOICES[1][0]}
         response = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
     def test_should_raise_validation_error_case_code_already_exist(self):
         self.client.force_login(user=self.employe_ucl.user)
         data = {"name": "formation_test_2",
                 "code": self.formation.code,
                 "description": FORMATION_DESCRIPTION,
-                'public_cible': ROLES_OSIS_CHOICES[1]}
+                'public_cible': ROLES_OSIS_CHOICES[1][0]}
         response = self.client.get(URL_NEW_FORMATION_VIEW)
         request = self.client.post(URL_NEW_FORMATION_VIEW, data=data)
 
@@ -61,7 +62,6 @@ class NouvelleFormationFormViewTest(TestCase):
         self.assertEqual(Formation.objects.count(), 1)
         self.assertRaisesMessage(ValidationError,
                                  "Un objet Formation avec ce champ Code existe déjà.")
-        self.assertFormError(request, 'form', "code", ["Un objet Formation avec ce champ Code existe déjà."])
 
     def test_should_raise_validation_error_case_code_format(self):
         self.client.force_login(user=self.employe_ucl.user)
@@ -75,11 +75,8 @@ class NouvelleFormationFormViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(request.status_code, 200)
         self.assertEqual(Formation.objects.count(), 1)
-        self.assertFormError(request,
-                             'form',
-                             "code",
-                             [
-                                 f'Assurez-vous que cette valeur comporte au plus 6 caractères (actuellement {len(data["code"])}).'])
+        self.assertRaisesMessage(ValidationError,
+                                 f'Assurez-vous que cette valeur comporte au plus 6 caractères (actuellement {len(data["code"])}).')
 
     def test_should_raise_validation_error_case_code_length(self):
         self.client.force_login(user=self.employe_ucl.user)
@@ -93,5 +90,5 @@ class NouvelleFormationFormViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(request.status_code, 200)
         self.assertEqual(Formation.objects.count(), 1)
-        self.assertFormError(request, 'form', "code",
-                             ['Saisissez une valeur valide.'])
+        self.assertRaisesMessage(ValidationError,
+                                 'Saisissez une valeur valide.')
