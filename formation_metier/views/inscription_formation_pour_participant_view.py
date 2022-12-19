@@ -9,7 +9,7 @@ from formation_metier.models.inscription import Inscription
 from formation_metier.models.seance import Seance
 
 
-class InscriptionAUneFormation(LoginRequiredMixin, generic.DetailView):
+class InscriptionFormationPourParticipant(LoginRequiredMixin, generic.DetailView):
     model = Formation
     pk_url_kwarg = 'formation_id'
     context_object_name = "formation"

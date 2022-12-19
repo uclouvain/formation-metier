@@ -6,24 +6,29 @@ from formation_metier.models.inscription import Inscription
 
 
 class NouvelleInscriptionParParticipantForm(ModelForm):
-    def __init__(self, seance, *args, **kwargs):
-        self.seance = seance
+
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['participant'].required = False
+        self.fields['seance'].required = False
 
     class Meta:
         model = Inscription
         fields = (
             'participant',
+            'seance',
         )
         widgets = {
             'participant': HiddenInput(),
+            'seance': HiddenInput(),
         }
 
     def clean(self):
         cleaned_data = super().clean()
-        participant = cleaned_data['participant']
-        if Inscription.objects.filter(seance=self.seance, participant=participant).exists():
-            raise ValidationError(_(f"L'utilisateur {participant} est déja inscit à cette formation"))
-        if self.seance.inscription_set.count() >= self.seance.participant_max_number:
+        cleaned_data['seance'] = self.fields['seance'].initial
+        cleaned_data['participant'] = self.fields['participant'].initial
+        if Inscription.objects.filter(seance=cleaned_data['seance'], participant=cleaned_data['participant']).exists():
+            raise ValidationError(_(f"L'utilisateur {cleaned_data['participant']} est déja inscit à cette formation"))
+        if cleaned_data['seance'].inscription_set.count() >= cleaned_data['seance'].participant_max_number:
             raise ValidationError(_("Le nombre maximal de participant inscit a cette seance est déjà atteint"))
         return cleaned_data
