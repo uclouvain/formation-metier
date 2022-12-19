@@ -6,7 +6,7 @@ from formation_metier.models.employe_uclouvain import EmployeUCLouvain
 from formation_metier.models.inscription import Inscription
 
 
-class SelectionParticipantView(LoginRequiredMixin, PermissionRequiredMixin, autocomplete.Select2QuerySetView):
+class SelectionParticipantAutoComplete(LoginRequiredMixin, PermissionRequiredMixin, autocomplete.Select2QuerySetView):
     permission_required = [
         'formation_metier.view_employeuclouvain',
         'formation_metier.access_to_formation_fare'

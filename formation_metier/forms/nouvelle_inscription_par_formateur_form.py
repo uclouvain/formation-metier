@@ -1,14 +1,9 @@
-from pprint import pprint
-
 from django import forms
-from django.forms import ValidationError, ModelChoiceField
+from django.forms import ValidationError
 from django.forms import ModelForm
-from django.urls import reverse
-from django_select2.forms import ModelSelect2Widget
 from dal import autocomplete
 from django.utils.translation import gettext_lazy as _
 
-from formation_metier.models.employe_uclouvain import EmployeUCLouvain
 from formation_metier.models.inscription import Inscription
 
 
@@ -40,7 +35,6 @@ class NouvelleInscriptionParFormateurForm(ModelForm):
         }
 
     def clean(self):
-        pprint(self.instance)
         cleaned_data = super().clean()
         participant = cleaned_data.get('participant')
         if Inscription.objects.filter(seance=self.seance_object, participant=participant).exists():
