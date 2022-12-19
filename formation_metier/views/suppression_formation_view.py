@@ -20,4 +20,4 @@ class SuppressionFormation(LoginRequiredMixin, PermissionRequiredMixin, generic.
             self.request,
             f'La formation {self.object.name} a été supprimée.'
         )
-        return '/liste_formation'
+        return '/liste_formations'
