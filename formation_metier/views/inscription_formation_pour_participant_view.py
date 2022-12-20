@@ -31,30 +31,29 @@ class InscriptionFormationPourParticipant(LoginRequiredMixin, generic.DetailView
         )
 
     def post(self, request, *args, **kwargs):
-        if request.method == 'POST':
-            inscriptions_existantes_avant_post = Inscription.objects.filter(
-                participant__user=request.user,
-                seance__formation=self.get_object()
-            )
-            seance_list_apres_post = self.request.POST.getlist('seance')
-            for inscription_existante in inscriptions_existantes_avant_post:
-                if str(inscription_existante.seance.id) not in seance_list_apres_post:
-                    inscription_existante.delete()
-                    messages.success(
-                        request,
-                        f"Votre inscription pour la seance du {inscription_existante.seance.datetime_format()} a été supprimée"
-                    )
-            for seance_id in seance_list_apres_post:
-                if not Inscription.objects.filter(participant__user=request.user, seance__id=seance_id).exists():
-                    seance_object = Seance.objects.get(id=seance_id)
-                    inscription_cree = Inscription.objects.create(
-                        participant=request.user.employeuclouvain,
-                        seance=seance_object
-                    )
-                    messages.success(
-                        request,
-                        f"Votre inscription pour la seance du {inscription_cree.seance.datetime_format()} a été sauvegardée"
-                    )
-            return redirect(
-                self.get_success_url()
-            )
+        inscriptions_existantes_avant_post = Inscription.objects.filter(
+            participant__user=request.user,
+            seance__formation=self.get_object()
+        )
+        seance_list_apres_post = self.request.POST.getlist('seance')
+        for inscription_existante in inscriptions_existantes_avant_post:
+            if str(inscription_existante.seance.id) not in seance_list_apres_post:
+                inscription_existante.delete()
+                messages.success(
+                    request,
+                    f"Votre inscription pour la seance du {inscription_existante.seance.datetime_format()} a été supprimée"
+                )
+        for seance_id in seance_list_apres_post:
+            if not Inscription.objects.filter(participant__user=request.user, seance__id=seance_id).exists():
+                seance_object = Seance.objects.get(id=seance_id)
+                inscription_cree = Inscription.objects.create(
+                    participant=request.user.employeuclouvain,
+                    seance=seance_object
+                )
+                messages.success(
+                    request,
+                    f"Votre inscription pour la seance du {inscription_cree.seance.datetime_format()} a été sauvegardée"
+                )
+        return redirect(
+            self.get_success_url()
+        )
