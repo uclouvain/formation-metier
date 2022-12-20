@@ -1,4 +1,4 @@
-from django.forms import ValidationError
+from django.forms import ValidationError, HiddenInput
 from django.forms import ModelForm
 from django_select2.forms import ModelSelect2Widget
 from dal import autocomplete
@@ -23,6 +23,7 @@ class NouvelleInscriptionParFormateurForm(ModelForm):
         model = Inscription
         fields = (
             'participant',
+            'seance'
         )
         widgets = {
             "participant": autocomplete.ModelSelect2(
@@ -32,14 +33,16 @@ class NouvelleInscriptionParFormateurForm(ModelForm):
                     'data-minimum-input-length': 3,
                     'data-html': True
                 },
-            )
+            ),
+            "seance": HiddenInput()
         }
 
     def clean(self):
         cleaned_data = super().clean()
-        particpant = cleaned_data.get('participant')
-        if Inscription.objects.filter(seance=self.seance, participant=particpant).exists():
-            raise ValidationError(_(f"L'utilisateur {particpant} est déja inscit à cette formation"))
-        if self.seance.inscription_set.count() >= self.seance.participant_max_number:
+        participant = cleaned_data.get('participant')
+        seance = cleaned_data.get('seance')
+        if Inscription.objects.filter(seance=seance, participant=participant).exists():
+            raise ValidationError(_(f"L'utilisateur {participant} est déja inscit à cette formation"))
+        if seance.inscription_set.count() >= seance.participant_max_number:
             raise ValidationError(_("Le nombre maximal de participant inscit a cette seance est déjà atteint"))
         return cleaned_data
