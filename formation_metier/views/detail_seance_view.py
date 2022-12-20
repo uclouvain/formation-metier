@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.db.models import Count, Prefetch
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views import View, generic
+from django.views import generic
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormMixin, FormView
 
@@ -12,11 +12,13 @@ from formation_metier.models.inscription import Inscription
 from formation_metier.models.seance import Seance
 
 
-class DetailSeance(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
+class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, generic.DetailView):
     permission_required = [
         'formation_metier.view_seance',
-        'formation_metier.view_inscription'
+        'formation_metier.view_inscription',
+        'formation_metier.access_to_formation_fare'
     ]
+    name = 'detail_seance'
     model = Seance
     template_name = 'formation_metier/detail_seance.html'
     context_object_name = "seance"
@@ -46,6 +48,14 @@ class DetailSeance(LoginRequiredMixin, PermissionRequiredMixin, FormMixin, gener
 
     def get_form_class(self):
         return NouvelleInscriptionParFormateurForm
+
+    def post(self, request, *args, **kwargs):
+        view = InscriptionSeancePourFormateurFormView.as_view()
+        return view(
+            request,
+            *args,
+            **kwargs
+        )
 
 
 class InscriptionSeancePourFormateurFormView(LoginRequiredMixin, PermissionRequiredMixin, SingleObjectMixin, FormView):
@@ -95,25 +105,4 @@ class InscriptionSeancePourFormateurFormView(LoginRequiredMixin, PermissionRequi
             kwargs={
                 'seance_id': self.get_object().pk
             }
-        )
-
-
-class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    permission_required = 'formation_metier.access_to_formation_fare'
-    name = 'detail_seance'
-
-    def get(self, request, *args, **kwargs):
-        view = DetailSeance.as_view()
-        return view(
-            request,
-            *args,
-            **kwargs
-        )
-
-    def post(self, request, *args, **kwargs):
-        view = InscriptionSeancePourFormateurFormView.as_view()
-        return view(
-            request,
-            *args,
-            **kwargs
         )
