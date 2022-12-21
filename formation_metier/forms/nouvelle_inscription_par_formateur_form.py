@@ -1,21 +1,17 @@
 from django.forms import ValidationError, HiddenInput
 from django.forms import ModelForm
-from django_select2.forms import ModelSelect2Widget
 from dal import autocomplete
 from django.utils.translation import gettext_lazy as _
 
-from formation_metier.models.employe_uclouvain import EmployeUCLouvain
 from formation_metier.models.inscription import Inscription
 
 
-class SelectionParticipantWidget(ModelSelect2Widget):
-    model = EmployeUCLouvain
-    search_fields = ["name__icontains"]
-
-
 class NouvelleInscriptionParFormateurForm(ModelForm):
+    seance = forms.UUIDField(
+        required=False, widget=forms.HiddenInput)
+
     def __init__(self, seance, *args, **kwargs):
-        self.seance = seance
+        self.seance_object = seance
         super().__init__(*args, **kwargs)
 
     class Meta:
@@ -31,7 +27,7 @@ class NouvelleInscriptionParFormateurForm(ModelForm):
                 attrs={
                     'data-placeholder': 'Ajouter un participant',
                     'data-minimum-input-length': 3,
-                    'data-html': True
+                    'data-html': True,
                 },
             ),
             "seance": HiddenInput()
