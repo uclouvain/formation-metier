@@ -1,0 +1,124 @@
+{% extends 'formation_metier/base.html' %}
+{% load est_inscrit_a_la_formation %}
+{% load bootstrap3 %}
+{% load static %}
+{% load l10n %}
+{% load est_membre_du_groupe %}
+{% block content %}
+    {% include 'formation_metier/suppression_formation_modal.html' %}
+    {% include 'formation_metier/generation_lien_inscription_formation_modal.html' %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                                 aria-hidden="true"></span></a></li>
+        <li>
+            <a href="{% url 'formation_metier:liste_formations' %}">
+                Liste des formations
+            </a>
+        </li>
+        <li class="active">
+            Formation
+        </li>
+    </ol>
+    {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible alert-link">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    {% if messages %}
+        <div class="alert alert-success alert-dismissable alert-link">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Formation : {{ formation.name }} </h2>
+        </div>
+        <div class="col-md-2" style="margin-top: 20px">
+            <div class="btn-group pull-right">
+                <button id="btn-action" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-large row ">
+                    <li>
+                        <a href="{% url 'formation_metier:modification_formation' formation.id %} "
+                           class="no_spinner">
+                            <form method="post" style="margin: 0">Modifier la formation</form>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#formationDeleteModal">Supprimer la
+                            formation</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'formation_metier:nouvelle_seance' formation.id %}" class="no_spinner">
+                            <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionFormationModal">
+                            Générer un lien d'inscription
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" style="padding: 10px">
+        <p>Code : {{ formation.code }}</p>
+        <p>Description : {{ formation.description }}</p>
+        <p>Public cible : {{ formation.get_public_cible_display }}</p>
+    </div>
+    {% if formation.seance_set.count > 0 %}
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>Date</td>
+                        <td>Heure</td>
+                        <td>Durée</td>
+                        <td>Local</td>
+                        <td>Participants</td>
+                        <td>Nom du formateur</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for seance in formation.seance_set.all %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'formation_metier:detail_seance' seance.id %}">
+                                    {{ seance.seance_date|date:"l j F o" }}
+                                </a>
+                            </td>
+                            <td>{{ seance.time_format }}</td>
+                            <td>{{ seance.duree }}</td>
+                            <td>{{ seance.local }}</td>
+                            <td>{{ seance.inscription_set.count }}/{{ seance.participant_max_number }}</td>
+                            <td>{{ seance.formateur }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p> Il n'y a pas de seance actuellement organisé pour la formation : {{ formation.name }}</p>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

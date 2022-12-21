@@ -1,0 +1,141 @@
+{% extends 'formation_metier/base.html' %}
+{% load est_membre_du_groupe %}
+{% load est_inscrit_a_la_seance %}
+{% load bootstrap3 %}
+{% load static %}
+{% load l10n %}
+{% block content %}
+    {% include 'formation_metier/suppression_seance_modal.html' %}
+    {% include 'formation_metier/suppression_inscription_par_formateur_modal.html' %}
+    {% include 'formation_metier/suppression_inscription_par_participant_modal.html' %}
+    {% include 'formation_metier/generation_lien_inscription_seance_modal.html' %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                                 aria-hidden="true"></span></a></li>
+        <li>
+            <a href="{% url 'formation_metier:liste_formations' %}">
+                Liste des formations
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'formation_metier:detail_formation' seance.formation.id %}">
+                Formation
+            </a>
+        </li>
+        <li class="active">
+            Séance
+        </li>
+    </ol>
+    {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible alert-link">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    {% if messages %}
+        <div class="alert alert-success alert-dismissable alert-link">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Formation : {{ seance.formation.name }} </h2>
+        </div>
+        <div class="col-md-2" style="margin-top: 20px">
+            <div class="btn-group pull-right">
+                <button id="btn-action" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-large row">
+                    {% if user|est_membre_du_groupe:'FormateurGroup' %}
+                        <li>
+                            <a href="{% url 'formation_metier:nouvelle_seance' seance.formation.id %}"
+                               class="no_spinner">
+                                <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'formation_metier:modification_seance' seance.id %} " class="no_spinner">
+                                <form method="post" style="margin: 0">Modifier la seance</form>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
+                        </li>
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionSeanceModal">Générer
+                                un lien d'inscription</a>
+                        </li>
+                        {% if seance.inscription_set.count != 0 %}
+                            <li>
+                                <a href="#" data-toggle="modal" data-target="#registerDeleteModal">Supprimer des
+                                    inscription</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" style="padding: 10px">
+        <div class="panel-body">
+            <p>Date : {{ seance.seance_date|date:"l j F o" }}</p>
+            <p>Heure : {{ seance.time_format }}</p>
+            <p>Local : {{ seance.local }}</p>
+            <p>Durée ( en minutes) : {{ seance.duree }}</p>
+            <p>Participants : {{ seance.inscription_count }} / {{ seance.participant_max_number }}</p>
+            <p>Formateur : {{ seance.formateur }}</p>
+            <h3> Inscription : </h3>
+            <div>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.media }}
+                    <div class="row">
+                        <div class="col-lg-8 mb-3">
+                            {% bootstrap_form form layout='inline' error_types='none' %}
+                        </div>
+                        <div>
+                            {% bootstrap_button "Inscrire" button_type="submit" button_class="btn-primary" %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% if seance.inscription_set.count > 0 %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>Nom du participant</td>
+                        <td>Matricule FGS</td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for inscription in seance.inscription_set.all %}
+                        <tr style="max-height: 40px">
+                            <td>{{ inscription.participant.name }}</td>
+                            <td> {{ inscription.participant.matricule_fgs }}</td>
+                        </tr>
+                    {% endfor %}
+                    <div>
+                    </div>
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Il n'y a aucun participant d'inscrit pour l'instant</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+
