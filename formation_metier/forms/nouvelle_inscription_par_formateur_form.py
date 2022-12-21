@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import ValidationError, HiddenInput
 from django.forms import ModelForm
 from dal import autocomplete
@@ -7,9 +8,6 @@ from formation_metier.models.inscription import Inscription
 
 
 class NouvelleInscriptionParFormateurForm(ModelForm):
-    seance = forms.UUIDField(
-        required=False, widget=forms.HiddenInput)
-
     def __init__(self, seance, *args, **kwargs):
         self.seance_object = seance
         super().__init__(*args, **kwargs)
