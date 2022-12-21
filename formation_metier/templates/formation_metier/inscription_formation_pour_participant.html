@@ -1,6 +1,5 @@
 {% extends 'formation_metier/base.html' %}
 {% load est_membre_du_groupe %}
-{% load est_inscrit_a_la_seance %}
 {% load est_seance_passee %}
 {% load bootstrap3 %}
 {% load static %}
@@ -53,6 +52,7 @@
 
         </div>
     </div>
+    {{ formation.user_inscription_seance_list }}
     {% if formation.seance_set.count > 0 %}
         <div class="panel panel-default" style="padding: 10px">
             <div class="panel-body">
@@ -87,7 +87,7 @@
                                     <td id="local">{{ seance.local }}</td>
                                     <td id="etat"> <span id="badge" class="badge badge-secondary">Fermée</span> </td>
                                 </tr>
-                            {% elif seance.inscription_set.count == seance.participant_max_number and not user|est_inscrit_seance:seance %}
+                            {% elif seance.inscription_set.count == seance.participant_max_number and not seance.est_inscrit_seance %}
                                 <tr id="seance_complete">
                                     <td id="checkbox">
                                         <input class="form-check-input" type="checkbox" name="seance"
@@ -105,7 +105,7 @@
                             {% else %}
                                 <tr id="seance_ouverte">
                                     <td id="checkbox">
-                                        {% if user|est_inscrit_seance:seance %}
+                                        {% if seance.est_inscrit_seance %}
                                             <input class="form-check-input" type="checkbox" name="seance"
                                                    value={{ seance.id }} id="{{ seance }}" checked="checked">
                                         {% else %}
