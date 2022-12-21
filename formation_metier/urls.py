@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 
 from formation_metier.views import ListeFormationView, HomeView, NouvelleFormationFormView, DetailFormation, \
     DetailSeanceView, ModificationFormationView, ModificationSeanceView, NouvelleSeanceFormView, SuppressionSeance, \
-    SuppressionFormation, SelectionParticipantView, SuppressionInscriptionParFormateur, \
+    SuppressionFormation, SelectionParticipantAutoComplete, SuppressionInscriptionParFormateur, \
     SuppressionInscriptionParParticipant, InscriptionAUneFormation, InscriptionSeancePourParticipantView
 from formation_metier.api import urls_api
 
@@ -45,8 +45,9 @@ urlpatterns = [
          name=SuppressionInscriptionParParticipant.name),
 
     # Autocomplete Widget
-    path('autocompletePerson/', SelectionParticipantView.as_view(), name=SelectionParticipantView.name),
 
+    path('autocompletePerson/', SelectionParticipantAutoComplete.as_view(), name=SelectionParticipantAutoComplete.name),
+    
     # API
     path('', include(urls_api)),
 
