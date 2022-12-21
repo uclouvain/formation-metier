@@ -2,6 +2,6 @@ from django.urls import path
 from formation_metier.api import views
 
 urlpatterns = [
-    path('person/', views.PersonList.as_view()),
-    path('person/<int:pk>/', views.PersonDetail.as_view()),
+    path('employes_ucl/', views.EmployeUCLList.as_view()),
+    path('employe_ucl/<uuid:pk>/', views.EmployeUCLDetail.as_view()),
 ]

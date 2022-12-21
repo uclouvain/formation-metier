@@ -1,36 +1,59 @@
-from django.conf.urls import url
 from django.urls import path, include
 from schema_graph.views import Schema
 from django.contrib.auth import views as auth_views
 
-from formation_metier.views import ListFormationView, HomeView, NewFormationFormView, DetailFormation, \
-    DetailSessionView, UpdateFormationView, UpdateSessionView, NewSessionFormView, delete_session, delete_formation, \
-    PersonAutoComplete, delete_registration
+from formation_metier.views import ListeFormationView, HomeView, NouvelleFormationFormView, DetailFormation, \
+    DetailSeanceView, ModificationFormationView, ModificationSeanceView, NouvelleSeanceFormView, SuppressionSeance, \
+    SuppressionFormation, SelectionParticipantAutoComplete, SuppressionInscriptionParFormateur, \
+    SuppressionInscriptionParParticipant, InscriptionAUneFormation, InscriptionSeancePourParticipantView
 from formation_metier.api import urls_api
 
 app_name = 'formation_metier'
 urlpatterns = [
     path('', HomeView.as_view(), name=HomeView.name),
-    path('list_formation/', ListFormationView.as_view(), name=ListFormationView.name),
+
+    # list_view
+    path('liste_formation/', ListeFormationView.as_view(), name=ListeFormationView.name),
+
     # detail_view
-    path('formation/<int:formation_id>/', DetailFormation.as_view(), name=DetailFormation.name),
-    path('formation/session/<int:session_id>/', DetailSessionView.as_view(), name=DetailSessionView.name),
+    path('formation/<uuid:formation_id>/', DetailFormation.as_view(), name=DetailFormation.name),
+    path('formation/seance/<uuid:seance_id>/', DetailSeanceView.as_view(), name=DetailSeanceView.name),
+
     # new_view
-    path('new_formation/', NewFormationFormView.as_view(), name=NewFormationFormView.name),
-    path('formation/new_session/<int:formation_id>', NewSessionFormView.as_view(), name=NewSessionFormView.name),
+    path('nouvelle_formation/', NouvelleFormationFormView.as_view(), name=NouvelleFormationFormView.name),
+    path('formation/nouvelle_seance/<uuid:formation_id>/', NouvelleSeanceFormView.as_view(),
+         name=NouvelleSeanceFormView.name),
+    path('inscription/formation/<uuid:formation_id>/', InscriptionAUneFormation.as_view(),
+         name=InscriptionAUneFormation.name),
+    path('inscription/seance/<uuid:seance_id>/', InscriptionSeancePourParticipantView.as_view(),
+         name=InscriptionSeancePourParticipantView.name),
+
     # update_view
-    path('formation/update/<int:formation_id>/', UpdateFormationView.as_view(), name=UpdateFormationView.name),
-    path('formation/session/update/<int:session_id>/', UpdateSessionView.as_view(), name=UpdateSessionView.name),
+    path('formation/modification/<uuid:formation_id>/', ModificationFormationView.as_view(),
+         name=ModificationFormationView.name),
+    path('formation/seance/modification/<uuid:seance_id>/', ModificationSeanceView.as_view(),
+         name=ModificationSeanceView.name),
+
     # delete_view
-    path('formation/delete/<int:formation_id>/', delete_formation, name='delete_formation'),
-    path('formation/session/delete/<int:session_id>/', delete_session, name='delete_session'),
-    path('formation/session/register/delete/', delete_registration, name='delete_registration'),
+    path('formation/suppression/<uuid:formation_id>/', SuppressionFormation.as_view(), name=SuppressionFormation.name),
+    path('formation/seance/suppression/<uuid:seance_id>/', SuppressionSeance.as_view(), name=SuppressionSeance.name),
+    path('formation/seance/inscription_formateur/suppression/',
+         SuppressionInscriptionParFormateur.as_view(),
+         name=SuppressionInscriptionParFormateur.name
+         ),
+    path('formation/seance/inscription_participant/suppression/', SuppressionInscriptionParParticipant.as_view(),
+         name=SuppressionInscriptionParParticipant.name),
+
     # Autocomplete Widget
-    path('autocompletePerson/', PersonAutoComplete.as_view(), name=PersonAutoComplete.name),
+
+    path('autocompletePerson/', SelectionParticipantAutoComplete.as_view(), name=SelectionParticipantAutoComplete.name),
+    
     # API
     path('', include(urls_api)),
+
     # auth
     path('accounts/login/', auth_views.LoginView.as_view()),
+
     # graph_models
     path("schema/", Schema.as_view(), name='schemaModels'),
 ]

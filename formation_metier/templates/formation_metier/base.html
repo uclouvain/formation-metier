@@ -1,3 +1,4 @@
+<!doctype html>
 {% load bootstrap3 %}
 {% load static %}
 {% bootstrap_css %}
@@ -21,7 +22,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="{% url 'formation_metier:list_formation' %}">
+                            <a href="{% url 'formation_metier:liste_formations' %}">
                                 <span>formations FARE</span>
                             </a>
                         </li>
@@ -54,7 +55,7 @@
     {% endblock content %}
 </div>
 </body>
-<footer class="footer">
+<footer class="footer fixed-bottom">
 
     <div class="container-fluid p0-50">
         <p class="navbar-text pull-left">

@@ -1,0 +1,110 @@
+{% extends 'formation_metier/base.html' %}
+{% load est_membre_du_groupe %}
+{% load est_inscrit_a_la_formation %}
+{% load bootstrap3 %}
+{% load static %}
+{% block content %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                                 aria-hidden="true"></span></a></li>
+        <li class="active">
+            Liste des formations
+        </li>
+    </ol>
+    <div class="page-header">
+        <div class="row">
+            <div class="col-md-10">
+                <h2>Formation organisée</h2>
+            </div>
+            {% if user|est_membre_du_groupe:'FormateurGroup' %}
+                <div class="col-md-2" style="margin-top: 20px">
+                    <div class="btn-group pull-right">
+                        <button id="btn-action" type="button" class="btn btn-default dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="true">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-large row text-right pull-right">
+                            <li>
+                                <a href="{% url 'formation_metier:nouvelle_formation' %}">Nouvelle formation</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if messages %}
+        <div class="alert alert-success alert-dismissable alert-link">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            {% if liste_formations %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>Nom</td>
+                        <td>Code</td>
+                        <td>Public cible</td>
+                        {% if not user|est_membre_du_groupe:'FormateurGroup' %}
+                            <td id="etat_inscription_formation">Inscrit</td>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for formation in liste_formations %}
+                        <tr>
+                            <td>
+                                {% if user|est_membre_du_groupe:'FormateurGroup' %}
+                                    <a href="{% url 'formation_metier:detail_formation' formation.id %}">
+                                        {{ formation.name }}
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'formation_metier:inscription_formation' formation.id %}">
+                                        {{ formation.name }}
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ formation.code }}
+                            </td>
+                            <td>
+                                {{ formation.get_public_cible_display }}
+                            </td>
+                            {% if not user|est_membre_du_groupe:'FormateurGroup' %}
+                                {% if user|est_inscrit_formation:formation %}
+                                    <td id="etat_inscription_formation">
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true" style="color: #333">
+                                        </span>
+                                    </td>
+                                {% else %}
+                                    <td id="etat_inscription_formation">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true" style="color: #333">
+                                        </span>
+                                    </td>
+                                {% endif %}
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <span> Il n'y a pas de formation organisée</span>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

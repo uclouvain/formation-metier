@@ -1,0 +1,27 @@
+{% load bootstrap3 %}
+<div class="modal fade" id="registerDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Suppression d' inscription</h5>
+            </div>
+            <form method="post" action="{% url 'formation_metier:suppression_inscription_par_formateur' %}">
+                {% csrf_token %}
+                <input name="seance_id" class="hidden" type="text" value="{{ seance.id }}" readonly>
+                <span style="padding-left: 15px">Cochez la/les inscription(s) a supprimer pour cette seance</span>
+                <div class="modal-body">
+                    {% for inscription in seance.inscription_set.all %}
+                        <input  type="checkbox" name="inscription" value="{{ inscription.id }}">
+                        <label>{{ inscription.participant }}</label>
+                        <br>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Fermer</button>
+                    {% bootstrap_button "Supprimer" button_type="submit" button_class="btn btn-sm btn-danger" %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

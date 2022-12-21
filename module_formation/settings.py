@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'formation_metier.apps.FormationMetierConfig',
     'bootstrap3',
     'schema_graph',
-    'django_htmx',
     'django_select2',
     'jquery',
     'rest_framework',
@@ -61,7 +60,6 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django_htmx.middleware.HtmxMiddleware",
 )
 
 ROOT_URLCONF = 'module_formation.urls'
@@ -170,7 +168,7 @@ environ.Env.read_env()
 INSTALLED_APPS += OPTIONAL_APPS
 MIDDLEWARE += OPTIONAL_MIDDLEWARES
 INTERNAL_IPS += OPTIONAL_INTERNAL_IPS
-API_PERSON_URL = os.environ.get('API_PERSON_URL')
+API_GET_EMPLOYE_UCL_URL = os.environ.get('API_EMPLOYE_UCL_URL')
 DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER')
 ROLES_OSIS = os.environ.get('ROLES_OSIS')
 
@@ -180,3 +178,7 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+API_OSIS_URL = os.environ.get("API_OSIS")
+OSIS_EMPLOYER_ENDPOINT = os.environ.get("OSIS_EMPLOYER_ENDPOINT")
+OSIS_AUTHORIZATION = os.environ.get("OSIS_AUTHORIZATION")
+URL_BASE_MODULE = os.environ.get('URL_BASE_MODULE')
