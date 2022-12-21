@@ -14,9 +14,7 @@ class SelectionParticipantAutoComplete(LoginRequiredMixin, PermissionRequiredMix
     name = 'widget_participant'
 
     def get_queryset(self):
-        seance = self.forwarded['seance']
-        inscription_list = [x.participant.name for x in Inscription.objects.filter(seance__id=seance)]
-        qs = EmployeUCLouvain.objects.exclude(name__in=inscription_list)
+        qs = EmployeUCLouvain.objects.all()
         if self.q:
             qs = qs.filter(name__icontains=self.q).order_by('name')
         return qs

@@ -13,7 +13,6 @@ class NouvelleInscriptionParFormateurForm(ModelForm):
 
     def __init__(self, seance, *args, **kwargs):
         self.seance_object = seance
-        kwargs['initial'] = {'seance': seance.id}
         super().__init__(*args, **kwargs)
 
     class Meta:
@@ -30,7 +29,6 @@ class NouvelleInscriptionParFormateurForm(ModelForm):
                     'data-minimum-input-length': 3,
                     'data-html': True,
                 },
-                forward=['seance']
             )
         }
 
