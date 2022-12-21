@@ -12,8 +12,8 @@ class SuppressionInscriptionParParticipant(LoginRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None):
         inscription = Inscription.objects.get(
-            participant__id=self.request.user.employeuclouvain.id,
-            seance__id=self.request.POST.get('seance_id')
+            participant_id=self.request.user.employeuclouvain.id,
+            seance_id=self.request.POST.get('seance_id')
         )
         return inscription
 
