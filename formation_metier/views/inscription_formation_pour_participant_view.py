@@ -45,7 +45,7 @@ class InscriptionAUneFormation(LoginRequiredMixin, generic.DetailView):
                         f"Votre inscription pour la seance du {inscription_existante.seance.datetime_format()} a été supprimée"
                     )
             for seance_id in seance_list_apres_post:
-                if not Inscription.objects.filter(participant__user=request.user, seance__id=seance_id).exists():
+                if not Inscription.objects.filter(participant__user=request.user, seance_id=seance_id).exists():
                     seance_object = Seance.objects.get(id=seance_id)
                     inscription_cree = Inscription.objects.create(
                         participant=request.user.employeuclouvain,
