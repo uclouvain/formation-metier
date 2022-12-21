@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 from formation_metier.views import ListeFormationView, HomeView, NouvelleFormationFormView, DetailFormation, \
     DetailSeanceView, ModificationFormationView, ModificationSeanceView, NouvelleSeanceFormView, SuppressionSeance, \
     SuppressionFormation, SelectionParticipantView, SuppressionInscriptionParFormateur, \
-    SuppressionInscriptionParParticipant, InscriptionAUneFormation, InscriptionSeancePourParticipantView
+    SuppressionInscriptionParParticipant, InscriptionFormationPourParticipant, InscriptionSeancePourParticipantView
 from formation_metier.api import urls_api
 
 app_name = 'formation_metier'
@@ -19,8 +19,8 @@ urlpatterns = [
     path('nouvelle_formation/', NouvelleFormationFormView.as_view(), name=NouvelleFormationFormView.name),
     path('formation/nouvelle_seance/<uuid:formation_id>/', NouvelleSeanceFormView.as_view(),
          name=NouvelleSeanceFormView.name),
-    path('inscription/formation/<uuid:formation_id>/', InscriptionAUneFormation.as_view(),
-         name=InscriptionAUneFormation.name),
+    path('inscription/formation/<uuid:formation_id>/', InscriptionFormationPourParticipant.as_view(),
+         name=InscriptionFormationPourParticipant.name),
     # update_view
     path('inscription/seance/<uuid:seance_id>/', InscriptionSeancePourParticipantView.as_view(),
          name=InscriptionSeancePourParticipantView.name),
