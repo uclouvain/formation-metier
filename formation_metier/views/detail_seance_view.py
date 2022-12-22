@@ -15,7 +15,8 @@ class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, generic.Crea
     permission_required = [
         'formation_metier.view_seance',
         'formation_metier.view_inscription',
-        'formation_metier.access_to_formation_fare'
+        'formation_metier.access_to_formation_fare',
+        'formation_metier.add_inscription'
     ]
     name = 'detail_seance'
     model = Inscription

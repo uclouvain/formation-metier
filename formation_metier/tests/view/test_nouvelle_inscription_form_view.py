@@ -1,10 +1,9 @@
 import uuid
-
-from django.test import TestCase
 from datetime import datetime
 
-from django.urls import reverse
 from django.core.exceptions import ValidationError
+from django.test import TestCase
+from django.urls import reverse
 
 from formation_metier.models.employe_uclouvain import RoleFormationFareEnum, EmployeUCLouvain
 from formation_metier.models.inscription import Inscription
@@ -20,9 +19,13 @@ class NouvelleFormationFormViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.date = datetime.today()
-        cls.employe_ucl = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare', 'view_inscription',
-                                                                 'add_inscription', 'view_seance',
-                                                                 role=RoleFormationFareEnum.FORMATEUR)
+        cls.employe_ucl = EmployeUCLouvainWithPermissionsFactory(
+            'access_to_formation_fare',
+            'view_inscription',
+            'add_inscription',
+            'view_seance',
+            role=RoleFormationFareEnum.FORMATEUR
+        )
         add_employe_uclouvain_to_groups(cls.employe_ucl, 'FormateurGroup')
         cls.employe_ucl = EmployeUCLouvain.objects.get(id=cls.employe_ucl.id)
         cls.inscription = InscriptionFactory(participant=cls.employe_ucl, seance__participant_max_number=2)
@@ -39,35 +42,47 @@ class NouvelleFormationFormViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_should_deny_access_case_user_not_have_permission_access_to_formation_fare(self):
-        employe_ucl = EmployeUCLouvainWithPermissionsFactory('view_inscription',
-                                                             'add_inscription', 'view_seance')
+        employe_ucl = EmployeUCLouvainWithPermissionsFactory(
+            'view_inscription',
+            'add_inscription',
+            'view_seance'
+        )
         self.client.force_login(user=employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]))
         self.assertEqual(response.status_code, 403)
 
     def test_should_deny_access_case_user_not_have_permission_view_seance(self):
-        employe_ucl = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare', 'view_inscription',
-                                                             'add_inscription')
+        employe_ucl = EmployeUCLouvainWithPermissionsFactory(
+            'access_to_formation_fare',
+            'view_inscription',
+            'add_inscription'
+        )
         self.client.force_login(user=employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]))
         self.assertEqual(response.status_code, 403)
 
     def test_should_deny_access_case_user_not_have_permission_view_inscription(self):
-        employe_ucl = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare',
-                                                             'add_inscription', 'view_seance')
+        employe_ucl = EmployeUCLouvainWithPermissionsFactory(
+            'access_to_formation_fare',
+            'add_inscription',
+            'view_seance'
+        )
         self.client.force_login(user=employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]))
         self.assertEqual(response.status_code, 403)
 
     def test_should_deny_access_case_user_not_have_permission_add_inscription(self):
-        employe_ucl = EmployeUCLouvainWithPermissionsFactory('access_to_formation_fare', 'view_inscription',
-                                                             'view_seance')
+        employe_ucl = EmployeUCLouvainWithPermissionsFactory(
+            'access_to_formation_fare',
+            'view_inscription',
+            'view_seance'
+        )
         add_employe_uclouvain_to_groups(employe_ucl, 'FormateurGroup')
         employe_ucl = EmployeUCLouvain.objects.get(id=employe_ucl.id)
         self.client.force_login(user=employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]))
-        self.assertEqual(response.status_code, 200)
-        data = {"seance": self.inscription.seance,
+        self.assertEqual(response.status_code, 403)
+        data = {"seance": self.inscription.seance.id,
                 "participant": employe_ucl.id
                 }
         request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[self.inscription.seance.id]), data=data)
@@ -79,6 +94,7 @@ class NouvelleFormationFormViewTest(TestCase):
         self.client.force_login(user=self.employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[seance.id]))
         data = {
+            "seance": seance.id,
             "participant": participant.id
         }
         request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[seance.id]), data=data, )
@@ -112,10 +128,10 @@ class NouvelleFormationFormViewTest(TestCase):
         self.client.force_login(user=self.employe_ucl.user)
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[seance.id]))
         data1 = {
-            "seance": seance,
+            "seance": seance.id,
             "participant": participant1.id
         }
-        data2 = {"seance": self.inscription.seance,
+        data2 = {"seance": seance.id,
                  "participant": participant2.id
                  }
         self.assertEqual(response.status_code, 200)
@@ -135,6 +151,7 @@ class NouvelleFormationFormViewTest(TestCase):
         seance_id = uuid.uuid4()
         response = self.client.get(reverse(URL_NEW_REGISTRATION, args=[seance_id]))
         data = {
+            "seance": seance_id,
             "participant": participant1.id
         }
         request = self.client.post(reverse(URL_NEW_REGISTRATION, args=[seance_id]), data=data)
