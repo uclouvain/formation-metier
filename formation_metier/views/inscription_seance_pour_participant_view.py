@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.views import generic, View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormView, FormMixin
+
 from formation_metier.forms.nouvelle_inscription_par_participant_form import NouvelleInscriptionParParticipantForm
 from formation_metier.models.seance import Seance
 
@@ -69,6 +70,7 @@ class InscriptionSeancePourParticipantFormView(LoginRequiredMixin, SingleObjectM
 
 
 class InscriptionSeancePourParticipantDetailSeance(LoginRequiredMixin, FormMixin, generic.DetailView):
+    name = None
     model = Seance
     template_name = 'formation_metier/inscription_seance_pour_participant.html'
     context_object_name = "seance"
