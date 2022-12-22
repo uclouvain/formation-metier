@@ -19,7 +19,11 @@ class DetailFormation(LoginRequiredMixin, PermissionRequiredMixin, generic.Detai
     name = 'detail_formation'
 
     def get_queryset(self):
-        return super().get_queryset().filter(id=self.kwargs['formation_id']).order_by('name').prefetch_related(
+        return super().get_queryset().filter(
+            id=self.kwargs['formation_id']
+        ).order_by(
+            'name'
+        ).prefetch_related(
             Prefetch(
                 'seance_set',
                 queryset=Seance.objects.order_by('seance_date')

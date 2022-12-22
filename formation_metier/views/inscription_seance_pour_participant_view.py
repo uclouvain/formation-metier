@@ -1,12 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count
+from django.db.models import Count, Exists
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import generic, View
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormView, FormMixin
+
 from formation_metier.forms.nouvelle_inscription_par_participant_form import NouvelleInscriptionParParticipantForm
+from formation_metier.models.inscription import Inscription
 from formation_metier.models.seance import Seance
 
 
@@ -92,6 +94,12 @@ class InscriptionSeancePourParticipantDetailSeance(LoginRequiredMixin, FormMixin
             'inscription_set',
         ).annotate(
             inscription_count=Count('inscription'),
+            est_inscrit_seance=Exists(
+                Inscription.objects.filter(
+                    participant=self.request.user.employeuclouvain,
+                    seance=self.kwargs['seance_id']
+                )
+            ),
         )
 
     def get_form_class(self):
