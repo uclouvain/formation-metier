@@ -1,5 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.db.models import Subquery, Exists, OuterRef
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Exists, OuterRef
 from django.views import generic
 
 from formation_metier.models.formation import Formation
@@ -19,5 +19,8 @@ class ListeFormationView(LoginRequiredMixin, generic.ListView):
                     participant=self.request.user.employeuclouvain,
                     seance__formation=OuterRef('pk')
                 )
+            ),
+            is_current_user_formateur=Exists(
+                self.request.user.groups.filter(name='FormateurGroup')
             )
         )

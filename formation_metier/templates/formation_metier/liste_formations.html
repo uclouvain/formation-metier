@@ -1,5 +1,4 @@
 {% extends 'formation_metier/base.html' %}
-{% load est_membre_du_groupe %}
 {% load bootstrap3 %}
 {% load static %}
 {% block content %}
@@ -15,7 +14,7 @@
             <div class="col-md-10">
                 <h2>Formation organisée</h2>
             </div>
-            {% if user|est_membre_du_groupe:'FormateurGroup' %}
+            {% if formation.is_current_user_formateur %}
                 <div class="col-md-2" style="margin-top: 20px">
                     <div class="btn-group pull-right">
                         <button id="btn-action" type="button" class="btn btn-default dropdown-toggle"
@@ -68,7 +67,7 @@
                     {% for formation in liste_formations %}
                         <tr>
                             <td>
-                                {% if user|est_membre_du_groupe:'FormateurGroup' %}
+                                {% if formation.is_current_user_formateur %}
                                     <a href="{% url 'formation_metier:detail_formation' formation.id %}">
                                         {{ formation.name }}
                                     </a>
@@ -84,7 +83,7 @@
                             <td>
                                 {{ formation.get_public_cible_display }}
                             </td>
-                            {% if not user|est_membre_du_groupe:'FormateurGroup' %}
+                            {% if not formation.is_current_user_formateur %}
                                 {% if formation.est_inscrit_formation %}
                                     <td id="etat_inscription_formation">
                                         <span class="glyphicon glyphicon-ok" aria-hidden="true" style="color: #333">
