@@ -20,7 +20,7 @@ class ListeFormationView(LoginRequiredMixin, generic.ListView):
                     seance__formation=OuterRef('pk')
                 )
             ),
-            is_current_user_formateur=Exists(
+            est_user_formateur=Exists(
                 self.request.user.groups.filter(name='FormateurGroup')
             )
         )
