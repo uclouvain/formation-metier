@@ -3,9 +3,9 @@ from datetime import datetime
 from django.test import TestCase
 from django.urls import reverse
 
-from formation_metier.tests.factories.formation import FormationFactory
-from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
 from formation_metier.models.employe_uclouvain import RoleFormationFareEnum
+from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainWithPermissionsFactory
+from formation_metier.tests.factories.formation import FormationFactory
 
 URL_LIST_FORMATION = 'formation_metier:liste_formations'
 
@@ -32,7 +32,7 @@ class ListFormationViewTest(TestCase):
         url = reverse(URL_LIST_FORMATION)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['formation_liste'], [])
+        self.assertQuerysetEqual(response.context['liste_formations'], [])
 
     def test_should_display_one_formation(self):
         self.client.force_login(user=self.employe_uclouvain.user)
@@ -41,7 +41,7 @@ class ListFormationViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
-            response.context['formation_liste'],
+            response.context['liste_formations'],
             [formation],
         )
 
@@ -53,7 +53,7 @@ class ListFormationViewTest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
-            response.context['formation_liste'],
+            response.context['liste_formations'],
             [formation1, formation2],
             ordered=False,
         )
