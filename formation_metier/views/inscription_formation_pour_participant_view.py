@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
@@ -38,7 +40,7 @@ class InscriptionAUneFormation(LoginRequiredMixin, generic.DetailView):
             )
             seance_list_apres_post = self.request.POST.getlist('seance')
             for inscription_existante in inscriptions_existantes_avant_post:
-                if str(inscription_existante.seance.id) not in seance_list_apres_post:
+                if str(inscription_existante.seance.id) not in seance_list_apres_post and inscription_existante.seance.seance_date > datetime.datetime.now():
                     inscription_existante.delete()
                     messages.success(
                         request,
