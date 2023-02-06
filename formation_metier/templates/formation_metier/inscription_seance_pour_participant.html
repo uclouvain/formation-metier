@@ -26,7 +26,7 @@
         </div>
     {% endif %}
     {% if messages %}
-        <div class="alert alert-success alert-dismissable alert-link">
+        <div class="alert alert-success alert-dismissible alert-link">
             <ul class="messages">
                 {% for message in messages %}
                     <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
@@ -40,7 +40,7 @@
         </div>
     {% endif %}
     {% if seance.inscription_count == seance.participant_max_number and not user|est_inscrit_seance:seance %}
-        <div class="alert alert-danger alert-dismissable alert-link">
+        <div class="alert alert-danger alert-dismissible alert-link">
             <ul class="messages">
                 <li class="danger">
                     Vous ne pouvez pas vous inscire à cette séance : il n'y a plus de places libres.

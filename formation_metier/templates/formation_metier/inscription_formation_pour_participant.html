@@ -25,14 +25,14 @@
         </div>
     {% endif %}
     {% if messages %}
-        <div class="alert alert-success alert-dismissable alert-link">
+        <div class="alert alert-success alert-dismissible alert-link">
             <ul class="messages">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 {% for message in messages %}
                     <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
                         {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </li>
                 {% endfor %}
             </ul>
@@ -86,7 +86,7 @@
                                     <td id="heure">{{ seance.seance_date.time }}</td>
                                     <td id="duree">{{ seance.duree_en_heure }}</td>
                                     <td id="local">{{ seance.local }}</td>
-                                    <td id="etat"> <span id="badge" class="badge badge-secondary">Fermée</span> </td>
+                                    <td id="etat"><span id="badge" class="badge badge-secondary">Fermée</span></td>
                                 </tr>
                             {% elif seance.inscription_set.count == seance.participant_max_number and not user|est_inscrit_seance:seance %}
                                 <tr id="seance_complete">
@@ -101,7 +101,7 @@
                                     <td id="heure">{{ seance.seance_date.time }}</td>
                                     <td id="duree">{{ seance.duree_en_heure }}</td>
                                     <td id="local">{{ seance.local }}</td>
-                                    <td id="etat"> <span id="badge" class="badge badge-danger">Complète</span></td>
+                                    <td id="etat"><span id="badge" class="badge badge-danger">Complète</span></td>
                                 </tr>
                             {% else %}
                                 <tr id="seance_ouverte">
@@ -119,7 +119,7 @@
                                     <td id="heure">{{ seance.seance_date.time }}</td>
                                     <td id="duree">{{ seance.duree_en_heure }}</td>
                                     <td id="local">{{ seance.local }}</td>
-                                    <td id="etat"> <span id="badge" class="badge badge-success">Ouverte</span></td>
+                                    <td id="etat"><span id="badge" class="badge badge-success">Ouverte</span></td>
                                 </tr>
                             {% endif %}
                         {% endfor %}
