@@ -1,13 +1,12 @@
 import math
 import uuid
-from datetime import timedelta
 
 import django.utils.timezone
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint
-from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -74,7 +73,7 @@ class Seance(models.Model):
         return "{} - {}".format(self.formation.name, str(self.seance_date))
 
     def datetime_format(self) -> str:
-        return self.seance_date.__format__("%x à %Hh%M")
+        return self.seance_date.__format__("%d/%m/%Y à %Hh%M")
 
     def time_format(self) -> str:
         return self.seance_date.__format__("%Hh%M")
