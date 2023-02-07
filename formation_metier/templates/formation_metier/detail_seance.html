@@ -1,4 +1,5 @@
 {% extends 'formation_metier/base.html' %}
+{% load est_seance_passee %}
 {% load est_membre_du_groupe %}
 {% load est_inscrit_a_la_seance %}
 {% load bootstrap3 %}
@@ -26,6 +27,16 @@
             Séance
         </li>
     </ol>
+
+    {% if seance|est_seance_passee %}
+        <div class="alert alert-warning alert-dismissible alert-link">
+            <span class="glyphicon glyphicon-info-sign"></span>
+            <span> Vous ne pouvez plus inscrire de participant à cette séance car elle a déjà eu lieu </span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
     {% if form.errors %}
         <div class="alert alert-danger alert-dismissible alert-link">
             {{ form.non_field_errors }}
@@ -73,16 +84,18 @@
                         <li>
                             <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
                         </li>
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionSeanceModal">Générer
-                                un lien d'inscription</a>
-                        </li>
                         {% if seance.inscription_set.count != 0 %}
                             <li>
-                                <a href="#" data-toggle="modal" data-target="#registerDeleteModal">Supprimer des
-                                    inscription</a>
+                                <a href="#" data-toggle="modal" data-target="#registerDeleteModal">
+                                    Supprimer des inscription
+                                </a>
                             </li>
                         {% endif %}
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionSeanceModal">
+                                Générer un lien d'inscription
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
@@ -105,9 +118,15 @@
                         <div class="col-lg-8 mb-3">
                             {% bootstrap_form form layout='inline' error_types='none' %}
                         </div>
-                        <div>
-                            {% bootstrap_button "Inscrire" button_type="submit" button_class="btn-primary" %}
-                        </div>
+                        {% if seance|est_seance_passee %}
+                            <div>
+                                {% bootstrap_button "Inscrire" button_type="submit" button_class="btn-secondary disabled" %}
+                            </div>
+                        {% else %}
+                            <div>
+                                {% bootstrap_button "Inscrire" button_type="submit" button_class="btn-primary" %}
+                            </div>
+                        {% endif %}
                     </div>
                 </form>
             </div>
@@ -115,8 +134,8 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <td>Nom du participant</td>
-                        <td>Matricule FGS</td>
+                        <td style="font-weight: bold">Nom du participant</td>
+                        <td style="font-weight: bold">Matricule FGS</td>
                         <td></td>
                     </tr>
                     </thead>
@@ -127,8 +146,7 @@
                             <td> {{ inscription.participant.matricule_fgs }}</td>
                         </tr>
                     {% endfor %}
-                    <div>
-                    </div>
+
                     </tbody>
                 </table>
             {% else %}

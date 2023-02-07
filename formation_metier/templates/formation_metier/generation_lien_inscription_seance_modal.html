@@ -1,5 +1,6 @@
 {% load static %}
 {% load bootstrap3 %}
+{% load est_seance_passee %}
 <script src="{% static '/formation_metier/copier_lien_inscription.js' %}"></script>
 <div class="modal fade" id="GenerationLienInscriptionSeanceModal" tabindex="-1" role="dialog"
      aria-labelledby="exampleModalLabel"
@@ -10,10 +11,23 @@
                 <h5 class="modal-title" id="exampleModalLabel">Lien d'inscription à la séance pour les participants</h5>
             </div>
             <div class="modal-body">
+                {% if seance|est_seance_passee %}
+                    <div class="alert alert-warning alert-dismissible alert-link">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                        <span>
+                            Aucune nouvelle inscription n'est possible car cette séance a déjà eu lieu
+                        </span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
                 <a href="{{ seance.get_inscription_lien }}">
                     <span id="lien_inscription">{{ seance.get_inscription_lien }}</span>
                 </a>
-                <button id="btn_copier_lien_inscription_seance" class="btn btn-primary" onclick="CopierText()">Copier le lien</button>
+                <button id="btn_copier_lien_inscription_seance" class="btn btn-primary" onclick="CopierText()">Copier le
+                    lien
+                </button>
             </div>
         </div>
     </div>
