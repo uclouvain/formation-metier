@@ -5,8 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.views.generic import CreateView, DeleteView
-from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.detail import SingleObjectMixin, DetailView
 
 from formation_metier.models.formation import Formation
 from formation_metier.models.inscription import Inscription
@@ -18,7 +17,7 @@ class InscriptionFormationPourParticipantForm(forms.ModelForm):
         exclude = ('participant', 'seance', 'inscription_date')
 
 
-class InscriptionFormationPourParticipant(LoginRequiredMixin, CreateView, DeleteView, SingleObjectMixin):
+class InscriptionFormationPourParticipant(LoginRequiredMixin, DetailView, SingleObjectMixin):
     model = Inscription
     pk_url_kwarg = 'formation_id'
     context_object_name = "formation"
@@ -41,27 +40,26 @@ class InscriptionFormationPourParticipant(LoginRequiredMixin, CreateView, Delete
         )
 
     def post(self, request, *args, **kwargs):
-        seance_list_apres_post = self.request.POST.getlist('seance')
-        seance_uuid_list_apres_post = []
-        for seance in seance_list_apres_post:
-            seance_uuid_list_apres_post.append(UUID(seance))
+        seance_liste_apres_post = [UUID(seance) for seance in self.request.POST.getlist('seance')]
         inscriptions_existantes_liste_avant_post = Inscription.objects.filter(
             participant__user=request.user,
             seance__formation=self.get_object()
         )
-        seance_to_delete = inscriptions_existantes_liste_avant_post.exclude(seance__id__in=seance_uuid_list_apres_post)
-        seance_to_create = set(seance_uuid_list_apres_post) - set(
+        inscription_liste_a_supprimer = inscriptions_existantes_liste_avant_post.exclude(
+            seance__id__in=seance_liste_apres_post)
+
+        inscription_list_a_creer = set(seance_liste_apres_post) - set(
             inscriptions_existantes_liste_avant_post.values_list('seance_id', flat=True))
 
-        self.delete(request, seance_to_delete)
-        self.create(request, seance_to_create)
+        self.delete(request, inscription_list=inscription_liste_a_supprimer)
+        self.create(request, seances_liste=inscription_list_a_creer)
 
         return redirect(
             self.get_success_url()
         )
 
-    def delete(self, request, to_delete):
-        for inscription in to_delete:
+    def delete(self, request, inscription_list):
+        for inscription in inscription_list:
             inscription.delete()
             messages.success(
                 request,
