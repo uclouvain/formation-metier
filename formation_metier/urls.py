@@ -1,20 +1,19 @@
+from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from schema_graph.views import Schema
-from django.contrib.auth import views as auth_views
-
-from formation_metier.views import ListeFormationView, HomeView, NouvelleFormationFormView, DetailFormation, \
-    DetailSeanceView, ModificationFormationView, ModificationSeanceView, NouvelleSeanceFormView, SuppressionSeance, \
-    SuppressionFormation, SelectionParticipantView, SuppressionInscriptionParFormateur, \
-    SuppressionInscriptionParParticipant, InscriptionFormationPourParticipant, InscriptionSeancePourParticipantView
 
 from formation_metier.api import urls_api
+from formation_metier.views import ListeFormationView, HomeView, NouvelleFormationFormView, DetailFormation, \
+    DetailSeanceView, ModificationFormationView, ModificationSeanceView, NouvelleSeanceFormView, SuppressionSeance, \
+    SuppressionFormation, SelectionParticipantAutoComplete, SuppressionInscriptionParFormateur, \
+    SuppressionInscriptionParParticipant, InscriptionFormationPourParticipant, InscriptionSeancePourParticipantView
 
 app_name = 'formation_metier'
 urlpatterns = [
     path('', HomeView.as_view(), name=HomeView.name),
 
     # list_view
-    path('liste_formation/', ListeFormationView.as_view(), name=ListeFormationView.name),
+    path('liste_formations/', ListeFormationView.as_view(), name=ListeFormationView.name),
 
     # detail_view
     path('formation/<uuid:formation_id>/', DetailFormation.as_view(), name=DetailFormation.name),
