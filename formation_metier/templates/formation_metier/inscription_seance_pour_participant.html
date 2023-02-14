@@ -1,5 +1,4 @@
 {% extends 'formation_metier/base.html' %}
-{% load est_inscrit_a_la_seance %}
 {% load bootstrap3 %}
 {% load static %}
 {% load l10n %}
@@ -39,7 +38,7 @@
             </ul>
         </div>
     {% endif %}
-    {% if seance.inscription_count == seance.participant_max_number and not user|est_inscrit_seance:seance %}
+    {% if seance.inscription_count == seance.participant_max_number and not seance.est_inscrit_seance %}
         <div class="alert alert-danger alert-dismissible alert-link">
             <ul class="messages">
                 <li class="danger">
@@ -67,7 +66,7 @@
             <p>Participants : {{ seance.inscription_count }} / {{ seance.participant_max_number }}</p>
             <p>Formateur : {{ seance.formateur }}</p>
             <div>
-                {% if user|est_inscrit_seance:seance %}
+                {% if seance.est_inscrit_seance %}
                     <a href="#" data-toggle="modal" data-target="#SelfRegisterDeleteModal" class="col-md-2"
                        style="padding-left: 0">
                         {% bootstrap_button "Se désinscrire" button_class="btn-primary btn-danger" %}
