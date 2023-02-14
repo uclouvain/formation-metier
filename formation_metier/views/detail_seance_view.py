@@ -15,7 +15,8 @@ class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, generic.Crea
     permission_required = [
         'formation_metier.view_seance',
         'formation_metier.view_inscription',
-        'formation_metier.access_to_formation_fare'
+        'formation_metier.access_to_formation_fare',
+        'formation_metier.add_inscription'
     ]
     name = 'detail_seance'
     model = Inscription
@@ -37,7 +38,9 @@ class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, generic.Crea
         }
 
     def get_queryset(self):
-        return Seance.objects.filter(id=self.kwargs['seance_id']).prefetch_related(
+        return Seance.objects.filter(
+            id=self.kwargs['seance_id']
+        ).prefetch_related(
             Prefetch(
                 'inscription_set',
                 queryset=Inscription.objects.order_by('participant')

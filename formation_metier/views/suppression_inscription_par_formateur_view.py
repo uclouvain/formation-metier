@@ -2,8 +2,9 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
-from formation_metier.models.inscription import Inscription
 from django.views.generic import DeleteView
+
+from formation_metier.models.inscription import Inscription
 from formation_metier.views import DetailSeanceView
 
 
@@ -20,12 +21,6 @@ class SuppressionInscriptionParFormateur(LoginRequiredMixin, PermissionRequiredM
         return Inscription.objects.filter(id__in=inscription_list, seance_id=self.request.POST.get("seance_id"))
 
     def get_success_url(self):
-        inscription_list = self.get_queryset()
-        for inscription_object in inscription_list:
-            messages.success(
-                self.request,
-                f"L'inscription de l'utilisateur '{inscription_object.participant.name}' a été supprimée."
-            )
         seance = self.request.POST.get("seance_id")
         return reverse(
             f'formation_metier:{DetailSeanceView.name}',
@@ -34,6 +29,11 @@ class SuppressionInscriptionParFormateur(LoginRequiredMixin, PermissionRequiredM
         )
 
     def delete(self, request, *args, **kwargs):
+        participant_name_list = [inscription_object.participant.name for inscription_object in self.get_queryset()]
         self.get_queryset().delete()
+        for name in participant_name_list:
+            messages.success(
+                self.request,
+                f"L'inscription de l'utilisateur ' {name} ' a été supprimée."
+            )
         return redirect(self.get_success_url())
-
