@@ -58,11 +58,7 @@ table#inscription_seance_table th, td {
     border-bottom: 1px solid #ddd;
 }
 
-table#inscription_seance_table th {
-    text-align: left;
-}
-
-table#inscription_seance_table tr {
+table#inscription_seance_table th tr {
     text-align: left;
 }
 

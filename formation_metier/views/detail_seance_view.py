@@ -37,7 +37,9 @@ class DetailSeanceView(LoginRequiredMixin, PermissionRequiredMixin, generic.Crea
         }
 
     def get_queryset(self):
-        return Seance.objects.filter(id=self.kwargs['seance_id']).prefetch_related(
+        return Seance.objects.filter(
+            id=self.kwargs['seance_id']
+        ).prefetch_related(
             Prefetch(
                 'inscription_set',
                 queryset=Inscription.objects.order_by('participant')

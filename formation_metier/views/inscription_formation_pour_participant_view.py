@@ -1,8 +1,10 @@
+from datetime import datetime
 from uuid import UUID
 
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Exists, OuterRef, Prefetch
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic.detail import SingleObjectMixin, DetailView
@@ -26,9 +28,39 @@ class InscriptionFormationPourParticipant(LoginRequiredMixin, DetailView, Single
     form_class = InscriptionFormationPourParticipantForm
 
     def get_queryset(self):
-        return Formation.objects.filter(id=self.kwargs['formation_id']).prefetch_related(
-            'seance_set',
-            'seance_set__inscription_set',
+        date = datetime.now()
+        seance_qs = Seance.objects.filter(
+            formation_id=self.kwargs['formation_id']
+        ).order_by(
+            'seance_date'
+        ).prefetch_related(
+            'inscription_set'
+        ).annotate(
+            est_inscrit_seance=Exists(
+                Inscription.objects.filter(
+                    participant=self.request.user.employeuclouvain,
+                    seance=OuterRef('pk')
+                )
+            ),
+            est_seance_passee=Exists(
+                Seance.objects.filter(
+                    seance_date__lt=date,
+                    id=OuterRef('pk')
+                ),
+            )
+        )
+        return super().get_queryset().prefetch_related(
+            Prefetch(
+                'seance_set',
+                queryset=seance_qs
+            ),
+        ).annotate(
+            est_inscrit_formation=Exists(
+                Inscription.objects.filter(
+                    participant=self.request.user.employeuclouvain,
+                    seance__formation=OuterRef('pk')
+                )
+            ),
         )
 
     def get_success_url(self):
