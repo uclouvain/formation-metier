@@ -53,6 +53,7 @@ class InscriptionSeancePourParticipantFormView(LoginRequiredMixin, SuccessMessag
 
 
 class InscriptionSeancePourParticipantDetailSeance(LoginRequiredMixin, FormMixin, generic.DetailView):
+    name = None
     model = Seance
     template_name = 'formation_metier/inscription_seance_pour_participant.html'
     context_object_name = "seance"
