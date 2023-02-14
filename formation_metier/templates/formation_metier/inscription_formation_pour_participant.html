@@ -21,14 +21,14 @@
         </div>
     {% endif %}
     {% if messages %}
-        <div class="alert alert-success alert-dismissable alert-link">
+        <div class="alert alert-success alert-dismissible alert-link">
             <ul class="messages">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 {% for message in messages %}
                     <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
                         {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </li>
                 {% endfor %}
             </ul>
@@ -72,9 +72,15 @@
                             {% if seance.est_seance_passee %}
                                 <tr id="seance_fermee">
                                     <td id="checkbox">
-                                        <input class="form-check-input" type="checkbox" name="seance"
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               name="seance"
+                                               value={{ seance.id }} id="{{ seance }}"
                                                disabled="disabled"
-                                               value={{ seance.id }} id="{{ seance }}">
+                                                {% if user|est_inscrit_seance:seance %}
+                                                    checked="checked"
+                                                {% endif %}
+                                        >
                                         <label class="form-check-label" style="color: darkgrey">
                                         </label>
                                     </td>
@@ -115,7 +121,7 @@
                                     <td id="heure">{{ seance.seance_date.time }}</td>
                                     <td id="duree">{{ seance.duree_en_heure }}</td>
                                     <td id="local">{{ seance.local }}</td>
-                                    <td id="etat"> <span id="badge" class="badge badge-success">Ouverte</span></td>
+                                    <td id="etat"><span id="badge" class="badge badge-success">Ouverte</span></td>
                                 </tr>
                             {% endif %}
                         {% endfor %}

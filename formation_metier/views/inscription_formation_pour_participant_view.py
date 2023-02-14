@@ -104,7 +104,25 @@ class InscriptionFormationPourParticipant(LoginRequiredMixin, DetailView, Single
                 participant=request.user.employeuclouvain,
                 seance_id=seance_id
             )
-            messages.success(
-                request,
-                f"Votre inscription pour la seance du {inscription_cree.seance.datetime_format()} a été sauvegardée"
+            seance_list_apres_post = self.request.POST.getlist('seance')
+            for inscription_existante in inscriptions_existantes_avant_post:
+                if str(inscription_existante.seance.id) not in seance_list_apres_post and inscription_existante.seance.seance_date > datetime.datetime.now():
+                    inscription_existante.delete()
+                    messages.success(
+                        request,
+                        f"Votre inscription pour la seance du {inscription_existante.seance.datetime_format()} a été supprimée"
+                    )
+            for seance_id in seance_list_apres_post:
+                if not Inscription.objects.filter(participant__user=request.user, seance_id=seance_id).exists():
+                    seance_object = Seance.objects.get(id=seance_id)
+                    inscription_cree = Inscription.objects.create(
+                        participant=request.user.employeuclouvain,
+                        seance=seance_object
+                    )
+                    messages.success(
+                        request,
+                        f"Votre inscription pour la seance du {inscription_cree.seance.datetime_format()} a été sauvegardée"
+                    )
+            return redirect(
+                self.get_success_url()
             )

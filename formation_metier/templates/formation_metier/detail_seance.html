@@ -30,14 +30,14 @@
         </div>
     {% endif %}
     {% if messages %}
-        <div class="alert alert-success alert-dismissable alert-link">
+        <div class="alert alert-success alert-dismissible alert-link">
             <ul class="messages">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 {% for message in messages %}
                     <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}>
                         {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </li>
                 {% endfor %}
             </ul>
