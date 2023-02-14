@@ -76,16 +76,15 @@
                             {% if seance|est_seance_passee %}
                                 <tr id="seance_fermee">
                                     <td id="checkbox">
-                                        {% if user|est_inscrit_seance:seance %}
-                                            <input class="form-check-input" type="checkbox" name="seance"
-                                                   value={{ seance.id }} id="{{ seance }}" checked="checked"
-                                                   disabled="disabled">
-                                        {% else %}
-                                            <input class="form-check-input" type="checkbox"
-                                                   name="seance"
-                                                   disabled="disabled"
-                                                   value={{ seance.id }} id="{{ seance }}">
-                                        {% endif %}
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               name="seance"
+                                               value={{ seance.id }} id="{{ seance }}"
+                                               disabled="disabled"
+                                                {% if user|est_inscrit_seance:seance %}
+                                                    checked="checked"
+                                                {% endif %}
+                                        >
                                         <label class="form-check-label" style="color: darkgrey">
                                         </label>
                                     </td>
