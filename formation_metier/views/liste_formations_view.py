@@ -19,8 +19,10 @@ class ListeFormationView(LoginRequiredMixin, generic.ListView):
                     participant=self.request.user.employeuclouvain,
                     seance__formation=OuterRef('pk')
                 )
-            ),
-            est_user_formateur=Exists(
-                self.request.user.groups.filter(name='FormateurGroup')
             )
         )
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        return {**super().get_context_data(object_list=object_list, **kwargs),
+                'current_user_est_formateur': self.request.user.groups.filter(name='FormateurGroup').exists()
+                }

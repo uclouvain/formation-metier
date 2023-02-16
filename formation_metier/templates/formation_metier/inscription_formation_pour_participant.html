@@ -77,7 +77,7 @@
                                                name="seance"
                                                value={{ seance.id }} id="{{ seance }}"
                                                disabled="disabled"
-                                                {% if user|est_inscrit_seance:seance %}
+                                                {% if seance.est_inscrit_seance %}
                                                     checked="checked"
                                                 {% endif %}
                                         >

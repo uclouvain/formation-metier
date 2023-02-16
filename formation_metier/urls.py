@@ -24,10 +24,9 @@ urlpatterns = [
     path('formation/nouvelle_seance/<uuid:formation_id>/', NouvelleSeanceFormView.as_view(),
          name=NouvelleSeanceFormView.name),
 
+    # inscription_pour_participant_view
     path('inscription/formation/<uuid:formation_id>/', InscriptionFormationPourParticipant.as_view(),
          name=InscriptionFormationPourParticipant.name),
-    # update_view
-
     path('inscription/seance/<uuid:seance_id>/', InscriptionSeancePourParticipantView.as_view(),
          name=InscriptionSeancePourParticipantView.name),
 

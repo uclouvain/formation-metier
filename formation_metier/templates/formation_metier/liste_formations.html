@@ -14,7 +14,7 @@
             <div class="col-md-10">
                 <h2>Formation organisée</h2>
             </div>
-            {% if formation.est_user_formateur %}
+            {% if current_user_est_formateur %}
                 <div class="col-md-2" style="margin-top: 20px">
                     <div class="btn-group pull-right">
                         <button id="btn-action" type="button" class="btn btn-default dropdown-toggle"
@@ -58,7 +58,7 @@
                         <td>Nom</td>
                         <td>Code</td>
                         <td>Public cible</td>
-                        {% if formation.est_inscrit_formation %}
+                        {% if not current_user_est_formateur %}
                             <td id="etat_inscription_formation">Inscrit</td>
                         {% endif %}
                     </tr>
@@ -67,7 +67,7 @@
                     {% for formation in liste_formations %}
                         <tr>
                             <td>
-                                {% if formation.est_user_formateur %}
+                                {% if current_user_est_formateur %}
                                     <a href="{% url 'formation_metier:detail_formation' formation.id %}">
                                         {{ formation.name }}
                                     </a>
@@ -83,7 +83,7 @@
                             <td>
                                 {{ formation.get_public_cible_display }}
                             </td>
-                            {% if not formation.est_user_formateur %}
+                            {% if not current_user_est_formateur %}
                                 {% if formation.est_inscrit_formation %}
                                     <td id="etat_inscription_formation">
                                         <span class="glyphicon glyphicon-ok" aria-hidden="true" style="color: #333">
