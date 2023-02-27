@@ -70,12 +70,14 @@
                             <form method="post" style="margin: 0">Modifier la seance</form>
                         </a>
                     </li>
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
-                    </li>
+                    <hr/>
                     <li>
                         <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionSeanceModal">Générer
                             un lien d'inscription</a>
+                    </li>
+                    <hr/>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
                     </li>
                     {% if seance.inscription_set.count != 0 %}
                         <li>
