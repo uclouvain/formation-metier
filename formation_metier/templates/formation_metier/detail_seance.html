@@ -96,7 +96,11 @@
             <p>Local : {{ seance.local }}</p>
             <p>Durée ( en minutes) : {{ seance.duree }}</p>
             <p>Participants : {{ seance.inscription_count }} / {{ seance.participant_max_number }}</p>
-            <p>Formateur : {{ seance.formateur }}</p>
+            <p>Formateur{% if seance.formateur.all|length > 1 %}s{% endif %} :
+                {% for formateur in seance.formateur.all %}
+                    <span style="padding-right: 20px">{{ formateur }}</span>
+                {% endfor %}
+            </p>
             <h3> Inscription : </h3>
             <div>
                 <form method="post">

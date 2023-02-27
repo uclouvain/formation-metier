@@ -107,7 +107,12 @@
                             <td>{{ seance.duree }}</td>
                             <td>{{ seance.local }}</td>
                             <td>{{ seance.inscription_set.count }}/{{ seance.participant_max_number }}</td>
-                            <td>{{ seance.formateur }}</td>
+                            <td>
+                                {% for formateur in seance.formateur.all %}
+                                    {{ formateur }}
+                                    <br>
+                                {% endfor %}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
