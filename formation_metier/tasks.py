@@ -1,10 +1,9 @@
-import uuid
-from django.conf import settings
-import requests
 import logging
-
+import uuid
 from typing import List, Dict
 
+import requests
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework.exceptions import APIException
@@ -86,19 +85,19 @@ def create_employe_ucl_object_from_api_response(employe_ucl_list_json: list):
                 name = f"{employe_ucl['lastname']}"
             else:
                 name = f"{employe_ucl['firstname']} {employe_ucl['lastname']}"
-            number_fgs = employe_ucl["matric_fgs"]
-            if not User.objects.filter(employeuclouvain__number_fgs=number_fgs).exists():
-                user_object = User.objects.create_user(username=number_fgs,
-                                                       password="password123")
-                EmployeUCLouvain.objects.update_or_create(name=name,
-                                                          number_fgs=number_fgs,
-                                                          role_formation_metier=RoleFormationFareEnum.PARTICIPANT,
-                                                          user=user_object
-                                                          )
+            if 'email' in employe_ucl:
+                email = employe_ucl['email']
             else:
-                user_object = User.objects.get(employeuclouvain__number_fgs=number_fgs)
-                EmployeUCLouvain.objects.update_or_create(name=name,
-                                                          number_fgs=number_fgs,
-                                                          role_formation_metier=RoleFormationFareEnum.PARTICIPANT,
-                                                          user=user_object
-                                                          )
+                email = "default.email@uclouvain.be"
+            matricule_fgs = employe_ucl['matric_fgs']
+            if not User.objects.filter(employeuclouvain__matricule_fgs=matricule_fgs).exists():
+                user_object = User.objects.create_user(username=matricule_fgs,
+                                                       password="password123")
+            else:
+                user_object = User.objects.get(employeuclouvain__matricule_fgs=matricule_fgs)
+            EmployeUCLouvain.objects.update_or_create(matricule_fgs=matricule_fgs, defaults={
+                'name': name,
+                'email': email,
+                'role_formation_metier': RoleFormationFareEnum.PARTICIPANT,
+                'user': user_object
+            })

@@ -3,7 +3,6 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.utils.html import format_html
 
 from formation_metier.models.employe_uclouvain import EmployeUCLouvain
-from formation_metier.models.inscription import Inscription
 
 
 class SelectionParticipantAutoComplete(LoginRequiredMixin, PermissionRequiredMixin, autocomplete.Select2QuerySetView):
@@ -20,4 +19,6 @@ class SelectionParticipantAutoComplete(LoginRequiredMixin, PermissionRequiredMix
         return qs
 
     def get_result_label(self, result):
-        return format_html('<span>{}<span>', result.name)
+        return format_html(
+            f'<div style= "display:inline-block"><span style="display:inline-block;width: 700px;">{result.name}</span><span style = "display:inline-block;width: 300px;">{result.email}</span></div>'
+        )

@@ -70,7 +70,7 @@
                         <tbody>
                         {% for seance in formation.seance_set.all %}
                             {% if seance.est_seance_passee %}
-                                <tr id="seance_fermee">
+                                <tr id="seance_termine">
                                     <td id="checkbox">
                                         <input class="form-check-input"
                                                type="checkbox"
@@ -88,7 +88,7 @@
                                     <td id="heure">{{ seance.seance_date.time }}</td>
                                     <td id="duree">{{ seance.duree_en_heure }}</td>
                                     <td id="local">{{ seance.local }}</td>
-                                    <td id="etat"><span id="badge" class="badge badge-secondary">Fermée</span></td>
+                                    <td id="etat"><span id="badge" class="badge badge-secondary">Terminée</span></td>
                                 </tr>
                             {% elif seance.inscription_set.count == seance.participant_max_number and not seance.est_inscrit_seance %}
                                 <tr id="seance_complete">

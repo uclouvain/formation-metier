@@ -50,24 +50,26 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-large row ">
                     <li>
-                        <a href="{% url 'formation_metier:modification_formation' formation.id %} "
-                           class="no_spinner">
-                            <form method="post" style="margin: 0">Modifier la formation</form>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#formationDeleteModal">Supprimer la
-                            formation</a>
-                    </li>
-                    <li>
                         <a href="{% url 'formation_metier:nouvelle_seance' formation.id %}" class="no_spinner">
                             <form method="post" style="margin: 0">Ajouter une nouvelle seance</form>
                         </a>
                     </li>
                     <li>
+                        <a href="{% url 'formation_metier:modification_formation' formation.id %} "
+                           class="no_spinner">
+                            <form method="post" style="margin: 0">Modifier la formation</form>
+                        </a>
+                    </li>
+                    <hr/>
+                    <li>
                         <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionFormationModal">
                             Générer un lien d'inscription
                         </a>
+                    </li>
+                    <hr/>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#formationDeleteModal">Supprimer la
+                            formation</a>
                     </li>
                 </ul>
             </div>
@@ -105,7 +107,12 @@
                             <td>{{ seance.duree }}</td>
                             <td>{{ seance.local }}</td>
                             <td>{{ seance.inscription_set.count }}/{{ seance.participant_max_number }}</td>
-                            <td>{{ seance.formateur }}</td>
+                            <td>
+                                {% for formateur in seance.formateur.all %}
+                                    {{ formateur }}
+                                    <br>
+                                {% endfor %}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>

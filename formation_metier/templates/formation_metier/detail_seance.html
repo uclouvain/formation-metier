@@ -70,12 +70,14 @@
                             <form method="post" style="margin: 0">Modifier la seance</form>
                         </a>
                     </li>
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
-                    </li>
+                    <hr/>
                     <li>
                         <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionSeanceModal">Générer
                             un lien d'inscription</a>
+                    </li>
+                    <hr/>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#seanceDeleteModal">Supprimer la seance</a>
                     </li>
                     {% if seance.inscription_set.count != 0 %}
                         <li>
@@ -94,7 +96,11 @@
             <p>Local : {{ seance.local }}</p>
             <p>Durée ( en minutes) : {{ seance.duree }}</p>
             <p>Participants : {{ seance.inscription_count }} / {{ seance.participant_max_number }}</p>
-            <p>Formateur : {{ seance.formateur }}</p>
+            <p>Formateur{% if seance.formateur.all|length > 1 %}s{% endif %} :
+                {% for formateur in seance.formateur.all %}
+                    <span style="padding-right: 20px">{{ formateur }}</span>
+                {% endfor %}
+            </p>
             <h3> Inscription : </h3>
             <div>
                 <form method="post">
@@ -115,7 +121,7 @@
                     <thead>
                     <tr style="font-weight: bold">
                         <td>Nom du participant</td>
-                        <td>Matricule FGS</td>
+                        <td>Email</td>
                         <td></td>
                     </tr>
                     </thead>
@@ -123,7 +129,7 @@
                     {% for inscription in seance.inscription_set.all %}
                         <tr style="max-height: 40px">
                             <td>{{ inscription.participant.name }}</td>
-                            <td> {{ inscription.participant.matricule_fgs }}</td>
+                            <td> {{ inscription.participant.email }}</td>
                         </tr>
                     {% endfor %}
                     <div>
