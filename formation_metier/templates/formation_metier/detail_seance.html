@@ -121,7 +121,7 @@
                     <thead>
                     <tr style="font-weight: bold">
                         <td>Nom du participant</td>
-                        <td>Matricule FGS</td>
+                        <td>Email</td>
                         <td></td>
                     </tr>
                     </thead>
@@ -129,7 +129,7 @@
                     {% for inscription in seance.inscription_set.all %}
                         <tr style="max-height: 40px">
                             <td>{{ inscription.participant.name }}</td>
-                            <td> {{ inscription.participant.matricule_fgs }}</td>
+                            <td> {{ inscription.participant.email }}</td>
                         </tr>
                     {% endfor %}
                     <div>
