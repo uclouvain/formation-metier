@@ -1,7 +1,6 @@
 import math
 import uuid
 
-import django.utils.timezone
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
@@ -41,7 +40,6 @@ class Seance(models.Model):
         on_delete=models.CASCADE,
         blank=False)
     seance_date = models.DateTimeField(
-        default=django.utils.timezone.now,
         blank=False)
     local = models.CharField(
         max_length=MAX_LENGTH_LOCAL,
