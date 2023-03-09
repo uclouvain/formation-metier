@@ -81,48 +81,103 @@
         <p>Public cible : {{ formation.get_public_cible_display }}</p>
     </div>
     {% if formation.seance_set.count > 0 %}
-
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <table class="table">
-                    <thead>
-                    <tr style="font-weight: bold">
-                        <td>Date</td>
-                        <td>Heure</td>
-                        <td>Durée</td>
-                        <td>Local</td>
-                        <td>Participants</td>
-                        <td>Nom du formateur</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for seance in formation.seance_set.all %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'formation_metier:detail_seance' seance.id %}">
-                                    {{ seance.seance_date|date:"l j F o" }}
-                                </a>
-                            </td>
-                            <td>{{ seance.time_format }}</td>
-                            <td>{{ seance.duree }}</td>
-                            <td>{{ seance.local }}</td>
-                            <td>{{ seance.inscription_set.count }}/{{ seance.participant_max_number }}</td>
-                            <td>
-                                {% for formateur in seance.formateur.all %}
-                                    {{ formateur }}
-                                    <br>
-                                {% endfor %}
-                            </td>
+        <div class="panel-group">
+            <div class="panel panel-default" id="seances_futures">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Séances ouvertes</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                        <tr style="font-weight: bold">
+                            <td>Date</td>
+                            <td>Heure</td>
+                            <td>Durée</td>
+                            <td>Local</td>
+                            <td>Participants</td>
+                            <td>Nom du formateur</td>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {% for seance in formation.seance_set.all %}
+                            {% if not seance.est_seance_passee %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'formation_metier:detail_seance' seance.id %}">
+                                            {{ seance.seance_date|date:"l j F o" }}
+                                        </a>
+                                    </td>
+                                    <td>{{ seance.time_format }}</td>
+                                    <td>{{ seance.duree }}</td>
+                                    <td>{{ seance.local }}</td>
+                                    <td>{{ seance.inscription_set.count }}/{{ seance.participant_max_number }}</td>
+                                    <td>
+                                        {% for formateur in seance.formateur.all %}
+                                            {{ formateur }}
+                                            <br>
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            {% if formation.a_seance_passee %}
+                <div class="panel panel-default" id="seances_terminee">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" href="#pannel_seance_fermee"
+                               aria-expanded="false" aria-controls="pannel_seance_fermee">
+                                Séances terminées
+                            </a>
+                        </h3>
+                    </div>
+                    <div class="panel-body collapse" id="pannel_seance_fermee">
+                        <table class="table">
+                            <thead>
+                            <tr style="font-weight: bold">
+                                <td>Date</td>
+                                <td>Heure</td>
+                                <td>Durée</td>
+                                <td>Local</td>
+                                <td>Participants</td>
+                                <td>Nom du formateur</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for seance in formation.seance_set.all %}
+                                {% if seance.est_seance_passee %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'formation_metier:detail_seance' seance.id %}">
+                                                {{ seance.seance_date|date:"l j F o" }}
+                                            </a>
+                                        </td>
+                                        <td>{{ seance.time_format }}</td>
+                                        <td>{{ seance.duree }}</td>
+                                        <td>{{ seance.local }}</td>
+                                        <td>{{ seance.inscription_set.count }}/{{ seance.participant_max_number }}</td>
+                                        <td>
+                                            {% for formateur in seance.formateur.all %}
+                                                {{ formateur }}
+                                                <br>
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     {% else %}
         <div class="panel panel-default">
             <div class="panel-body">
-                <p> Il n'y a pas de seance actuellement organisé pour la formation : {{ formation.name }}</p>
+                <p> Il n'y a pas de seance organisé pour la formation : {{ formation.name }}</p>
             </div>
         </div>
     {% endif %}
