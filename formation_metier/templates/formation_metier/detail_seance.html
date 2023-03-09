@@ -72,8 +72,9 @@
                     </li>
                     <hr/>
                     <li>
-                        <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionSeanceModal">Générer
-                            un lien d'inscription</a>
+                        <a href="#" data-toggle="modal" data-target="#GenerationLienInscriptionSeanceModal">
+                            Générer un lien d'inscription
+                        </a>
                     </li>
                     <hr/>
                     <li>
@@ -81,8 +82,9 @@
                     </li>
                     {% if seance.inscription_set.count != 0 %}
                         <li>
-                            <a href="#" data-toggle="modal" data-target="#registerDeleteModal">Supprimer des
-                                inscription</a>
+                            <a href="#" data-toggle="modal" data-target="#registerDeleteModal">
+                                Supprimer des inscriptions
+                            </a>
                         </li>
                     {% endif %}
                 </ul>
@@ -130,6 +132,12 @@
                         <tr style="max-height: 40px">
                             <td>{{ inscription.participant.name }}</td>
                             <td> {{ inscription.participant.email }}</td>
+                            <td>
+                                <a href="{% url 'formation_metier:suppression_unique_inscriptions_par_formateur' inscription.id%}">
+                                  <span class="glyphicon glyphicon-remove pull-right" aria-hidden="true" style="color: darkred">
+                                  </span>
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                     <div>
