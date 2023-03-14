@@ -3,14 +3,20 @@
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery=1 %}
-<link rel="stylesheet" href="{% static 'formation_metier/style.css' %}">
-<link rel="shortcut icon" type="image/png" href="{% static 'img/favicon/favicon.ico' %}"/>
+<head>
+    <link rel="stylesheet" href="{% static 'formation_metier/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon/favicon.ico' %}"/>
+    <script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+</head>
 <body class="">
 <nav class="navbar navbar-default navbar-fixed-top justify-content-start flew-nowrap">
     <div class="container-fluid">
         <div class="navbar-header">
             <a id="formation-list-link" class="navbar-brand" href="{% url 'formation_metier:home' %}">
-                <img src="{% static 'img/logo_osis.png' %}" alt="OSIS" style="margin-top: -10px; margin-left: -10px"></a>
+                <img src="{% static 'img/logo_osis.png' %}" alt="OSIS"
+                     style="margin-top: -10px; margin-left: -10px"></a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -66,8 +72,12 @@
         </p>
 
         <p class="navbar-text pull-right">
-            <span class="glyphicon glyphicon-copyright-mark"></span> 2022 <a href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a>
+            <span class="glyphicon glyphicon-copyright-mark"></span> 2022 <a href="http://www.uclouvain.be"
+                                                                             target="_blank" id="lnk_ucl">Université
+            catholique de Louvain</a>
         </p>
     </div>
 
 </footer>
+{% block script %}
+{% endblock %}
