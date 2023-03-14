@@ -4,6 +4,7 @@ from .home_view import HomeView
 from .inscription_formation_pour_participant_view import InscriptionFormationPourParticipant
 from .inscription_seance_pour_participant_view import InscriptionSeancePourParticipantView
 from .liste_formations_view import ListeFormationView
+from .liste_participants_formation_view import ListeParticipantsFormationView
 from .modification_formation_view import ModificationFormationView
 from .modification_seance_view import ModificationSeanceView
 from .nouvelle_formation_form_view import NouvelleFormationFormView

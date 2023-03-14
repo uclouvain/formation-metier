@@ -7,7 +7,7 @@ from formation_metier.views import ListeFormationView, HomeView, NouvelleFormati
     DetailSeanceView, ModificationFormationView, ModificationSeanceView, NouvelleSeanceFormView, SuppressionSeance, \
     SuppressionFormation, SelectionParticipantAutoComplete, SuppressionMultiplesInscriptionsParFormateur, \
     SuppressionInscriptionParParticipant, InscriptionFormationPourParticipant, InscriptionSeancePourParticipantView, \
-    SuppressionUniqueInscriptionParFormateurView
+    SuppressionUniqueInscriptionParFormateurView, ListeParticipantsFormationView
 
 app_name = 'formation_metier'
 urlpatterns = [
@@ -15,6 +15,8 @@ urlpatterns = [
 
     # list_view
     path('liste_formations/', ListeFormationView.as_view(), name=ListeFormationView.name),
+    path('liste_participants/<uuid:formation_id>', ListeParticipantsFormationView.as_view(),
+         name=ListeParticipantsFormationView.name),
 
     # detail_view
     path('formation/<uuid:formation_id>/', DetailFormation.as_view(), name=DetailFormation.name),
