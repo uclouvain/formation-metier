@@ -2,6 +2,7 @@
 {% load bootstrap3 %}
 {% load static %}
 {% block content %}
+
     <ol class="breadcrumb">
         <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                                  aria-hidden="true"></span></a></li>
@@ -52,7 +53,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             {% if liste_formations %}
-                <table class="table">
+                <table class="table" id="formation_list_table">
                     <thead>
                     <tr style="font-weight: bold">
                         <td>Nom</td>
@@ -66,7 +67,7 @@
                     <tbody>
                     {% for formation in liste_formations %}
                         <tr>
-                            <td>
+                            <td data-sort="{{ formation.name }}">
                                 {% if current_user_est_formateur %}
                                     <a href="{% url 'formation_metier:detail_formation' formation.id %}">
                                         {{ formation.name }}
@@ -105,4 +106,18 @@
             {% endif %}
         </div>
     </div>
+{% endblock %}
+{% block script %}
+    <script>
+        let dataTableConfig = {
+            paging: false,
+            orderMulti: true,
+            info: false,
+            searching: true,
+            processing: false,
+        }
+        $(document).ready(function () {
+            $('#formation_list_table').DataTable(dataTableConfig);
+        });
+    </script>
 {% endblock %}

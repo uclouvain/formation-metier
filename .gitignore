@@ -5,3 +5,4 @@
 *.sqlite3
 module_formation/.env
 /.env.local
+/dump.rdb

@@ -8,9 +8,9 @@ from formation_metier.tests.factories.employe_uclouvain import EmployeUCLouvainF
 from formation_metier.tests.factories.formation import FormationFactory
 from formation_metier.tests.factories.inscription import InscriptionFactory
 from formation_metier.tests.factories.seance import SeanceFactory
-from formation_metier.views import InscriptionAUneFormation
+from formation_metier.views import InscriptionFormationPourParticipant
 
-URL = "formation_metier:" + InscriptionAUneFormation.name
+URL = "formation_metier:" + InscriptionFormationPourParticipant.name
 
 
 class NouvelleInscriptionFormationPourParticipantFormViewTest(TestCase):

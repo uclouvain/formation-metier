@@ -1,7 +1,6 @@
 import math
 import uuid
 
-import django.utils.timezone
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
@@ -15,13 +14,14 @@ from formation_metier.models.employe_uclouvain import EmployeUCLouvain, RoleForm
 from module_formation.settings import URL_BASE_MODULE
 
 
-def validate_formateur(formateur_id):
-    employe_ucl = EmployeUCLouvain.objects.get(id=formateur_id)
-    if employe_ucl.role_formation_metier != RoleFormationFareEnum.FORMATEUR:
-        raise ValidationError(
-            _("%(formateur)s n'est pas un formateur du module : 'formation FARE'"),
-            params={'formateur': employe_ucl},
-        )
+def validate_formateur(formateur_list):
+    for formateur in formateur_list:
+        employe_ucl = EmployeUCLouvain.objects.get(id=formateur.id)
+        if employe_ucl.role_formation_metier != RoleFormationFareEnum.FORMATEUR:
+            raise ValidationError(
+                _("%(formateur)s n'est pas un formateur du module : 'formation FARE'"),
+                params={'formateur': employe_ucl},
+            )
 
 
 DEFAULT_DUREE = 60
@@ -40,7 +40,6 @@ class Seance(models.Model):
         on_delete=models.CASCADE,
         blank=False)
     seance_date = models.DateTimeField(
-        default=django.utils.timezone.now,
         blank=False)
     local = models.CharField(
         max_length=MAX_LENGTH_LOCAL,
@@ -48,11 +47,9 @@ class Seance(models.Model):
     participant_max_number = models.PositiveSmallIntegerField(
         default=DEFAULT_PARTICIPANT_NUMBER,
         blank=False)
-    formateur = models.ForeignKey(
+    formateur = models.ManyToManyField(
         EmployeUCLouvain,
-        on_delete=models.SET_NULL,
-        null=True,
-        validators=[validate_formateur])
+        limit_choices_to={'role_formation_metier': RoleFormationFareEnum.FORMATEUR})
     duree = models.PositiveSmallIntegerField(
         validators=[MaxValueValidator(MAX_DUREE)],
         default=DEFAULT_DUREE)
@@ -62,8 +59,7 @@ class Seance(models.Model):
             UniqueConstraint(
                 fields=[
                     'seance_date',
-                    'local',
-                    'formateur'
+                    'local'
                 ],
                 name='unique_session'
             ),
@@ -97,6 +93,11 @@ class Seance(models.Model):
             }
         )
 
+    def get_formateur(self):
+        print(self.formateur.filter(role_formation_metier=RoleFormationFareEnum.FORMATEUR))
+        return "\n".join([formateur.name for formateur in self.formateur.filter(
+            role_formation_metier=RoleFormationFareEnum.FORMATEUR)])
+
 
 class SeanceAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -113,7 +114,7 @@ class SeanceAdmin(admin.ModelAdmin):
         'seance_date',
         'local',
         'participant_max_number',
-        'formateur',
+        'get_formateur',
         'duree'
     )
 

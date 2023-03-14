@@ -8,13 +8,13 @@ from formation_metier.models.inscription import Inscription
 from formation_metier.views import DetailSeanceView
 
 
-class SuppressionInscriptionParFormateur(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class SuppressionMultiplesInscriptionsParFormateur(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     permission_required = [
         'formation_metier.delete_inscription',
         'formation_metier.access_to_formation_fare'
     ]
     model = Inscription
-    name = 'suppression_inscription_par_formateur'
+    name = 'suppression_multiples_inscriptions_par_formateur'
 
     def get_queryset(self):
         inscription_list = self.request.POST.getlist('inscription')

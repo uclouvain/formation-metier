@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Exists, OuterRef
 from django.views import generic
 
 from formation_metier.models.formation import Formation
@@ -19,14 +21,25 @@ class DetailFormation(LoginRequiredMixin, PermissionRequiredMixin, generic.Detai
     name = 'detail_formation'
 
     def get_queryset(self):
+        date = datetime.now()
         return super().get_queryset().filter(
             id=self.kwargs['formation_id']
-        ).order_by(
-            'name'
+        ).annotate(
+            a_seance_passee=Exists(
+                Seance.objects.filter(
+                    seance_date__lt=date,
+                    formation__id=self.kwargs['formation_id']
+                )
+            )
         ).prefetch_related(
             Prefetch(
                 'seance_set',
-                queryset=Seance.objects.order_by('seance_date')
+                queryset=Seance.objects.order_by('seance_date').annotate(est_seance_passee=Exists(
+                    Seance.objects.filter(
+                        seance_date__lt=date,
+                        id=OuterRef('pk')
+                    ),
+                ))
             ),
             'seance_set__inscription_set',
             'seance_set__formateur',

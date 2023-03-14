@@ -4,9 +4,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Suppression d' inscription</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Suppression d'inscriptions</h5>
             </div>
-            <form method="post" action="{% url 'formation_metier:suppression_inscription_par_formateur' %}">
+            <form method="post" action="{% url 'formation_metier:suppression_multiples_inscriptions_par_formateur' %}">
                 {% csrf_token %}
                 <input name="seance_id" class="hidden" type="text" value="{{ seance.id }}" readonly>
                 <span style="padding-left: 15px">Cochez la/les inscription(s) a supprimer pour cette seance</span>
