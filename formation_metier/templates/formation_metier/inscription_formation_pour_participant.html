@@ -69,60 +69,41 @@
                         </thead>
                         <tbody>
                         {% for seance in formation.seance_set.all %}
-                            {% if seance.est_seance_passee %}
-                                <tr id="seance_fermee">
-                                    <td id="checkbox">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               name="seance"
-                                               value={{ seance.id }} id="{{ seance }}"
-                                               disabled="disabled"
-                                                {% if seance.est_inscrit_seance %}
-                                                    checked="checked"
-                                                {% endif %}
-                                        >
-                                        <label class="form-check-label" style="color: darkgrey">
-                                        </label>
-                                    </td>
-                                    <td id="date">{{ seance.seance_date.date }}</td>
-                                    <td id="heure">{{ seance.seance_date.time }}</td>
-                                    <td id="duree">{{ seance.duree_en_heure }}</td>
-                                    <td id="local">{{ seance.local }}</td>
-                                    <td id="etat"><span id="badge" class="badge badge-secondary">Fermée</span></td>
-                                </tr>
-                            {% elif seance.inscription_set.count == seance.participant_max_number and not seance.est_inscrit_seance %}
-                                <tr id="seance_complete">
-                                    <td id="checkbox">
-                                        <input class="form-check-input" type="checkbox" name="seance"
-                                               disabled="disabled"
-                                               value={{ seance.id }} id="{{ seance }}">
-                                        <label class="form-check-label" style="color: darkgrey">
-                                        </label>
-                                    </td>
-                                    <td id="date">{{ seance.seance_date.date }}</td>
-                                    <td id="heure">{{ seance.seance_date.time }}</td>
-                                    <td id="duree">{{ seance.duree_en_heure }}</td>
-                                    <td id="local">{{ seance.local }}</td>
-                                    <td id="etat"><span id="badge" class="badge badge-danger">Complète</span></td>
-                                </tr>
-                            {% else %}
-                                <tr id="seance_ouverte">
-                                    <td id="checkbox">
-                                        {% if seance.est_inscrit_seance %}
+                            {% if not seance.est_seance_passee %}
+                                {% if seance.inscription_set.count == seance.participant_max_number and not seance.est_inscrit_seance %}
+                                    <tr id="seance_complete">
+                                        <td id="checkbox">
                                             <input class="form-check-input" type="checkbox" name="seance"
-                                                   value={{ seance.id }} id="{{ seance }}" checked="checked">
-                                        {% else %}
-                                            <input class="form-check-input" type="checkbox" name="seance"
+                                                   disabled="disabled"
                                                    value={{ seance.id }} id="{{ seance }}">
-                                        {% endif %}
-                                        <label class="form-check-label"></label>
-                                    </td>
-                                    <td id="date">{{ seance.seance_date.date }}</td>
-                                    <td id="heure">{{ seance.seance_date.time }}</td>
-                                    <td id="duree">{{ seance.duree_en_heure }}</td>
-                                    <td id="local">{{ seance.local }}</td>
-                                    <td id="etat"><span id="badge" class="badge badge-success">Ouverte</span></td>
-                                </tr>
+                                            <label class="form-check-label" style="color: darkgrey">
+                                            </label>
+                                        </td>
+                                        <td id="date">{{ seance.seance_date.date }}</td>
+                                        <td id="heure">{{ seance.seance_date.time }}</td>
+                                        <td id="duree">{{ seance.duree_en_heure }}</td>
+                                        <td id="local">{{ seance.local }}</td>
+                                        <td id="etat"><span id="badge" class="badge badge-danger">Complète</span></td>
+                                    </tr>
+                                {% else %}
+                                    <tr id="seance_ouverte">
+                                        <td id="checkbox">
+                                            {% if seance.est_inscrit_seance %}
+                                                <input class="form-check-input" type="checkbox" name="seance"
+                                                       value={{ seance.id }} id="{{ seance }}" checked="checked">
+                                            {% else %}
+                                                <input class="form-check-input" type="checkbox" name="seance"
+                                                       value={{ seance.id }} id="{{ seance }}">
+                                            {% endif %}
+                                            <label class="form-check-label"></label>
+                                        </td>
+                                        <td id="date">{{ seance.seance_date.date }}</td>
+                                        <td id="heure">{{ seance.seance_date.time }}</td>
+                                        <td id="duree">{{ seance.duree_en_heure }}</td>
+                                        <td id="local">{{ seance.local }}</td>
+                                        <td id="etat"><span id="badge" class="badge badge-success">Ouverte</span></td>
+                                    </tr>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                         </tbody>

@@ -15,6 +15,7 @@ class RoleFormationFareEnum(TextChoices):
 
 MAX_LENGTH_NAME = 50
 MAX_LENGTH_MATRICULE_FGS = 8
+MAX_LENGTH_EMAIL = 255
 MAX_LENGTH_DESCRIPTION = 200
 MAX_LENGTH_ROLE_FORMATION_METIER = 200
 
@@ -32,6 +33,11 @@ class EmployeUCLouvain(models.Model):
     matricule_fgs = models.CharField(
         max_length=MAX_LENGTH_MATRICULE_FGS,
         blank=False
+    )
+    email = models.EmailField(
+        max_length=MAX_LENGTH_EMAIL,
+        blank=False,
+        default="default.email@uclouvain.be"
     )
     role_formation_metier = models.CharField(
         choices=RoleFormationFareEnum.choices,
@@ -62,6 +68,7 @@ class EmployeUCLouvainAdmin(admin.ModelAdmin):
     fieldsets = [
         ('name', {'fields': ['name']}),
         ('matricule_fgs', {'fields': ['matricule_fgs']}),
+        ('email', {'fields': ['email']}),
         ('role_formation_metier', {'fields': ['role_formation_metier']}),
         ('user', {'fields': ['user']}),
     ]
@@ -69,6 +76,7 @@ class EmployeUCLouvainAdmin(admin.ModelAdmin):
         'id',
         'name',
         'matricule_fgs',
+        'email',
         'role_formation_metier',
         'user'
     )

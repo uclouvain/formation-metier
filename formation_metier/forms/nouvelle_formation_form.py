@@ -17,3 +17,6 @@ class NouvelleFormationForm(ModelForm):
             'description',
             'public_cible'
         )
+        labels = {
+            'name': 'Nom de la formation'
+        }

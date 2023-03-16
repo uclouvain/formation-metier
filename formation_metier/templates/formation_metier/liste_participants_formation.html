@@ -1,0 +1,67 @@
+{% extends 'formation_metier/base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+{% block content %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'formation_metier:home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                                 aria-hidden="true"></span></a></li>
+        <li>
+            <a href="{% url 'formation_metier:liste_formations' %}">
+                Liste des formations
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'formation_metier:detail_formation' formation.id %}">
+                Formation
+            </a>
+        </li>
+        <li class="active">
+            Liste des participants
+        </li>
+    </ol>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h3>
+                    Liste des participants de la formation "{{ formation.name }}"
+                </h3>
+            </div>
+        </div>
+        <div class="panel-body">
+            {% if liste_participants %}
+                <table class="table" id="liste_participants_table">
+                    <thead>
+                    <tr style="font-weight: bold">
+                        <td id="td_nom_liste_participants">Nom</td>
+                        <td id="td_email_liste_participants">Adresse mail</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for participant in liste_participants %}
+                        <tr>
+                            <td>{{ participant.name }}</td>
+                            <td>{{ participant.email }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Il n'y a aucunes inscription pour cette formation</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        let DataTableConfig = {
+            paging: false,
+            orderMulti: true,
+            info: false,
+            searching: true,
+            processing: false,
+        }
+        $(document).ready(function () {
+            $('#liste_participants_table').DataTable(DataTableConfig);
+        });
+    </script>
+{% endblock %}

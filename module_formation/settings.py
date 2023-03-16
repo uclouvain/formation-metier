@@ -44,7 +44,6 @@ INSTALLED_APPS = (
     'bootstrap3',
     'schema_graph',
     'django_select2',
-    'jquery',
     'rest_framework',
     'rest_framework.authtoken',
     'celery',
